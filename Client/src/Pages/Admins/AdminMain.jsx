@@ -1,9 +1,26 @@
-import React from 'react'
+import React,{useState} from 'react'
+import Navbar from './components/Navbar'
+import Sidebar from './components/Sidebar'
+import Dashboard from './Pages/Dashborad';
 
 const AdminMain = () => {
+
+    const [activeOption, setActiveOption] = useState('dashboard'); 
+
+  const handleOptionClick = (option) => {
+    setActiveOption(option);
+  };
+
   return (
     <div>
-      <h1  className='text-3xl text-white bg-black'>Admin page</h1>
+        <Navbar />
+        {/* Side bar for full screen */}
+        <div className='flex'>
+        <Sidebar activeOption={activeOption} handleOptionClick={handleOptionClick} />
+        
+          <Dashboard/>
+        
+        </div>
     </div>
   )
 }

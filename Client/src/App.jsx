@@ -11,7 +11,7 @@ import UnauthorizedPage from "./components/UnAuthorized";
 
 const App = () => {
   return (
-    <div className="h-screen bg-black">
+    <div className="h-screen">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
