@@ -22,6 +22,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    premium: {
+        type: String,
+        enum: ['none', 'monthly', 'yearly'],
+        default: 'none', 
+    },
+    premiumExpiresAt: { type: Date, default: null },
 }, { timestamps: true }); 
 
 const User = mongoose.model('User', UserSchema); 

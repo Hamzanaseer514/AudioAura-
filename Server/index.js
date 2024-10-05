@@ -16,20 +16,20 @@ app.use("/admin",AlbumRouter)
 
 
 const storage = multer.diskStorage({
-    destination: './Upload/Images',
+    destination: './Upload/AlbumImages',
     filename: (req, file, cb) => {
         return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
     }
 });
 const upload = multer({ storage: storage });
-app.use('/images', express.static("Upload/Images"));
-app.post("/upload", upload.single('product'), (req, res) => {
+app.use('/albumimages', express.static("Upload/AlbumImages"));
+app.post("/uploadalbum", upload.single('album'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ success: false, message: "No file uploaded" });
     }
-    res.json({
+    res.json({ 
         success: true,
-        image_url: `http://localhost:5173/images/${req.file.filename}`
+        image_url: `http://localhost:${port}/images/${req.file.filename}`
     });
 });
 
