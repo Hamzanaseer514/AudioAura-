@@ -10,6 +10,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UnauthorizedPage from "./components/UnAuthorized";
 import CategoryContext from "./context/CategoryContext";
 import { useState } from "react";
+import Album from "./Pages/Admins/Pages/Albums";
+import AddSong from "./Pages/Admins/Pages/AddSongs";
 
 const App = () => {
   const [category, setCategory] = useState('all'); 
@@ -40,6 +42,8 @@ const App = () => {
             }
           />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route path="/album" element={<Album />}/>
+          <Route path="/song" element={<AddSong />}/>
         </Routes>
       </div>
     </CategoryContext.Provider>

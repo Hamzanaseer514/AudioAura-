@@ -23,13 +23,37 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 app.use('/albumimages', express.static("Upload/AlbumImages"));
-app.post("/uploadalbum", upload.single('album'), (req, res) => {
+app.post("/uploadalbum", upload.single('image'), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ success: false, message: "No file uploaded" });
     }
-    res.json({ 
+    res.json({
         success: true,
-        image_url: `http://localhost:${port}/images/${req.file.filename}`
+        image_url: `http://localhost:${port}/albumimages/${req.file.filename}`
+    });
+});
+
+
+// #  UPLOAD FILES 
+
+const storageAudio = multer.diskStorage({
+    destination: './Upload/AudioFiles',
+    filename: (req, file, cb) => {
+        return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
+    }
+});
+
+const uploadAudio = multer({ storage: storageAudio });
+
+app.use('/audiofiles', express.static("Upload/AudioFiles"));
+
+app.post("/uploadaudio", uploadAudio.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ success: false, message: "No file uploaded" });
+    }
+    res.json({
+        success: true,
+        file_url: `http://localhost:${port}/audiofiles/${req.file.filename}`
     });
 });
 

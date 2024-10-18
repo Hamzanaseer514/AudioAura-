@@ -9,7 +9,7 @@ const Signup = () => {
     lastname: '',
     email: '',
     password: '',
-    role: 'admin',
+    role: 'user',
   });
 
   const handleChange = (e) => {
