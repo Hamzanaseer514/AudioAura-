@@ -1,14 +1,21 @@
-import { createContext, useRef, useState,useEffect } from "react";
+import { createContext, useRef, useState,useEffect,useContext } from "react";
+import AlbumsContext from "./AlbumsContext";
 import { songsData } from "../assets/assets";
+
+
 
 export const PlayerContext = createContext();
 
-const PlayerContextProvider = (props) =>{
 
+
+
+const PlayerContextProvider = (props) =>{
+  const {songs} = useContext(AlbumsContext)
+  // console.log("songd in player",songs)
   const audioRef = useRef();
   const seekBg   = useRef();
   const seekBar = useRef();
-
+//  console.log(songsData[4])
   const [track, settrack] = useState(songsData[2])
   const [playStatus, setplayStatus] = useState(false)
   const [time, settime] = useState({

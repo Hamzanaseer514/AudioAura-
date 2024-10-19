@@ -12,40 +12,46 @@ import CategoryContext from "./context/CategoryContext";
 import { useState } from "react";
 import Album from "./Pages/Admins/Pages/Albums";
 import AddSong from "./Pages/Admins/Pages/AddSongs";
+import { AlbumsProvider } from './context/AlbumsContext'; // Import AlbumsProvider
+import PlayerContextProvider  from './context/Playercontext.jsx'
 
 const App = () => {
-  const [category, setCategory] = useState('all'); 
+  const [category, setCategory] = useState('all');
 
   return (
     <CategoryContext.Provider value={{ category, setCategory }}>
-      <div className="h-screen">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route
-            path="/spotify"
-            element={
-              <ProtectedRoute requiredRole="user">
-                <MainPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/spotify/premium" element={<Premium />} />
-          <Route path="/spotify/album/:id" element={<ShowAlbum />} />
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute requiredRole="admin">
-                <AdminMain />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/unauthorized" element={<UnauthorizedPage />} />
-          <Route path="/album" element={<Album />}/>
-          <Route path="/song" element={<AddSong />}/>
-        </Routes>
-      </div>
+      <AlbumsProvider> {/* Wrap with AlbumsProvider */}
+      <PlayerContextProvider>
+        <div className="h-screen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route
+              path="/spotify"
+              element={
+                <ProtectedRoute requiredRole="user">
+                  <MainPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/spotify/premium" element={<Premium />} />
+            <Route path="/spotify/album/:id" element={<ShowAlbum />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminMain />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
+            <Route path="/album" element={<Album />} />
+            <Route path="/song" element={<AddSong />} />
+          </Routes>
+        </div>
+        </PlayerContextProvider>
+      </AlbumsProvider>
     </CategoryContext.Provider>
   );
 };

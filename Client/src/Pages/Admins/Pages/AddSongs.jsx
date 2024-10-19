@@ -10,7 +10,8 @@ const AddSong = () => {
     duration: '',
     albumId: '',
     image: '',
-    audio: '',
+    file: '',
+    description: '', // Added description field
   });
   const [albums, setAlbums] = useState([]);
 
@@ -19,6 +20,7 @@ const AddSong = () => {
       try {
         const response = await fetch('http://localhost:3000/admin/getalbums');
         const data = await response.json();
+        console.log(data);
         if (data.success) {
           setAlbums(data.albums); // Assuming the response contains albums array
         }
@@ -55,7 +57,7 @@ const AddSong = () => {
       });
 
       const imageData = await imageResponse.json();
-      console.log(imageData)
+      console.log(imageData);
       songData.image = imageData.image_url; // Set the image URL
 
       // Upload audio
@@ -68,23 +70,23 @@ const AddSong = () => {
       });
 
       const audioData = await audioResponse.json();
-      console.log(songData)
-      songData.audio = audioData.file_url; // Set the audio file URL
+      console.log(audioData);
+      songData.file = audioData.file_url; // Set the audio file URL
 
       // Submit song data
       const response = await fetch('http://localhost:3000/admin/addsong', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "token": localStorage.getItem("token"),
         },
         body: JSON.stringify(songData),
       });
+      console.log(songData);
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        console.error("Error adding song:", errorResponse);
-        throw new Error("Song addition failed");
+        console.log(errorResponse.message);
+        throw new Error(errorResponse.message);
       }
 
       const data = await response.json();
@@ -144,6 +146,21 @@ const AddSong = () => {
               required
               placeholder="e.g., 3:45"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
+            />
+          </div>
+          <div>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              Description
+            </label>
+            <textarea
+              value={songData.description}
+              onChange={changeHandler}
+              id="description"
+              name="description"
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
+              rows="3"
+              placeholder="Enter song description"
             />
           </div>
           <div>
