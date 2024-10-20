@@ -15,12 +15,15 @@ const AdminMain = () => {
       <Navbar />
       {/* Side bar for full screen */}
       <div className="flex">
-        <Sidebar
-          activeOption={activeOption}
-          handleOptionClick={handleOptionClick}
-        />
-
-        <Dashboard />
+        <div>
+          <Sidebar
+            activeOption={activeOption}
+            handleOptionClick={handleOptionClick}
+          />
+        </div>
+        <div  className="flex-1">
+          <Dashboard />
+        </div>
       </div>
     </div>
   );

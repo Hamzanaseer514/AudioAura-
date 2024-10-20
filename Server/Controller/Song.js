@@ -11,7 +11,7 @@ const addSong = async (req, res) => {
     console.log(file)
     const existingSong = await Songs.findOne({ name, albumId });
     if (existingSong) {
-      return res.status(400).json({ message: "Song already exists in this album" });
+      return res.status(400).json({success:false, message: "Song already exists in this album" });
     }
 
     const lastSong = await Songs.findOne().sort({ id: -1 });
@@ -33,10 +33,10 @@ const addSong = async (req, res) => {
 
     await updateAlbumBySong(newSong._id, albumId);
 
-    res.status(201).json({ message: "Song added successfully", song: newSong });
+    res.status(201).json({success:true, message: "Song added successfully", song: newSong });
   } catch (error) {
     console.error("Error adding song:", error);
-    res.status(500).json({ message: "Error adding song", error });
+    res.status(500).json({success:false, message: "Error adding song", error });
   }
 };
 

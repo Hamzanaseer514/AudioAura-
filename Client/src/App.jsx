@@ -14,6 +14,8 @@ import Album from "./Pages/Admins/Pages/Albums";
 import AddSong from "./Pages/Admins/Pages/AddSongs";
 import { AlbumsProvider } from './context/AlbumsContext'; // Import AlbumsProvider
 import PlayerContextProvider  from './context/Playercontext.jsx'
+import Playlist from "./Pages/Admins/Pages/Playlist.jsx";
+import User from "./Pages/Admins/Pages/User.jsx";
 
 const App = () => {
   const [category, setCategory] = useState('all');
@@ -46,9 +48,12 @@ const App = () => {
               }
             />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
-            <Route path="/album" element={<Album />} />
-            <Route path="/song" element={<AddSong />} />
+            <Route path="/albums" element={<Album />} />
+            <Route path="/songs" element={<AddSong />} />
+            <Route path="/playlists" element={<Playlist />} />
+            <Route path="/users" element={<User />} />
           </Routes>
+         
         </div>
         </PlayerContextProvider>
       </AlbumsProvider>

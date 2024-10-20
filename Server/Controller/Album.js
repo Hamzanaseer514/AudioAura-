@@ -14,13 +14,13 @@ const addAlbum = async (req, res) => {
   try {
     const { error } = albumSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: "Validation error", details: error.details });
+      return res.status(400).json({success:false, message: "Validation error", details: error.details });
     }
 
     const { name, image, category, description, bgColor } = req.body;
     const existingAlbum = await Album.findOne({ name });
     if (existingAlbum) {
-      return res.status(400).json({ message: "Album with this name already exists" });
+      return res.status(400).json({ success:false,message: "Album with this name already exists" });
     }
 
     const lastAlbum = await Album.findOne().sort({ id: -1 });
@@ -36,10 +36,10 @@ const addAlbum = async (req, res) => {
       songs: [],
     });
 
-    res.status(201).json({ message: "Album added successfully", album: newAlbum });
+    res.status(201).json({ success:true,message: "Album added successfully", album: newAlbum });
   }
    catch (error) {
-    res.status(500).json({ message: "Error adding album", error });
+    res.status(500).json({success:false, message: "Error adding album", error });
   }
 };
 
