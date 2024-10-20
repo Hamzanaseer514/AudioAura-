@@ -4,7 +4,7 @@ import Graph from "../components/Graph";
 
 const Dashboard = () => {
   return (
-    <div className="min-h-screen lg:ml-60 mt-14 bg-gray-100 w-full p-6">
+    <div className="min-h-screen lg:ml-60 mt-14 bg-gray-100 p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {/* Card for Albums */}
         <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
