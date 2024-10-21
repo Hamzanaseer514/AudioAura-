@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { assets } from '../../../assets/assets';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeOption, setActiveOption] = useState('dashboard');
+  const [loading, setLoading] = useState(false); // Loading state for logout
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -16,12 +19,22 @@ const Navbar = () => {
   };
 
   const handleOptionClick = (option) => {
-    setActiveOption(option); // Update active option on click
-    setIsSidebarOpen(false); // Close sidebar on option click
+    setActiveOption(option);
+    setIsSidebarOpen(false);
+  };
+
+  const logout = () => {
+    setLoading(true); // Show loader
+    setTimeout(() => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      setLoading(false); // Hide loader after logout
+      navigate('/login'); // Redirect to login page
+    }, 2000); // Simulate a 2-second delay
   };
 
   return (
-    <nav className="bg-[#3F4D66] border-b-2 border-gray-300 p-4 relative">
+    <nav className="bg-[#3F4D66] border-b-2 border-gray-300 p-4 w-full fixed">
       <div className="container flex justify-between items-center">
         {/* Left Hamburger Icon */}
         <div className="lg:hidden">
@@ -43,21 +56,29 @@ const Navbar = () => {
             <img className="w-6" src={assets.menu_icon} alt="Menu" />
           </button>
           {isMenuOpen && (
-            <div
-              className={`absolute right-0 mt-2 bg-white text-black border border-gray-300 rounded shadow-lg p-4 space-y-2 w-32 transition-opacity duration-300 ${
-                isMenuOpen ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              <a href="#profile" className="block text-black hover:bg-gray-200 py-2 px-4 rounded">Profile</a>
-              <a href="#logout" className="block text-black hover:bg-gray-200 py-2 px-4 rounded">Logout</a>
+            <div className="absolute right-0 mt-2 bg-white text-black border border-gray-300 rounded shadow-lg p-4 space-y-2 w-32 transition-opacity duration-300">
+              <Link to="#" className="block text-black hover:bg-gray-200 py-2 px-4 rounded">Profile</Link>
+              <button
+                onClick={logout}
+                className="block text-black hover:bg-gray-200 py-2 px-4 rounded"
+                disabled={loading} // Disable button during loading
+              >
+                {loading ? 'Logging out...' : 'Logout'}
+              </button>
             </div>
           )}
         </div>
 
         {/* Desktop Profile and Logout Links */}
-        <div className="lg:flex items-center space-x-6 hidden lg:block">
-          <a href="#profile" className="text-white hover:text-[#abacad] font-bold">Profile</a>
-          <a href="#logout" className="text-white hover:text-[#abacad] font-bold">Logout</a>
+        <div className="lg:flex items-center space-x-6 hidden">
+          <Link to="#profile" className="text-white hover:text-[#abacad] font-bold">Profile</Link>
+          <button
+            onClick={logout}
+            className="text-white hover:text-[#abacad] font-bold"
+            disabled={loading} // Disable button during loading
+          >
+            {loading ? 'Logging out...' : 'Logout'}
+          </button>
         </div>
       </div>
 

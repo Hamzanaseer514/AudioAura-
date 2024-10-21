@@ -5,20 +5,20 @@ import { Link,useNavigate } from 'react-router-dom';
 const Sidebar = ({ activeOption, handleOptionClick }) => {
   const navigate = useNavigate();
   return (
-    <div className="hidden lg:block h-screen w-60 bg-[#3F4D66] text-white shadow-lg p-4">
+    <div className="hidden mt-14 lg:block h-screen w-60 bg-[#3F4D66] text-white shadow-lg p-4 fixed">
       <div className="space-y-3 mt-8">
-        <div
-          to="/admin/dashboard"
+        <Link
+          to="/admin"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'dashboard' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
-          onClick={() => {handleOptionClick('dashboard'); navigate('/dashboard') }}
+          onClick={() => {handleOptionClick('dashboard'); navigate('/admin') }}
         >
           <img src={assets.dashboard_icon} alt="Dashboard" className="w-5 h-5 mr-5" />
           Dashboard
-        </div>
+        </Link>
         <Link
-          to="/admin/user"
+          to="/users"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'users' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
@@ -28,7 +28,7 @@ const Sidebar = ({ activeOption, handleOptionClick }) => {
           Users
         </Link>
         <Link
-          to="/admin/albums"
+          to="/albums"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'albums' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
@@ -38,7 +38,7 @@ const Sidebar = ({ activeOption, handleOptionClick }) => {
           Albums
         </Link>
         <Link
-          to="/admin/playlist"
+          to="/playlists"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'playlists' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
@@ -48,14 +48,14 @@ const Sidebar = ({ activeOption, handleOptionClick }) => {
           Playlists
         </Link>
         <Link
-          to="/admin/track"
+          to="/songs"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
-            activeOption === 'tracks' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
+            activeOption === 'songs' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
-          onClick={() => handleOptionClick('tracks')}
+          onClick={() => handleOptionClick('songs')}
         >
-          <img src={assets.music_icon} alt="Tracks" className="w-5 h-5 mr-5" />
-          Tracks
+          <img src={assets.music_icon} alt="Songs" className="w-5 h-5 mr-5" />
+          Songs
         </Link>
       </div>
     </div>

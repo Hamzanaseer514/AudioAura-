@@ -8,9 +8,9 @@ import PlayerContextProvider  from './context/Playercontext.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-    <PlayerContextProvider>
+    {/* <PlayerContextProvider> */}
     <App />
-    </PlayerContextProvider>
+    {/* </PlayerContextProvider> */}
     </BrowserRouter>
   </StrictMode>,
 )
