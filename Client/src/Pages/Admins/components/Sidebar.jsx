@@ -8,7 +8,7 @@ const Sidebar = ({ activeOption, handleOptionClick }) => {
     <div className="hidden lg:block h-screen w-60 bg-[#3F4D66] text-white shadow-lg p-4">
       <div className="space-y-3 mt-8">
         <div
-          to="/dashboard"
+          to="/admin/dashboard"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'dashboard' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
@@ -18,7 +18,7 @@ const Sidebar = ({ activeOption, handleOptionClick }) => {
           Dashboard
         </div>
         <Link
-          to="/user"
+          to="/admin/user"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'users' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
@@ -28,7 +28,7 @@ const Sidebar = ({ activeOption, handleOptionClick }) => {
           Users
         </Link>
         <Link
-          to="/album"
+          to="/admin/albums"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'albums' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
@@ -38,7 +38,7 @@ const Sidebar = ({ activeOption, handleOptionClick }) => {
           Albums
         </Link>
         <Link
-          to="/playlist"
+          to="/admin/playlist"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'playlists' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
@@ -48,7 +48,7 @@ const Sidebar = ({ activeOption, handleOptionClick }) => {
           Playlists
         </Link>
         <Link
-          to="/track"
+          to="/admin/track"
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'tracks' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}

@@ -8,6 +8,10 @@ import ShowAlbum from "./components/ShowAlbum";
 import AdminMain from "./Pages/Admins/AdminMain";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UnauthorizedPage from "./components/UnAuthorized";
+import AdminAlbum from "./Pages/Admins/Pages/Albums"
+import User from "./Pages/Admins/Pages/User"
+import Playlist from "./Pages/Admins/Pages/Playlist"
+import Track from "./Pages/Admins/Pages/Track"
 
 const App = () => {
   return (
@@ -35,6 +39,11 @@ const App = () => {
           }
         />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route path="/admin/albums" element={<AdminAlbum />} />
+          <Route path="/admin/user" element={<User/>}/>
+          <Route path="/admin/playlist" element={<Playlist/>}/>
+          <Route path="/admin/track" element={<Track/>}/>
+
       </Routes>
     </div>
   );
