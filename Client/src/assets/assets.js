@@ -49,7 +49,9 @@ import albums_icon from './albums-icon.png'
 import music_icon from './music-icon.png'
 import playlist_icon from './playlist-icon.png'
 import user_icon from './user-icon.png'
-
+import humberger_icon from './humburger_icon.png'
+import download_icon from './download-icon.png'
+import plus_icon_playlist from './plus-icon.png'
 
 export const assets = {
     bell_icon,
@@ -83,7 +85,10 @@ export const assets = {
     albums_icon,
     music_icon,
     playlist_icon,
-    user_icon
+    user_icon,
+    humberger_icon,
+    download_icon,
+    plus_icon_playlist
 
 }
 

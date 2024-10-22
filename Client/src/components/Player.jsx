@@ -36,8 +36,8 @@ const Player = () => {
         </div>
         <div className='hidden lg:flex items-center gap-2 opacity-75'>
                  <img className='w-5 cursor-pointer'src={assets.favorite_icon} alt="" />
-                 <img className='w-4 cursor-pointer'src={assets.plays_icon} alt="" />
-                 <img className='w-4 cursor-pointer'src={assets.mic_icon} alt="" />
+                 <img className='w-5 cursor-pointer'src={assets.download_icon} alt="" />
+                 <img className='w-5 cursor-pointer'src={assets.plus_icon_playlist} alt="" />
                  <img className='w-4 cursor-pointer'src={assets.queue_icon} alt="" />
                  <img className='w-4 cursor-pointer'src={assets.volume_icon} alt="" />
                  <div className='w-20 bg-slate-50 h-1 rounded'>
