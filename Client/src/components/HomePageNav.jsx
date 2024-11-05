@@ -18,14 +18,14 @@ const Navbar = () => {
       localStorage.removeItem("token"); 
       setIsLoggedIn(false);
       navigate("/"); // Redirect after 5 seconds
-    }, 3000); // 5 seconds delay
+    }, 3000); // Simulate a 3-second wait
   };
 
   return (
     <nav className="bg-gray-800 p-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="text-white text-lg font-bold">
-          <h1 className="text-green-500 text-5xl">SPOTIFY</h1>
+          <h1 className="text-green-500 text-5xl">AudioAura</h1>
         </div>
         <div className="hidden md:flex space-x-6 items-center">
           <Link to="/spotify" className="text-white hover:text-gray-300">

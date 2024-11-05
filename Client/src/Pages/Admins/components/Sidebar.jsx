@@ -1,9 +1,8 @@
 import React from 'react';
 import { assets } from '../../../assets/assets'; 
-import { Link,useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Sidebar = ({ activeOption, handleOptionClick }) => {
-  const navigate = useNavigate();
   return (
     <div className="hidden mt-14 lg:block h-screen w-60 bg-[#3F4D66] text-white shadow-lg p-4 fixed">
       <div className="space-y-3 mt-8">
@@ -12,7 +11,7 @@ const Sidebar = ({ activeOption, handleOptionClick }) => {
           className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-[100%] ${
             activeOption === 'dashboard' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
           }`}
-          onClick={() => {handleOptionClick('dashboard'); navigate('/admin') }}
+          onClick={() => {handleOptionClick('dashboard');}}
         >
           <img src={assets.dashboard_icon} alt="Dashboard" className="w-5 h-5 mr-5" />
           Dashboard
