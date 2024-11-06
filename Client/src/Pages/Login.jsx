@@ -28,10 +28,11 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      const { msg, success, token, role } = data;
+      const { msg, success, token, role,name } = data;
       if (success) {
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
+        localStorage.setItem("name", name);
         alert(msg);
         if (role === "admin") {
           navigate("/admin");

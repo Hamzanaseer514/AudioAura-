@@ -48,15 +48,24 @@ const Player = () => {
   // Fullscreen toggle for the player
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().then(() => {
-        setIsFullscreen(true);
-      }).catch((err) => {
-        console.error(`Error attempting to enable fullscreen mode: ${err.message}`);
-      });
+      document.documentElement
+        .requestFullscreen()
+        .then(() => {
+          setIsFullscreen(true);
+        })
+        .catch((err) => {
+          console.error(
+            `Error attempting to enable fullscreen mode: ${err.message}`
+          );
+        });
     } else {
       document.exitFullscreen();
       setIsFullscreen(false);
     }
+  };
+
+  const openmodel = () => {
+    setIsAddToPlaylistOpen(true);
   };
 
   // Ensuring the volume is applied when the audio element is ready
@@ -81,6 +90,8 @@ const Player = () => {
       setFloatingHearts([]);
     }, 1000);
   };
+  const playlists = []; // Define this with your actual playlist data
+  const song = {}; // Define this with your actual song data
 
   return (
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4 relative">
@@ -93,18 +104,44 @@ const Player = () => {
       </div>
       <div className="flex flex-col items-center gap-1 m-auto">
         <div className="flex gap-4">
-          <img className="w-4 cursor-pointer" src={assets.shuffle_icon} alt="" />
-          <img onClick={previous} className="w-4 cursor-pointer" src={assets.prev_icon} alt="" />
+          <img
+            className="w-4 cursor-pointer"
+            src={assets.shuffle_icon}
+            alt=""
+          />
+          <img
+            onClick={previous}
+            className="w-4 cursor-pointer"
+            src={assets.prev_icon}
+            alt=""
+          />
           {playStatus ? (
-            <img onClick={pause} className="w-4 cursor-pointer" src={assets.pause_icon} alt="" />
+            <img
+              onClick={pause}
+              className="w-4 cursor-pointer"
+              src={assets.pause_icon}
+              alt=""
+            />
           ) : (
-            <img onClick={play} className="w-4 cursor-pointer" src={assets.play_icon} alt="" />
+            <img
+              onClick={play}
+              className="w-4 cursor-pointer"
+              src={assets.play_icon}
+              alt=""
+            />
           )}
-          <img onClick={next} className="w-4 cursor-pointer" src={assets.next_icon} alt="" />
+          <img
+            onClick={next}
+            className="w-4 cursor-pointer"
+            src={assets.next_icon}
+            alt=""
+          />
           <img className="w-4 cursor-pointer" src={assets.loop_icon} alt="" />
         </div>
         <div className="flex items-center gap-5">
-          <p>{time.currentTime.minutes}:{time.currentTime.seconds}</p>
+          <p>
+            {time.currentTime.minutes}:{time.currentTime.seconds}
+          </p>
           <div
             onClick={seeksong}
             ref={seekBg}
@@ -115,7 +152,9 @@ const Player = () => {
               className="h-1 border-none w-0 bg-green-800 rounded-full"
             />
           </div>
-          <p>{time.TotalTime.minutes}:{time.TotalTime.seconds}</p>
+          <p>
+            {time.TotalTime.minutes}:{time.TotalTime.seconds}
+          </p>
         </div>
       </div>
       <div className="hidden lg:flex items-center gap-2 opacity-75 relative">
@@ -147,7 +186,11 @@ const Player = () => {
         ))}
         {/* Download icon with hover effect */}
         <div className="relative group">
-          <img className="w-5 cursor-pointer" src={assets.download_icon} alt="download icon" />
+          <img
+            className="w-5 cursor-pointer"
+            src={assets.download_icon}
+            alt="download icon"
+          />
           <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-0">
             Download
           </div>
@@ -156,7 +199,7 @@ const Player = () => {
         {/* Add to playlist icon with hover text */}
         <div className="relative group">
           <img
-            onClick={() => setIsAddToPlaylistOpen(true)}
+            onClick={openmodel}
             className="w-5 cursor-pointer"
             src={assets.plus_icon_playlist}
             alt="add to playlist"
@@ -166,23 +209,23 @@ const Player = () => {
           </div>
         </div>
         <div className=" relative group">
-        <img className="w-4 cursor-pointer" src={assets.queue_icon} alt="" />
-        <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-7 left-0">
+          <img className="w-4 cursor-pointer" src={assets.queue_icon} alt="" />
+          <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-7 left-0">
             Queue
           </div>
         </div>
 
         {/* Mute/Volume control section with hover text */}
-                <div className="relative group">
-        <img
+        <div className="relative group">
+          <img
             className={`w-4 cursor-pointer ${isMuted ? "w-5" : "w-4"}`}
             src={isMuted ? assets.mute_icon : assets.volume_icon}
             alt="volume icon"
             onClick={toggleMute}
-        />
-        <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-0">
+          />
+          <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-0">
             {isMuted ? "Unmute" : "Mute"}
-        </div>
+          </div>
         </div>
 
         <input
@@ -195,14 +238,20 @@ const Player = () => {
           className="w-20 bg-slate-50 h-1 rounded"
         />
         <div className="relative group">
-        <img className="w-4 cursor-pointer" src={assets.mini_player_icon} alt="" />
-        <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-7 left-0">
+          <img
+            className="w-4 cursor-pointer"
+            src={assets.mini_player_icon}
+            alt=""
+          />
+          <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-7 left-0">
             Mini
           </div>
         </div>
         <div className="relative group">
           <img
-            className={`w-4 cursor-pointer ${isFullscreen ? "opacity-50" : "opacity-150"}`}
+            className={`w-4 cursor-pointer ${
+              isFullscreen ? "opacity-50" : "opacity-150"
+            }`}
             src={assets.zoom_icon}
             alt="zoom icon"
             onClick={toggleFullscreen}

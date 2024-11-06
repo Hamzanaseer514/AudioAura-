@@ -17,6 +17,7 @@ import PlayerContextProvider  from './context/Playercontext.jsx'
 import Playlist from "./Pages/Admins/Pages/Playlist.jsx";
 import User from "./Pages/Admins/Pages/User.jsx";
 import CreatePlaylist from "./components/CreatePlaylist.jsx";
+import UserProfile  from "./components/UserProfile.jsx";
 
 const App = () => {
   const [category, setCategory] = useState('all');
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/user-profile" element={<UserProfile />} />
             <Route
               path="/spotify"
               element={

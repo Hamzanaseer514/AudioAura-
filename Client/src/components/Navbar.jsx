@@ -9,11 +9,21 @@ const Navbar = () => {
   const { category, setCategory } = useContext(CategoryContext);
   const navigate = useNavigate();
 
+  const name = localStorage.getItem("name");
+  const name1 = name.split(" ");
+  console.log(name1);
+  const firstCharacter = name1[0].charAt(0).toUpperCase();
+  const SecondCharacter = name1[1].charAt(0).toUpperCase();
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const openModal = () => {
     setIsModalOpen(true);
+  };
+
+  const handleAvatarClick = () => {
+    setIsDropdownOpen((prev) => !prev);
   };
 
   const toggleMenu = () => {
@@ -52,9 +62,33 @@ const Navbar = () => {
           <p className="bg-black py-1 px-3 rounded-2xl text-[15px] cursor-pointer hidden">
             Install App
           </p>
-          <p className="bg-purple-500 text-black w-7 h-7 rounded-full flex justify-center">
-            Z
+          <p
+            onClick={handleAvatarClick}
+            className="bg-purple-500 text-black w-8 cursor-pointer h-7 rounded-full flex justify-center"
+          >
+            {firstCharacter + SecondCharacter}
           </p>
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div
+              className="absolute right-0 top-16 mt-2 w-32 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+              onClick={() => setIsDropdownOpen(false)}
+            >
+              <div className="py-2">
+                <Link to="/user-profile">
+                  <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
+                    Profile
+                  </button>
+                </Link>
+                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
+                  Playlists
+                </button>
+                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
+                  Favorites
+                </button>
+              </div>
+            </div>
+          )}
           {/* Hamburger Icon */}
           <div className="md:hidden cursor-pointer" onClick={toggleMenu}>
             <img src={assets.humberger_icon} alt="menu" className="w-8 h-8" />
@@ -163,15 +197,13 @@ const Navbar = () => {
           <div className="text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out hover:bg-white hover:text-black">
             Browse Podcasts
           </div>
-          
         </div>
       </div>
       <div>
-      {isModalOpen && <CreatePlaylist setIsModalOpen={setIsModalOpen} />}
+        {isModalOpen && <CreatePlaylist setIsModalOpen={setIsModalOpen} />}
       </div>
-      
+
       <div className="hidden md:flex items-center gap-2 mt-4">
-     
         <p
           onClick={() => setCategory("all")}
           className={`px-4 py-1 rounded-2xl cursor-pointer transition duration-300 ease-in-out ${
