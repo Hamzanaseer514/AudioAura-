@@ -8,26 +8,29 @@
     display: none;
 }
 
-@keyframes heart-float {
+
+
+/* Heart Amination on Home page */
+
+.floating-heart {
+    position: absolute;
+    animation: floatUp 1s ease-in-out forwards;
+}
+
+@keyframes floatUp {
     0% {
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
         opacity: 1;
     }
     50% {
-        transform: translateY(-30px); /* Height of the float */
-        opacity: 1;
+        transform: translateY(-30px) scale(1.6); /* Move slightly up and enlarge */
     }
     100% {
-        transform: translateY(-60px); /* How high it will float */
-        opacity: 0; /* Fade out */
+        transform: translateY(-70px) scale(1.8); /* Move a bit higher and fade */
+        opacity: 0;
     }
 }
 
-.floating-heart {
-    animation: heart-float 1s ease forwards; /* Match duration with timeout in JavaScript */
-    pointer-events: none; /* Prevent interaction with the floating heart */
-}
-
-
+/* End of Heart Animation */
 
 

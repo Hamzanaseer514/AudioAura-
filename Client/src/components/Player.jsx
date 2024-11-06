@@ -9,13 +9,17 @@ const Player = () => {
     const [isHeartToggled, setIsHeartToggled] = useState(false);
     const [floatingHearts, setFloatingHearts] = useState([]); // State to manage floating hearts
 
+    // State for download icon animation
+    const [isDownloading, setIsDownloading] = useState(false);
+
     const toggleHeart = () => {
         setIsHeartToggled(!isHeartToggled);
-        
-        // Create multiple floating hearts
+
+        // Create multiple floating hearts with slightly different horizontal offsets
         const newHearts = Array.from({ length: 3 }).map((_, index) => ({
             id: Date.now() + index, // Unique ID for each heart
-            offset: index * 20 // Slightly offset each heart for staggered effect
+            offset: index * 100, // Slightly offset the animation start time for staggered effect
+            leftOffset: (index - 1) * 10 // Adjust for slight horizontal movement (-10px, 0, +10px)
         }));
 
         setFloatingHearts(newHearts);
@@ -24,6 +28,14 @@ const Player = () => {
         setTimeout(() => {
             setFloatingHearts([]);
         }, 1000); // Match this to the animation duration
+    };
+
+    // Function to handle download icon animation
+    const handleDownloadClick = () => {
+        setIsDownloading(true); // Trigger the bounce animation
+        setTimeout(() => {
+            setIsDownloading(false); // Remove the animation after 1 second
+        }, 1000); // Match animation duration
     };
 
     return (
@@ -58,27 +70,38 @@ const Player = () => {
             </div>
             <div className='hidden lg:flex items-center gap-2 opacity-75 relative'>
                 {/* Toggle heart icon with animation */}
-                <img
-                    className='w-5 cursor-pointer'
-                    src={isHeartToggled ? assets.favorite_icon : assets.heart_icon}
-                    alt="heart icon"
-                    onClick={toggleHeart}
-                />
-                {/* Render floating hearts */}
-                {floatingHearts.map(heart => (
+                <div className='relative'>
                     <img
-                        key={heart.id}
-                        className='absolute w-5 floating-heart'
-                        style={{ 
-                            animationDelay: `${heart.offset}ms`, // Stagger the animation
-                            left: '0', // Positioning to center over the original heart
-                            bottom: '100%', // Position above the original heart
-                        }}
-                        src={assets.heart_icon} // Use the same heart icon
-                        alt="floating heart"
+                        className='w-5 cursor-pointer'
+                        src={isHeartToggled ? assets.favorite_icon : assets.heart_icon}
+                        alt="heart icon"
+                        onClick={toggleHeart}
                     />
-                ))}
-                <img className='w-5 cursor-pointer' src={assets.download_icon} alt="" />
+                    {/* Render floating hearts */}
+                    {floatingHearts.map(heart => (
+                        <img
+                            key={heart.id}
+                            className='absolute w-5 floating-heart'
+                            style={{ 
+                                animationDelay: `${heart.offset}ms`, // Stagger the animation
+                                left: '-10%', // Start exactly over the original heart
+                                transform: `translateX(${heart.leftOffset}px)`, // Slight horizontal shift
+                                bottom: '100%', // Start at the position just above the original heart
+                            }}
+                            src={assets.heart_icon} // Use the same heart icon
+                            alt="floating heart"
+                        />
+                    ))}
+                </div>
+
+                {/* Download icon with bounce animation */}
+                <img
+                    className={`w-5 cursor-pointer ${isDownloading ? 'animate-bounce' : ''}`}
+                    src={assets.download_icon}
+                    alt="download icon"
+                    onClick={handleDownloadClick}
+                />
+
                 <img className='w-5 cursor-pointer' src={assets.plus_icon_playlist} alt="" />
                 <img className='w-4 cursor-pointer' src={assets.queue_icon} alt="" />
                 <img className='w-4 cursor-pointer' src={assets.volume_icon} alt="" />

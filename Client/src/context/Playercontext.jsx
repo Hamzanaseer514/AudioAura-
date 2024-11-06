@@ -11,7 +11,7 @@ export const PlayerContext = createContext();
 
 const PlayerContextProvider = (props) =>{
   const {songs} = useContext(AlbumsContext)
-  // console.log("songd in player",songs)
+  console.log("songs in player",songs)
   const audioRef = useRef();
   const seekBg   = useRef();
   const seekBar = useRef();
