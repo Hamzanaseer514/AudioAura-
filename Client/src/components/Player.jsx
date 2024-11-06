@@ -1,9 +1,21 @@
-import React, { useContext, useState } from 'react';
-import { assets } from '../assets/assets';
-import { PlayerContext } from '../context/Playercontext';
+import React, { useContext, useState } from "react";
+import { assets } from "../assets/assets";
+import { PlayerContext } from "../context/Playercontext";
+import AddToPlaylist from "./AddToPlaylist";
 
 const Player = () => {
-    const { track, seekBg, seekBar, playStatus, play, pause, time, previous, next, seeksong } = useContext(PlayerContext);
+  const {
+    track,
+    seekBg,
+    seekBar,
+    playStatus,
+    play,
+    pause,
+    time,
+    previous,
+    next,
+    seeksong,
+  } = useContext(PlayerContext);
 
     // State to handle image toggle for the heart icon
     const [isHeartToggled, setIsHeartToggled] = useState(false);
@@ -22,7 +34,7 @@ const Player = () => {
             leftOffset: (index - 1) * 10 // Adjust for slight horizontal movement (-10px, 0, +10px)
         }));
 
-        setFloatingHearts(newHearts);
+    setFloatingHearts(newHearts);
 
         // Clear floating hearts after animation duration
         setTimeout(() => {

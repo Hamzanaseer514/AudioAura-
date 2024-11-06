@@ -12,10 +12,11 @@ import CategoryContext from "./context/CategoryContext";
 import { useState } from "react";
 import Album from "./Pages/Admins/Pages/Albums";
 import AddSong from "./Pages/Admins/Pages/AddSongs";
-import { AlbumsProvider } from './context/AlbumsContext'; // Import AlbumsProvider
+import { AlbumsProvider } from './context/AlbumsContext'; 
 import PlayerContextProvider  from './context/Playercontext.jsx'
 import Playlist from "./Pages/Admins/Pages/Playlist.jsx";
 import User from "./Pages/Admins/Pages/User.jsx";
+import CreatePlaylist from "./components/CreatePlaylist.jsx";
 
 const App = () => {
   const [category, setCategory] = useState('all');
