@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-
 import upload from "../../../assets/arrow.png";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
 const AddAlbum = () => {
   const [activeOption, setActiveOption] = useState("albums");
-
   const handleOptionClick = (option) => {
     setActiveOption(option);
   };
@@ -17,7 +15,7 @@ const AddAlbum = () => {
     image: "",
     category: "",
     description: "",
-    bgColor: "#ffffff", // Default color
+    bgColor: "#ffffff",
   });
 
   const changeHandler = (e) => {
@@ -60,17 +58,9 @@ const AddAlbum = () => {
           body: JSON.stringify(albumData),
         });
 
-        
-
         const data2 = await response2.json();
-        console.log(data2)
-        const {success,message} = data2
-        if (success) {
-          alert(message);
-        }
-         else if(!success) {
-          alert(message);
-        }
+        const { success, message } = data2;
+        alert(message);
       }
     } catch (error) {
       console.error("Error in addAlbumHandler:", error);
@@ -79,27 +69,16 @@ const AddAlbum = () => {
 
   return (
     <>
-    <Navbar/>
-      <div className="flex">
-        <div>
-          <Sidebar
-          activeOption={activeOption}
-          handleOptionClick={handleOptionClick}
-        />
-        </div>
-        <div className="w-auto flex-1 lg:ml-60 mt-14 ">
-          <div className="p-8 bg-slate-300 rounded-lg shadow-lg px-10 md:px-20">
-            <h2 className="text-2xl font-bold text-center mb-6">
-              Add New Album
-            </h2>
-            <form onSubmit={addAlbumHandler} className="space-y-4">
+      <Navbar />
+      <div className="flex min-h-screen bg-gradient-to-br from-gray-200 to-gray-300">
+        <Sidebar activeOption={activeOption} handleOptionClick={handleOptionClick} />
+        <main className="flex-1 lg:ml-60 mt-14 p-6 min-h-screen flex items-center justify-center">
+          <div className="p-8 bg-white rounded-xl shadow-lg w-full max-w-2xl lg:max-w-none">
+            <h2 className="text-3xl sm:text-2xl md:text-2xl  font-bold text-center mb-8 text-gray-800">Add New Album</h2>
+
+            <form onSubmit={addAlbumHandler} className="space-y-6">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Album Name
-                </label>
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-700">Album Name</label>
                 <input
                   value={albumData.name}
                   onChange={changeHandler}
@@ -107,63 +86,49 @@ const AddAlbum = () => {
                   id="name"
                   name="name"
                   required
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4141]"
                 />
               </div>
               <div>
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Description
-                </label>
+                <label htmlFor="description" className="block text-sm font-semibold text-gray-700">Description</label>
                 <textarea
                   value={albumData.description}
                   onChange={changeHandler}
                   id="description"
                   name="description"
                   required
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
+                  className="mt-2 w-full px-4 py-3 h-28 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4141]"
+                  style={{ resize: "none" }} 
                 />
               </div>
               <div>
-                <label
-                  htmlFor="bgColor"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Background Color
-                </label>
-                <input
-                  type="color"
-                  value={albumData.bgColor}
-                  onChange={colorChangeHandler}
-                  id="bgColor"
-                  name="bgColor"
-                  className="mt-1 block w-[20%] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
-                />
-                <input
-                  type="text"
-                  value={albumData.bgColor}
-                  onChange={changeHandler}
-                  name="bgColor"
-                  readOnly
-                  className="mt-1 ml-2 block w-[30%] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
-                />
+                <label htmlFor="bgColor" className="block text-sm font-semibold text-gray-700">Background Color</label>
+                <div className="flex items-center gap-3 mt-2">
+                  <input
+                    type="color"
+                    value={albumData.bgColor}
+                    onChange={colorChangeHandler}
+                    id="bgColor"
+                    name="bgColor"
+                    className="w-12 h-10 border rounded shadow-sm"
+                  />
+                  <input
+                    type="text"
+                    value={albumData.bgColor}
+                    readOnly
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none"
+                  />
+                </div>
               </div>
               <div>
-                <label
-                  htmlFor="category"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Category
-                </label>
+                <label htmlFor="category" className="block text-sm font-semibold text-gray-700">Category</label>
                 <select
                   value={albumData.category}
                   onChange={changeHandler}
                   id="category"
                   name="category"
                   required
-                  className="mt-1 block w-[80%] px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4141]"
                 >
                   <option value="">Select a category</option>
                   <option value="pop">Pop</option>
@@ -173,36 +138,36 @@ const AddAlbum = () => {
                 </select>
               </div>
               <div>
-                <label
-                  htmlFor="image"
-                  className="block text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="image" className="block text-sm font-semibold text-gray-700">Album Cover</label>
+                <div className="mt-3 flex items-center">
                   <img
-                    className="w-20"
+                    className="w-20 h-20 object-cover rounded-lg mr-4"
                     src={image ? URL.createObjectURL(image) : upload}
-                    alt=""
+                    alt="Upload preview"
                   />
-                </label>
-                <input
-                  onChange={imageHandler}
-                  type="file"
-                  id="image"
-                  name="image"
-                  required
-                  className="mt-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#ff4141] file:text-white hover:file:bg-[#626262]"
-                />
+                  <div className="relative w-full">
+                    <input
+                      onChange={imageHandler}
+                      type="file"
+                      id="image"
+                      name="image"
+                      required
+                      className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-[#ff4141] file:text-white file:w-auto hover:file:bg-[#626262] cursor-pointer"
+                    />
+                  </div>
+                </div>
               </div>
-              <div>
+              <div className="text-center"> {/* Ensure button is centered */}
                 <button
                   type="submit"
-                  className="py-2 px-4 bg-gradient-to-r from-[#ff4141] to-[#626262] text-white font-semibold rounded-md shadow-sm hover:bg-gradient-to-l focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff4141]"
+                  className="w-full sm:w-[50%] py-3 mt-4 bg-gradient-to-r from-[#ff4141] to-[#626262] text-white font-bold rounded-lg shadow-md hover:bg-gradient-to-l focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff4141] mx-auto"
                 >
                   Add Album
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </main>
       </div>
     </>
   );

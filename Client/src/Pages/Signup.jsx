@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast, Toaster } from 'react-hot-toast';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -33,17 +33,39 @@ const Signup = () => {
 
       const data = await response.json();
       const { msg } = data;
-      alert(msg);
       if (response.ok) {
+        toast.success(msg, {
+          style: {
+            background: '#181818',
+            color: '#1DB954',
+            fontWeight: 'bold',
+          },
+        });
         navigate('/login');
+      } else {
+        toast.error(msg, {
+          style: {
+            background: '#181818',
+            color: '#FF0000',
+            fontWeight: 'bold',
+          },
+        });
       }
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong, please try again", {
+        style: {
+          background: '#181818',
+          color: '#FF0000',
+          fontWeight: 'bold',
+        },
+      });
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#121212] text-white">
+      <Toaster />
       <div className="bg-[#181818] shadow-xl rounded-lg p-8 w-full max-w-md">
         <h2 className="text-4xl font-bold mb-6 text-center">Sign Up for Free</h2>
 

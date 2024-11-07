@@ -56,14 +56,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow mt-6">
-        <h2 className="text-xl font-semibold mb-2">Dashboard Summary</h2>
-        <div className="">
-          <div className="">
-            <Graph />
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

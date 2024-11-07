@@ -23,7 +23,6 @@ const AddSong = () => {
       try {
         const response = await fetch('http://localhost:3000/admin/getalbums');
         const data = await response.json();
-        console.log(data);
         if (data.success) {
           setAlbums(data.albums); // Assuming the response contains albums array
         }
@@ -60,7 +59,6 @@ const AddSong = () => {
       });
 
       const imageData = await imageResponse.json();
-      console.log(imageData);
       songData.image = imageData.image_url; // Set the image URL
 
       // Upload audio
@@ -73,7 +71,6 @@ const AddSong = () => {
       });
 
       const audioData = await audioResponse.json();
-      console.log(audioData);
       songData.file = audioData.file_url; // Set the audio file URL
 
       // Submit song data
@@ -84,20 +81,12 @@ const AddSong = () => {
         },
         body: JSON.stringify(songData),
       });
-      console.log(songData);
-
-      // if (!response.ok) {
-      //   const errorResponse = await response.json();
-      //   console.log(errorResponse.message);
-      //   throw new Error(errorResponse.message);
-      // }
 
       const data = await response.json();
-      const {success,message} = data;
+      const { success, message } = data;
       if (success) {
         alert(message);
-      }
-       else if(!success) {
+      } else {
         alert(message);
       }
     } catch (error) {
@@ -113,21 +102,19 @@ const AddSong = () => {
   return (
     <>
       <Navbar />
-      <div className="flex">
-        <div>
-          <Sidebar
-            activeOption={activeOption}
-            handleOptionClick={handleOptionClick}
-          />
-        </div>
-        <div className="w-auto flex-1 lg:ml-60 mt-14">
-          <div className="p-8 bg-slate-300  shadow-lg px-10 md:px-20">
-            <h2 className="text-2xl font-bold text-center mb-6">Add New Song</h2>
-            <form onSubmit={addSongHandler} className="space-y-4">
+      <div className="flex min-h-screen bg-gradient-to-br from-gray-200 to-gray-300">
+        <Sidebar
+          activeOption={activeOption}
+          handleOptionClick={handleOptionClick}
+        />
+        <main className="flex-1 lg:ml-60 mt-14 p-6 min-h-screen flex items-center justify-center">
+          <div className="p-8 bg-white rounded-xl shadow-lg w-full max-w-2xl lg:max-w-none">
+            <h2 className="text-3xl sm:text-2xl md:text-2xl font-bold text-center mb-8 text-gray-800">Add New Song</h2>
+
+            <form onSubmit={addSongHandler} className="space-y-6">
+              {/* Song Name */}
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                  Song Name
-                </label>
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-700">Song Name</label>
                 <input
                   value={songData.name}
                   onChange={changeHandler}
@@ -135,13 +122,13 @@ const AddSong = () => {
                   id="name"
                   name="name"
                   required
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4141]"
                 />
               </div>
+
+              {/* Singer */}
               <div>
-                <label htmlFor="singer" className="block text-sm font-medium text-gray-700">
-                  Singer
-                </label>
+                <label htmlFor="singer" className="block text-sm font-semibold text-gray-700">Singer</label>
                 <input
                   value={songData.singer}
                   onChange={changeHandler}
@@ -149,13 +136,13 @@ const AddSong = () => {
                   id="singer"
                   name="singer"
                   required
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4141]"
                 />
               </div>
+
+              {/* Duration */}
               <div>
-                <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-                  Duration
-                </label>
+                <label htmlFor="duration" className="block text-sm font-semibold text-gray-700">Duration</label>
                 <input
                   value={songData.duration}
                   onChange={changeHandler}
@@ -164,81 +151,94 @@ const AddSong = () => {
                   name="duration"
                   required
                   placeholder="e.g., 3:45"
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4141]"
                 />
               </div>
+
+              {/* Description */}
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                  Description
-                </label>
+                <label htmlFor="description" className="block text-sm font-semibold text-gray-700">Description</label>
                 <textarea
                   value={songData.description}
                   onChange={changeHandler}
                   id="description"
                   name="description"
                   required
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
-                  rows="3"
-                  placeholder="Enter song description"
+                  className="mt-2 w-full px-4 py-3 h-28 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4141]"
+                  style={{ resize: "none" }}
                 />
               </div>
+
+              {/* Album Selection */}
               <div>
-                <label htmlFor="albumId" className="block text-sm font-medium text-gray-700">
-                  Select Album
-                </label>
+                <label htmlFor="albumId" className="block text-sm font-semibold text-gray-700">Album</label>
                 <select
                   value={songData.albumId}
                   onChange={changeHandler}
                   id="albumId"
                   name="albumId"
                   required
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#ff4141] focus:border-[#ff4141] sm:text-sm"
+                  className="mt-2 w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4141]"
                 >
                   <option value="">Select an album</option>
                   {albums.map((album) => (
-                    <option key={album._id} value={album._id}>
+                    <option key={album.id} value={album.id}>
                       {album.name}
                     </option>
                   ))}
                 </select>
               </div>
+
+              {/* Image Upload */}
               <div>
-                <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                  <img className="w-20" src={image ? URL.createObjectURL(image) : upload} alt="" />
-                </label>
-                <input
-                  onChange={imageHandler}
-                  type="file"
-                  id="image"
-                  name="image"
-                  required
-                  className="mt-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#ff4141] file:text-white hover:file:bg-[#626262]"
-                />
+                <label htmlFor="image" className="block text-sm font-semibold text-gray-700">Song Image</label>
+                <div className="mt-3 flex items-center">
+                  <img
+                    className="w-20 h-20 object-cover rounded-lg mr-4"
+                    src={image ? URL.createObjectURL(image) : upload}
+                    alt="Upload preview"
+                  />
+                  <div className="relative w-full">
+                    <input
+                      onChange={imageHandler}
+                      type="file"
+                      id="image"
+                      name="image"
+                      required
+                      className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-[#ff4141] file:text-white file:w-auto hover:file:bg-[#626262] cursor-pointer"
+                    />
+                  </div>
+                </div>
               </div>
+
+              {/* Audio Upload */}
               <div>
-                <label htmlFor="audio" className="block text-sm font-medium text-gray-700">
-                  Upload Audio
-                </label>
-                <input
-                  onChange={audioHandler}
-                  type="file"
-                  id="audio"
-                  name="audio"
-                  required
-                  className="mt-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#ff4141] file:text-white hover:file:bg-[#626262]"
-                />
+                <label htmlFor="file" className="block text-sm font-semibold text-gray-700">Song File</label>
+                <div className="mt-3 flex items-center">
+                  <input
+                    onChange={audioHandler}
+                    type="file"
+                    id="file"
+                    name="file"
+                    required
+                    accept="audio/*"
+                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-[#ff4141] file:text-white file:w-auto hover:file:bg-[#626262] cursor-pointer"
+                  />
+                </div>
               </div>
-              <div>
+
+              {/* Submit Button */}
+              <div className="text-center">
                 <button
                   type="submit"
-                  className="py-2 px-4 bg-gradient-to-r from-[#ff4141] to-[#626262] text-white font-semibold rounded-md shadow-sm hover:bg-gradient-to-l focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff4141]"
+                  className="w-full sm:w-[50%] py-3 mt-4 bg-gradient-to-r from-[#ff4141] to-[#626262] text-white font-bold rounded-lg shadow-md hover:bg-gradient-to-l focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff4141] mx-auto"
                 >
                   Add Song
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </main>
       </div>
     </>
   );

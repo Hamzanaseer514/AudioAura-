@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,27 +28,58 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      const { msg, success, token, role,name } = data;
+      const { msg, success, token, role, name } = data;
       if (success) {
         localStorage.setItem("token", token);
         localStorage.setItem("role", role);
         localStorage.setItem("name", name);
-        alert(msg);
-        if (role === "admin") {
-          navigate("/admin");
-        } else if (role === "user") {
-          navigate("/spotify");
-        }
+        toast.success(msg, {
+          style: {
+            background: '#1DB954',
+            color: '#121212',
+          },
+          iconTheme: {
+            primary: '#121212',
+            secondary: '#1DB954',
+          },
+        });
+        setTimeout(() => {
+          if (role === "admin") {
+            navigate("/admin");
+          } else if (role === "user") {
+            navigate("/spotify");
+          }
+        }, 1500);
       } else {
-        alert(msg);
+        toast.error(msg, {
+          style: {
+            background: '#ff3b3b',
+            color: '#ffffff',
+          },
+          iconTheme: {
+            primary: '#ffffff',
+            secondary: '#ff3b3b',
+          },
+        });
       }
     } catch (err) {
       console.log(err);
+      toast.error("Something went wrong. Please try again.", {
+        style: {
+          background: '#ff3b3b',
+          color: '#ffffff',
+        },
+        iconTheme: {
+          primary: '#ffffff',
+          secondary: '#ff3b3b',
+        },
+      });
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-[#121212] text-white">
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="bg-[#181818] shadow-xl rounded-lg p-8 w-full max-w-md">
         <h2 className="text-4xl font-bold mb-6 text-center">Login to Spotify</h2>
         
