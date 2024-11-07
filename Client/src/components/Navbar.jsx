@@ -34,6 +34,16 @@ const Navbar = () => {
     setIsSearchOpen(!isSearchOpen);
   };
 
+  const handleLogout = () => {
+    // setIsLoading(true);
+    setTimeout(() => {
+      localStorage.removeItem("token");
+      alert("Logged Out Successfully");
+      // setIsLoggedIn(false);
+      navigate("/");
+    }, 1000);
+  };
+
   return (
     <>
       {/* Top Navbar */}
@@ -71,7 +81,7 @@ const Navbar = () => {
           {/* Dropdown Menu */}
           {isDropdownOpen && (
             <div
-              className="absolute right-0 top-16 mt-2 w-32 bg-white border border-gray-300 rounded-md shadow-lg z-10"
+              className="absolute right-6 top-16 mt-2 w-32 bg-white border border-gray-300 rounded-md shadow-lg z-10"
               onClick={() => setIsDropdownOpen(false)}
             >
               <div className="py-2">
@@ -80,11 +90,20 @@ const Navbar = () => {
                     Profile
                   </button>
                 </Link>
-                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
-                  Playlists
-                </button>
+                <Link to="/user-playlist">
+                  <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
+                    Playlists
+                  </button>
+                </Link>
+
                 <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
                   Favorites
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black"
+                >
+                  Log Out
                 </button>
               </div>
             </div>

@@ -2,9 +2,9 @@ import { useState } from "react";
 
 const CreatePlaylist = ({ setIsModalOpen }) => {
   const [form, setForm] = useState({
-    playlistName: "",
+    name: "",
     description: "",
-    status: "public",
+    status: "",
   });
 
   const handleChange = (e) => {
@@ -12,9 +12,31 @@ const CreatePlaylist = ({ setIsModalOpen }) => {
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form); // Submit logic here
+    // Send the form data to your backend
+    try {
+      const response = await fetch("http://localhost:3000/user/createplaylist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "token": localStorage.getItem("token"), 
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await response.json();
+      console.log(data);
+      const { success, message } = data;
+      if (success) {
+        alert(message);
+        setIsModalOpen(false); // Close the modal
+      } else {
+        alert(message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   const closeModal = () => {
@@ -41,8 +63,8 @@ const CreatePlaylist = ({ setIsModalOpen }) => {
             </label>
             <input
               type="text"
-              name="playlistName"
-              value={form.playlistName}
+              name="name"
+              value={form.name}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-700 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400"
