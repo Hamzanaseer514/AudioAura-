@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+const { useState, useEffect } = require("react");
 import { useNavigate } from "react-router-dom"; // React Router's useNavigate hook for redirection
 import Sidebar from "../components/sidebar";
 
@@ -45,7 +45,7 @@ const PlaylistPage = () => {
 
   return (
     <div>
-        </>
+        
     </div>
   );
 };
