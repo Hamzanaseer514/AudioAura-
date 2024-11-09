@@ -1,9 +1,9 @@
-// src/components/DisplayAlbum.js
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import { useParams, useLocation } from "react-router-dom";
 import { PlayerContext } from "../context/Playercontext";
 import AlbumsContext from "../context/AlbumsContext";
+import { FaRegHeart } from "react-icons/fa";
 
 const DisplayAlbum = () => {
   const { id } = useParams();
@@ -16,6 +16,19 @@ const DisplayAlbum = () => {
   const albumData = albums.find((album) => album._id === albumId);
   const [songs, setSongs] = useState([]);
   const [loadingSongs, setLoadingSongs] = useState(true);
+  const [likedSongs, setLikedSongs] = useState(new Set()); // Track liked songs by their IDs
+
+  const handleLikeClick = (songId) => {
+    setLikedSongs((prevLikedSongs) => {
+      const newLikedSongs = new Set(prevLikedSongs);
+      if (newLikedSongs.has(songId)) {
+        newLikedSongs.delete(songId); // Remove from liked if already liked
+      } else {
+        newLikedSongs.add(songId); // Add to liked if not liked
+      }
+      return newLikedSongs;
+    });
+  };
 
   useEffect(() => {
     const fetchSongs = async () => {
@@ -75,7 +88,7 @@ const DisplayAlbum = () => {
             <p>Singer</p>
             <p className="hidden sm:block">Date Added</p>
             <p className="text-center">Duration</p>
-            <p className="text-center">ADD</p>
+            <p className="">ADD</p>
           </div>
           <hr />
           {songs.map((song, index) => (
@@ -97,7 +110,15 @@ const DisplayAlbum = () => {
               <p className="text-[15px]">{song.singer}</p>
               <p className="text-[15px] hidden sm:block">5 days ago</p>
               <p className="text-[15px] text-center">{song.duration}</p>
-              <p className="text-[15px] text-center">add</p>
+              <p
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent click from triggering song play
+                  handleLikeClick(song.id);
+                }}
+                className={`cursor-pointer w-8 ${likedSongs.has(song.id) ? "bg-green-700 text-white" : "bg-transparent text-[#a7a7a7]"} p-2 rounded-full transition-all duration-300`}
+              >
+                <FaRegHeart />
+              </p>
             </div>
           ))}
         </>

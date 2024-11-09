@@ -1,15 +1,20 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import Sidebar from "./sidebar";
+import Player from "./Player";
+import Navbar from "./Navbar";
 
 const PlaylistPage = () => {
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPlaylists = async () => {
       try {
         const response = await fetch("http://localhost:3000/user/playlists", {
           headers: {
-            "token": localStorage.getItem("token"),
+            token: localStorage.getItem("token"),
           },
         });
         const data = await response.json();
@@ -18,9 +23,11 @@ const PlaylistPage = () => {
           setPlaylists(playlists);
         } else {
           console.error("Failed to fetch playlists");
+          setError("Failed to fetch playlists");
         }
       } catch (error) {
         console.error("Error:", error);
+        setError("Error fetching playlists");
       } finally {
         setLoading(false);
       }
@@ -29,61 +36,114 @@ const PlaylistPage = () => {
     fetchPlaylists();
   }, []);
 
+  const handlePlaylistClick = (playlist) => {
+    setSelectedPlaylist(playlist);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-r from-[#2a2a2a] to-[#121212] text-white py-12 px-6">
-      <h1 className="text-5xl font-extrabold text-center text-cyan-400 mb-20 tracking-wider">
-        Your Playlists
-      </h1>
+    <div className="h-screen bg-gradient-to-b from-[#0a0a0a] to-[#1b1b1b]">
+      <div className="h-[90%] flex">
+        <Sidebar />
+        <div className="flex-1 p-8 overflow-y-auto">
+          <Navbar />
 
-      {loading ? (
-        <div className="text-center text-xl text-gray-400">Loading...</div>
-      ) : playlists.length === 0 ? (
-        <div className="text-center text-xl text-gray-400">No playlists available.</div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-12">
-          {playlists.map((playlist) => (
-            <div
-              key={playlist._id}
-              className="bg-[#1a1a1a] p-6 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 relative"
-            >
-              {/* Circular Image with Overlap */}
-              <div className="z-50 absolute top-[-43px] right-[-28px] w-24 h-24 rounded-full border-4 border-cyan-400 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8M3x8fGVufDB8fHx8fA%3D%3D" // Replace with actual image URL
-                  alt="Playlist"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              <div className="absolute top-0 left-0 bg-gradient-to-r from-cyan-400 to-blue-500 h-1.5 w-full rounded-tl-lg rounded-tr-lg"></div>
-
-              <h2 className="text-2xl font-bold text-cyan-400 mb-2">{playlist.name}</h2>
-              <p className="text-gray-300 text-sm mb-6">{playlist.description}</p>
-
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-gray-200">Songs:</h3>
-                {playlist.songs.length > 0 ? (
-                  <ul className="space-y-3">
-                    {playlist.songs.map((song) => (
-                      <li
-                        key={song._id}
-                        className="flex items-center justify-between text-gray-300 hover:text-cyan-400 transition duration-200 py-2 px-3 rounded-lg hover:bg-[#2a2a2a]"
-                      >
-                        <span className="truncate">{song.name}</span>
-                        <button className="text-cyan-400 hover:text-cyan-500">
-                          Play
-                        </button>
+          {loading ? (
+            <div className="text-white text-center py-10">
+              Loading playlists...
+            </div>
+          ) : error ? (
+            <div className="text-white text-center py-10">{error}</div>
+          ) : selectedPlaylist ? (
+            <div className="bg-[#1a1a1a] mt-5 rounded-lg p-6 shadow-2xl transform transition duration-300 hover:scale-105">
+              <button
+                onClick={() => setSelectedPlaylist(null)}
+                className="text-teal-400 hover:underline mb-4 text-lg"
+              >
+                &larr; Back to Playlists
+              </button>
+              <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-8">
+                <div className="w-full lg:w-1/3 mb-4 lg:mb-0 flex justify-end">
+                  <img
+                    src={
+                      selectedPlaylist.image ||
+                      "https://via.placeholder.com/150"
+                    }
+                    alt={selectedPlaylist.title}
+                    className="w-48 h-48 rounded-lg object-cover border-4 border-teal-400 shadow-xl"
+                  />
+                </div>
+                <div className="w-full lg:w-2/3">
+                  <h2 className="text-4xl font-semibold text-white mb-4">
+                    {selectedPlaylist.title}
+                  </h2>
+                  <p className="text-gray-400 mb-6">
+                    {selectedPlaylist.description}
+                  </p>
+                  <ul className="space-y-2">
+                    {selectedPlaylist.songs.map((song, index) => (
+                      <li key={index} className="text-lg text-gray-300">
+                        🎶 {song}
                       </li>
                     ))}
                   </ul>
-                ) : (
-                  <p className="text-gray-400">No songs in this playlist yet.</p>
-                )}
+                </div>
               </div>
             </div>
-          ))}
+          ) : (
+            <div className="grid gap-8 mt-5 md:grid-cols-2 lg:grid-cols-3">
+              {playlists.map((playlist) => (
+                <div
+                  key={playlist.id}
+                  onClick={() => handlePlaylistClick(playlist)}
+                  className="relative bg-[#1f1f1f] rounded-lg p-6 cursor-pointer hover:bg-[#333333] transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+                >
+                  {/* Background Image */}
+                  <div
+                    className="absolute inset-0 bg-cover bg-center rounded-lg opacity-40"
+                    style={{
+                      backgroundImage: `url(${
+                        playlist.image || "https://via.placeholder.com/150"
+                      })`,
+                    }}
+                  ></div>
+
+                  {/* Playlist Content */}
+                  <div className="relative z-10 flex flex-col items-center">
+                    {/* Playlist Image */}
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-teal-400 mb-4">
+                      <img
+                        src={
+                          playlist.image || "https://via.placeholder.com/150"
+                        }
+                        alt={playlist.title}
+                        className="w-full h-full object-cover transform transition duration-300 hover:scale-110"
+                      />
+                    </div>
+
+                    {/* Text Content */}
+                    <div className="text-center">
+                      <h3 className="text-2xl font-semibold text-white mb-2">
+                        {playlist.title}
+                      </h3>
+                      <p className="text-gray-400 text-sm mb-1">
+                        {playlist.status} •{" "}
+                        {playlist.songs.length} Songs
+                      </p>
+                      <a
+                        href="#"
+                        className="text-teal-400 hover:underline text-sm"
+                      >
+                        View full playlist
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-      )}
+      </div>
+      <Player />
     </div>
   );
 };
