@@ -19,6 +19,7 @@ import User from "./Pages/Admins/Pages/User.jsx";
 import CreatePlaylist from "./components/CreatePlaylist.jsx";
 import UserProfile  from "./components/UserProfile.jsx";
 import UserPlaylist from "./components/UserPlaylists.jsx";
+import UserFavourite from "./components/UserFavourite.jsx";
 
 const App = () => {
   const [category, setCategory] = useState('all');
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="/signup" element={<Signup />} />
             <Route path="/user-profile" element={<UserProfile />} />
             <Route path="/user-playlist" element={<UserPlaylist />} />
+            <Route path="/user-favourite" element={<UserFavourite/>} />
             <Route
               path="/spotify"
               element={

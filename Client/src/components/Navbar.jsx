@@ -95,10 +95,11 @@ const Navbar = () => {
                     Playlists
                   </button>
                 </Link>
-
+                <Link to="/user-favourite">
                 <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
                   Favorites
                 </button>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black"
