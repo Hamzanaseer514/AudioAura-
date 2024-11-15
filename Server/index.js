@@ -3,6 +3,7 @@ const {connectToDb} = require("./db")
 const UserRouter = require("./Routes/User")
 const AlbumRouter = require("./Routes/Album")
 const playlistRouter = require("./Routes/Playlist")
+const FavouriteRouter = require("./Routes/Favourite")
 const path =  require("path")
 const multer = require("multer")
 const cors = require("cors")
@@ -15,6 +16,7 @@ app.use(cors())
 app.use("/",UserRouter)
 app.use("/admin",AlbumRouter)
 app.use("/user",playlistRouter)
+app.use("/user",FavouriteRouter)
 
 
 const storage = multer.diskStorage({

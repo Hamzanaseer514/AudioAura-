@@ -20,6 +20,7 @@ import CreatePlaylist from "./components/CreatePlaylist.jsx";
 import UserProfile from "./components/UserProfile.jsx";
 import UserPlaylist from "./components/UserPlaylists.jsx";
 import UserFavourite from "./components/UserFavourite.jsx";
+import SongContext from "./context/SongContext.jsx";
 
 const App = () => {
   const [category, setCategory] = useState("all");
@@ -28,6 +29,7 @@ const App = () => {
     <CategoryContext.Provider value={{ category, setCategory }}>
       <AlbumsProvider> {/* Wrap with AlbumsProvider */}
       <PlayerContextProvider>
+        <SongContext.Provider value={{Song,setSong}}>
         <div className="h-screen">
           <Routes>
             <Route path="/" element={<Home />} />
@@ -62,6 +64,7 @@ const App = () => {
           </Routes>
          
         </div>
+        </SongContext.Provider>
         </PlayerContextProvider>
       </AlbumsProvider>
     </CategoryContext.Provider>

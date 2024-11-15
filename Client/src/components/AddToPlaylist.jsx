@@ -26,7 +26,7 @@ const AddToPlaylist = ({ setIsModalOpen }) => {
         console.error("Error fetching playlists:", error);
       }
     };
-    console.log("Song", Song.id); // Check song ID
+    // console.log("Song", Song.id); // Check song ID
     fetchPlaylists();
   }, [Song]); // Fetch playlists when Song changes
 

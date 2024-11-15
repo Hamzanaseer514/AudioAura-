@@ -25,7 +25,7 @@ const Navbar = () => {
     <nav className="bg-gray-800 p-4">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="text-white text-lg font-bold">
-          <h1 className="text-green-500 text-5xl">AudioAura</h1>
+          <h1 className="text-[#00ABE4] text-5xl">AudioAura</h1>
         </div>
         <div className="hidden md:flex space-x-6 items-center">
           <Link to="/spotify" className="text-white hover:text-gray-300">
@@ -36,14 +36,14 @@ const Navbar = () => {
           </a>
           {!isLoggedIn ? (
             <Link to="/login">
-              <button className="bg-green-500 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-green-600 transition duration-300">
+              <button className="bg-[#00ABE4] text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-[#00abe4d2] transition duration-300">
                 Login
               </button>
             </Link>
           ) : (
             <button
               onClick={handleLogout}
-              className="bg-green-500 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-green-600 transition duration-300"
+              className="bg-[#00ABE4] text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-[#00abe4d2] transition duration-300"
             >
               {isLoading ? "Logging out..." : "Logout"} {/* Change button text */}
             </button>
@@ -85,7 +85,7 @@ const Navbar = () => {
           </a>
           {!isLoggedIn ? (
             <Link to="/login">
-              <button className="bg-green-500 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-green-600 transition duration-300">
+              <button className="bg-[#00ABE4] text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-[#00abe4d2] transition duration-300">
                 Login
               </button>
             </Link>

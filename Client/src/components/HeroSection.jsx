@@ -43,7 +43,7 @@ const Hero = () => {
         <div className="animate-fadeUp delay-2s">
           <button
             onClick={handleGetStarted}
-            className="bg-green-500 text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-green-600 transition duration-300"
+            className="bg-[#00ABE4] text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-[#00ABE4] transition duration-300"
           >
             Get Spotify Free
           </button>

@@ -1,4 +1,5 @@
 const Playlist = require('../Model/Playlist');
+const Song = require('../Model/Song');
 
 const createPlaylist = async (req, res) => {
   try {
@@ -35,12 +36,19 @@ const getUsersPlaylist = async (req, res) => {
 
 const addToPlaylist = async (req, res) => {
   const { playlistId, songId } = req.body;
+  const song = await Song.findOne({id:songId});
+  if(!song){
+    return res.status(404).json({ message: 'Song not found', success: false });
+  }
+  // console.log(song._id);
+  const songid = song._id;
   try {
     const playlist = await Playlist.findById(playlistId);
     if (!playlist) {
       return res.status(404).json({ message: 'Playlist not found', success: false });
     }
-    playlist.songs.push("671387fb455756f7c50c2540");
+    // console.log("songid",songid)
+    playlist.songs.push(songid);
     await playlist.save();
     return res.json({ playlist, success: true, message: "Song added to playlist successfully" });
   } catch (error) {

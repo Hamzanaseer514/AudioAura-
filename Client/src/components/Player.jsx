@@ -69,8 +69,10 @@ const Player = () => {
   };
 
   const openmodel = () => {
-    setIsAddToPlaylistOpen(true);
     setSong(track)
+    setIsAddToPlaylistOpen(true);
+    console.log(track)
+    // console.log(Song)
   };
 
   // Ensuring the volume is applied when the audio element is ready
@@ -270,6 +272,7 @@ const Player = () => {
       {isAddToPlaylistOpen && (
         <AddToPlaylist
           setIsModalOpen={setIsAddToPlaylistOpen}
+          // Song={track}
           // playlists={playlists}
           // song={{ ...song, track }}
         />

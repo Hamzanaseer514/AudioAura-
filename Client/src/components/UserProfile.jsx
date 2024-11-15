@@ -82,7 +82,7 @@ const ProfilePage = () => {
                 {isEditing ? (
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="bg-[#2c2c2c] p-5 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
-                      <label className="block text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
+                      <label className=" text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
                         <FaUser className="text-teal-500" />
                         <span>First Name</span>
                       </label>
@@ -96,7 +96,7 @@ const ProfilePage = () => {
                       />
                     </div>
                     <div className="bg-[#2c2c2c] p-5 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
-                      <label className="block text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
+                      <label className=" text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
                         <FaUser className="text-teal-500" />
                         <span>Last Name</span>
                       </label>
@@ -110,7 +110,7 @@ const ProfilePage = () => {
                       />
                     </div>
                     <div className="bg-[#2c2c2c] p-5 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
-                      <label className="block text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
+                      <label className=" text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
                         <FaEnvelope className="text-teal-500" />
                         <span>Email</span>
                       </label>
@@ -124,7 +124,7 @@ const ProfilePage = () => {
                       />
                     </div>
                     <div className="bg-[#2c2c2c] p-5 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
-                      <label className="block text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
+                      <label className=" text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
                         <FaLock className="text-teal-500" />
                         <span>Password</span>
                       </label>
