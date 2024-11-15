@@ -25,11 +25,13 @@ import SongContext from "./context/SongContext.jsx";
 const App = () => {
   const [category, setCategory] = useState("all");
   const [Song, setSong] = useState(null);
+  const [FavouriteCount, setFavouriteCount] = useState(null);
+  const [PlaylistCount, setPlaylistCount] = useState(null);
   return (
     <CategoryContext.Provider value={{ category, setCategory }}>
       <AlbumsProvider> {/* Wrap with AlbumsProvider */}
       <PlayerContextProvider>
-        <SongContext.Provider value={{Song,setSong}}>
+        <SongContext.Provider value={{Song,setSong,FavouriteCount,setFavouriteCount,PlaylistCount,setPlaylistCount}}>
         <div className="h-screen">
           <Routes>
             <Route path="/" element={<Home />} />

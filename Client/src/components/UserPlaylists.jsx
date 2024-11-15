@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import Sidebar from "./sidebar";
 import Player from "./Player";
 import Navbar from "./Navbar";
 import { TiDelete } from "react-icons/ti";
+import SongContext from "../context/SongContext";
 
 const PlaylistPage = () => {
   const [playlists, setPlaylists] = useState([]);
@@ -10,6 +11,8 @@ const PlaylistPage = () => {
   const [loading, setLoading] = useState(true);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [error, setError] = useState(null);
+
+  const {setPlaylistCount} = useContext(SongContext)
 
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -22,6 +25,7 @@ const PlaylistPage = () => {
         const data = await response.json();
         if (data.success) {
           setPlaylists(data.playlists);
+          setPlaylistCount(data.playlists.length)
         } else {
           setError("Failed to fetch playlists");
         }
@@ -38,7 +42,7 @@ const PlaylistPage = () => {
   const fetchSongsByIds = async (songIds) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/user/getSongsByPlaylist",
+        "http://localhost:3000/user/getSongsByIds",
         {
           method: "POST",
           headers: {

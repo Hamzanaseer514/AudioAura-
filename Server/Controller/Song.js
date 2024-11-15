@@ -9,7 +9,7 @@ const Album = require("../Model/Album");
 const addSong = async (req, res) => {
   try {
     const { name, image, file, description, duration, singer, albumId } = req.body;
-    console.log(file)
+    // console.log(file)
     const existingSong = await Songs.findOne({ name, albumId });
     if (existingSong) {
       return res.status(400).json({success:false, message: "Song already exists in this album" });
@@ -29,8 +29,8 @@ const addSong = async (req, res) => {
       albumId,
     });
 
-    console.log(newSong._id);
-    console.log(albumId);
+    // console.log(newSong._id);
+    // console.log(albumId);
 
     await updateAlbumBySong(newSong._id, albumId);
 
@@ -74,9 +74,9 @@ const getallsongs = async (req, res) => {
 
 
 
-const getSongsByPlaylist = async (req, res) => {
+const getSongsByIds = async (req, res) => {
   const { songIds } = req.body;
-
+//  console.log("h",songIds)
   if (!songIds || songIds.length === 0) {
     return res.status(400).json({ message: 'No song IDs provided', success: false });
   }
@@ -84,7 +84,7 @@ const getSongsByPlaylist = async (req, res) => {
   try {
     const objectIds = songIds.map((id) => new mongoose.Types.ObjectId(id));
     const songs = await Songs.find({ '_id': { $in: objectIds } });
-    console.log(songs)
+    // console.log(songs)
     if (!songs || songs.length === 0) {
       return res.status(404).json({ message: 'No songs found', success: false });
     }
@@ -99,4 +99,4 @@ const getSongsByPlaylist = async (req, res) => {
 
 
 
-module.exports = { addSong,getSongsByAlbumId,getallsongs,getSongsByPlaylist};
+module.exports = { addSong,getSongsByAlbumId,getallsongs,getSongsByIds};
