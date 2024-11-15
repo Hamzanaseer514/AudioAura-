@@ -19,51 +19,49 @@ import User from "./Pages/Admins/Pages/User.jsx";
 import CreatePlaylist from "./components/CreatePlaylist.jsx";
 import UserProfile from "./components/UserProfile.jsx";
 import UserPlaylist from "./components/UserPlaylists.jsx";
-import SongContext  from "./context/SongContext.jsx";
+import UserFavourite from "./components/UserFavourite.jsx";
 
 const App = () => {
   const [category, setCategory] = useState("all");
   const [Song, setSong] = useState(null);
   return (
     <CategoryContext.Provider value={{ category, setCategory }}>
-      <AlbumsProvider>
-        {" "}
-        {/* Wrap with AlbumsProvider */}
-        <PlayerContextProvider>
-          <SongContext.Provider value={{Song,setSong}} >
-            <div className="h-screen">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/user-profile" element={<UserProfile />} />
-                <Route path="/user-playlist" element={<UserPlaylist />} />
-                <Route
-                  path="/spotify"
-                  element={
-                    <ProtectedRoute requiredRole="user">
-                      <MainPage />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/spotify/premium" element={<Premium />} />
-                <Route path="/spotify/album/:id" element={<ShowAlbum />} />
-                <Route
-                  path="/admin"
-                  element={
-                    <ProtectedRoute requiredRole="admin">
-                      <AdminMain />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/unauthorized" element={<UnauthorizedPage />} />
-                <Route path="/albums" element={<Album />} />
-                <Route path="/songs" element={<AddSong />} />
-                <Route path="/playlists" element={<Playlist />} />
-                <Route path="/users" element={<User />} />
-              </Routes>
-            </div>
-          </SongContext.Provider>
+      <AlbumsProvider> {/* Wrap with AlbumsProvider */}
+      <PlayerContextProvider>
+        <div className="h-screen">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/user-profile" element={<UserProfile />} />
+            <Route path="/user-playlist" element={<UserPlaylist />} />
+            <Route path="/user-favourite" element={<UserFavourite/>} />
+            <Route
+              path="/spotify"
+              element={
+                <ProtectedRoute requiredRole="user">
+                  <MainPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/spotify/premium" element={<Premium />} />
+            <Route path="/spotify/album/:id" element={<ShowAlbum />} />
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requiredRole="admin">
+                  <AdminMain />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/unauthorized" element={<UnauthorizedPage />} />
+            <Route path="/albums" element={<Album />} />
+            <Route path="/songs" element={<AddSong />} />
+            <Route path="/playlists" element={<Playlist />} />
+            <Route path="/users" element={<User />} />
+          </Routes>
+         
+        </div>
         </PlayerContextProvider>
       </AlbumsProvider>
     </CategoryContext.Provider>
