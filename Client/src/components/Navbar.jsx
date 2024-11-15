@@ -5,19 +5,49 @@ import { Link } from "react-router-dom";
 import CategoryContext from "../context/CategoryContext";
 import CreatePlaylist from "./CreatePlaylist";
 
+// Function to decode JWT
+function parseJwt(token) {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  } catch (error) {
+    console.error("Invalid token", error);
+    return null;
+  }
+}
+
 const Navbar = () => {
   const { category, setCategory } = useContext(CategoryContext);
   const navigate = useNavigate();
 
-  const name = localStorage.getItem("name");
-  const name1 = name.split(" ");
-  console.log(name1);
-  const firstCharacter = name1[0].charAt(0).toUpperCase();
-  const SecondCharacter = name1[1].charAt(0).toUpperCase();
+  // Decode the token from localStorage
+  const token = localStorage.getItem("token");
+  let name = "";
+
+  if (token) {
+    const decodedToken = parseJwt(token);
+    if (decodedToken && decodedToken.name) {
+      name = decodedToken.name;
+    }
+  }
+
+  // Extract initials from the name
+  const nameParts = name ? name.split(" ") : ["U", "N"];
+  const firstCharacter = nameParts[0]?.charAt(0).toUpperCase() || "U";
+  const secondCharacter = nameParts[1]?.charAt(0).toUpperCase() || "N";
+
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -35,11 +65,9 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
-    // setIsLoading(true);
     setTimeout(() => {
       localStorage.removeItem("token");
       alert("Logged Out Successfully");
-      // setIsLoggedIn(false);
       navigate("/");
     }, 1000);
   };
@@ -76,7 +104,7 @@ const Navbar = () => {
             onClick={handleAvatarClick}
             className="bg-purple-500 text-black w-8 cursor-pointer h-7 rounded-full flex justify-center"
           >
-            {firstCharacter + SecondCharacter}
+            {firstCharacter + secondCharacter}
           </p>
           {/* Dropdown Menu */}
           {isDropdownOpen && (
@@ -158,7 +186,6 @@ const Navbar = () => {
 
         {/* Category Options */}
         <div className="mt-6">
-          {/* Category Buttons */}
           <div
             onClick={() => {
               setCategory("all");
@@ -218,44 +245,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      <div>
-        {isModalOpen && <CreatePlaylist setIsModalOpen={setIsModalOpen} />}
-      </div>
-
-      <div className="hidden md:flex items-center gap-2 mt-4">
-        <p
-          onClick={() => setCategory("all")}
-          className={`px-4 py-1 rounded-2xl cursor-pointer transition duration-300 ease-in-out ${
-            category === "all"
-              ? "bg-green-500 text-black"
-              : "bg-black text-white hover:bg-white hover:text-black"
-          }`}
-        >
-          All
-        </p>
-        <Link to="">
-          <p
-            onClick={() => setCategory("music")}
-            className={`px-4 py-1 rounded-2xl cursor-pointer transition duration-300 ease-in-out ${
-              category === "music"
-                ? "bg-green-500 text-black"
-                : "bg-black text-white hover:bg-white hover:text-black"
-            }`}
-          >
-            Music
-          </p>
-        </Link>
-        <p
-          onClick={() => setCategory("podcast")}
-          className={`px-4 py-1 rounded-2xl cursor-pointer transition duration-300 ease-in-out ${
-            category === "podcast"
-              ? "bg-green-500 text-black"
-              : "bg-black text-white hover:bg-white hover:text-black"
-          }`}
-        >
-          Podcasts
-        </p>
-      </div>
+      {isModalOpen && <CreatePlaylist closeModal={() => setIsModalOpen(false)} />}
     </>
   );
 };

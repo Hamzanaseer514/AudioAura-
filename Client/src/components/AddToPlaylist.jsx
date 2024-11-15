@@ -1,33 +1,86 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useContext } from "react";
+import SongContext from '../context/SongContext'; // Correct import
 
-const AddToPlaylist = ({ setIsModalOpen, playlists, song }) => {
-  const [selectedPlaylists, setSelectedPlaylists] = useState([]);
+const AddToPlaylist = ({ setIsModalOpen }) => {
+  const [playlists, setPlaylists] = useState([]);
+  const [selectedPlaylist, setSelectedPlaylist] = useState(null); // Store the selected playlist ID
+  const [isSubmitting, setIsSubmitting] = useState(false); // For showing loading state
+  const [errorMessage, setErrorMessage] = useState(null); // To show error if any
+  const { Song } = useContext(SongContext);
 
-  const handleCheckboxChange = (playlistId) => {
-    setSelectedPlaylists((prevSelected) => {
-      if (prevSelected.includes(playlistId)) {
-        return prevSelected.filter((id) => id !== playlistId);
-      } else {
-        return [...prevSelected, playlistId]; 
+  // Fetch playlists from API on component mount with token
+  useEffect(() => {
+    const fetchPlaylists = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/user/playlists", {
+          headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await response.json();
+        setPlaylists(data.playlists); // Adjust based on the response format
+      } catch (error) {
+        console.error("Error fetching playlists:", error);
       }
-    });
+    };
+    console.log("Song", Song.id); // Check song ID
+    fetchPlaylists();
+  }, [Song]); // Fetch playlists when Song changes
+
+  const handleCardClick = (playlistId) => {
+    // Toggle the playlist selection when the card is clicked
+    setSelectedPlaylist(playlistId);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Selected Playlists:", selectedPlaylists);
-    console.log("Song to Add:", song);
+    setIsSubmitting(true);
+    setErrorMessage(null); // Reset error message
+
+    try {
+      // API request to add the song to the selected playlist
+      const response = await fetch("http://localhost:3000/user/addSongToPlaylist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playlistId: selectedPlaylist,
+          songId: Song.id, // Assuming Song has an id property
+        }),
+      });
+      console.log(response); // Log the response
+      const data = await response.json();
+      console.log(data); // Log the response
+      const { success,message } = data;
+
+      if (success) {
+        // If the request is successful, close the modal and reset selection
+        setIsModalOpen(false);
+        resetSelection();
+        alert(message);
+      } else if(!success) {
+        // Handle errors from the API
+        setErrorMessage(data.message || "An error occurred while adding the song.");
+      }
+    } catch (error) {
+      console.error("Error adding song to playlist:", error);
+      setErrorMessage("An unexpected error occurred.");
+    } finally {
+      setIsSubmitting(false); // Stop loading state
+    }
+  };
+
+  const closeModal = () => {
     setIsModalOpen(false);
     resetSelection();
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false); 
-    resetSelection(); 
-  };
-
   const resetSelection = () => {
-    setSelectedPlaylists([]); 
+    setSelectedPlaylist(null); // Reset selection
   };
 
   return (
@@ -45,35 +98,42 @@ const AddToPlaylist = ({ setIsModalOpen, playlists, song }) => {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <p className="text-sm font-medium mb-2 text-gray-300">
-              Select Playlists to Add "{song.title}" to:
+              Select Playlist to Add to:
             </p>
-            <div className="space-y-2">
+            <div className="flex overflow-x-auto space-x-4 p-2 scrollbar-thin scrollbar-thumb-cyan-400">
               {playlists.map((playlist) => (
-                <div key={playlist.id} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`playlist-${playlist.id}`}
-                    checked={selectedPlaylists.includes(playlist.id)}
-                    onChange={() => handleCheckboxChange(playlist.id)}
-                    className="mr-2 h-4 w-4 text-cyan-400 border-gray-600 rounded focus:ring-cyan-400"
-                  />
-                  <label
-                    htmlFor={`playlist-${playlist.id}`}
-                    className="text-sm text-gray-200"
-                  >
+                <div
+                  key={playlist._id}
+                  onClick={() => handleCardClick(playlist._id)}
+                  className={`min-w-[150px] p-4 rounded-lg shadow-md flex-shrink-0 cursor-pointer transition-all duration-300 ${
+                    selectedPlaylist === playlist._id
+                      ? "bg-cyan-500 text-white" // If selected, change the background color
+                      : "bg-gray-800 text-gray-300"
+                  }`}
+                >
+                  <label className="block text-sm font-semibold mb-1">
                     {playlist.name}
                   </label>
+                  <p className="text-xs text-gray-400">
+                    {playlist.songs?.length || 0} songs
+                  </p>
                 </div>
               ))}
             </div>
           </div>
 
+          {/* Error message */}
+          {errorMessage && (
+            <p className="text-red-500 text-center">{errorMessage}</p>
+          )}
+
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 bg-cyan-400 text-gray-900 rounded-lg font-bold hover:bg-cyan-300 transition duration-200"
+            disabled={isSubmitting || !selectedPlaylist} // Disable submit when submitting or no playlist is selected
+            className={`w-full py-2 ${isSubmitting ? "bg-gray-500" : "bg-cyan-400"} text-gray-900 rounded-lg font-bold hover:bg-cyan-300 transition duration-200`}
           >
-            Add to Selected Playlists
+            {isSubmitting ? "Adding..." : "Add to Selected Playlist"}
           </button>
         </form>
       </div>

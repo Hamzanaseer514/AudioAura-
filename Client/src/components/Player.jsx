@@ -2,8 +2,11 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/Playercontext";
 import AddToPlaylist from "./AddToPlaylist";
+import SongContext from "../context/SongContext";
 
 const Player = () => {
+
+  const {Song,setSong} = useContext(SongContext)
   const {
     track,
     seekBg,
@@ -16,6 +19,7 @@ const Player = () => {
     next,
     seeksong,
   } = useContext(PlayerContext);
+
 
   const [isHeartToggled, setIsHeartToggled] = useState(false);
   const [floatingHearts, setFloatingHearts] = useState([]);
@@ -66,6 +70,7 @@ const Player = () => {
 
   const openmodel = () => {
     setIsAddToPlaylistOpen(true);
+    setSong(track)
   };
 
   // Ensuring the volume is applied when the audio element is ready
@@ -90,8 +95,8 @@ const Player = () => {
       setFloatingHearts([]);
     }, 1000);
   };
-  const playlists = []; // Define this with your actual playlist data
-  const song = {}; // Define this with your actual song data
+  // const playlists = []; // Define this with your actual playlist data
+  // const song = {}; // Define this with your actual song data
 
   return (
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4 relative">
@@ -265,8 +270,8 @@ const Player = () => {
       {isAddToPlaylistOpen && (
         <AddToPlaylist
           setIsModalOpen={setIsAddToPlaylistOpen}
-          playlists={playlists}
-          song={{ ...song, track }}
+          // playlists={playlists}
+          // song={{ ...song, track }}
         />
       )}
 

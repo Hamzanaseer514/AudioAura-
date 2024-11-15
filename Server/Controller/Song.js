@@ -69,6 +69,28 @@ const getallsongs = async (req, res) => {
   }
 }
 
+const getSongsByPlaylist = async (req, res) => {
+  const { songIds } = req.body;
+
+  if (!songIds || songIds.length === 0) {
+    return res.status(400).json({ message: 'No song IDs provided', success: false });
+  }
+
+  try {
+    // Fetch songs from the database using the provided song IDs
+    const songs = await Songs.find({ '_id': { $in: songIds } });
+
+    if (!songs || songs.length === 0) {
+      return res.status(404).json({ message: 'No songs found', success: false });
+    }
+
+    return res.json({ success: true, songs });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Error fetching songs', success: false, error });
+  }
+}
 
 
-module.exports = { addSong,getSongsByAlbumId,getallsongs};
+
+module.exports = { addSong,getSongsByAlbumId,getallsongs,getSongsByPlaylist};

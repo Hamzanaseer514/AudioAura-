@@ -5,10 +5,12 @@ import Navbar from "./Navbar";
 
 const PlaylistPage = () => {
   const [playlists, setPlaylists] = useState([]);
+  const [songs, setSongs] = useState([]); // Store song details
   const [loading, setLoading] = useState(true);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [error, setError] = useState(null);
 
+  // Fetch playlists from API
   useEffect(() => {
     const fetchPlaylists = async () => {
       try {
@@ -36,8 +38,36 @@ const PlaylistPage = () => {
     fetchPlaylists();
   }, []);
 
+  // Fetch songs based on the selected playlist
+  const fetchSongsByIds = async (songIds) => {
+    try {
+      const response = await fetch("http://localhost:3000/user/getSongsByPlaylist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ songIds }),
+      });
+      
+      console.log(response)
+      const data = await response.json();
+      console.log(data)
+      if (data.success) {
+        setSongs(data.songs); // Store the fetched songs
+      } else {
+        alert(data.message);
+        setError("Error fetching songs");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Error fetching songs");
+    }
+  };
+
+  // Handle playlist click
   const handlePlaylistClick = (playlist) => {
     setSelectedPlaylist(playlist);
+    fetchSongsByIds(playlist.songs); // Fetch songs for the selected playlist
   };
 
   return (
@@ -64,10 +94,7 @@ const PlaylistPage = () => {
               <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-8">
                 <div className="w-full lg:w-1/3 mb-4 lg:mb-0 flex justify-end">
                   <img
-                    src={
-                      selectedPlaylist.image ||
-                      "https://via.placeholder.com/150"
-                    }
+                    src={selectedPlaylist.image || "https://via.placeholder.com/150"}
                     alt={selectedPlaylist.title}
                     className="w-48 h-48 rounded-lg object-cover border-4 border-teal-400 shadow-xl"
                   />
@@ -76,13 +103,11 @@ const PlaylistPage = () => {
                   <h2 className="text-4xl font-semibold text-white mb-4">
                     {selectedPlaylist.title}
                   </h2>
-                  <p className="text-gray-400 mb-6">
-                    {selectedPlaylist.description}
-                  </p>
+                  <p className="text-gray-400 mb-6">{selectedPlaylist.description}</p>
                   <ul className="space-y-2">
-                    {selectedPlaylist.songs.map((song, index) => (
+                    {songs.map((song, index) => (
                       <li key={index} className="text-lg text-gray-300">
-                        🎶 {song}
+                        🎶 {song.title} by {song.artist}
                       </li>
                     ))}
                   </ul>
@@ -93,41 +118,30 @@ const PlaylistPage = () => {
             <div className="grid gap-8 mt-5 md:grid-cols-2 lg:grid-cols-3">
               {playlists.map((playlist) => (
                 <div
-                  key={playlist.id}
+                  key={playlist._id}
                   onClick={() => handlePlaylistClick(playlist)}
                   className="relative bg-[#1f1f1f] rounded-lg p-6 cursor-pointer hover:bg-[#333333] transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg"
                 >
-                  {/* Background Image */}
                   <div
                     className="absolute inset-0 bg-cover bg-center rounded-lg opacity-40"
                     style={{
-                      backgroundImage: `url(${
-                        playlist.image || "https://via.placeholder.com/150"
-                      })`,
+                      backgroundImage: `url(${playlist.image || "https://via.placeholder.com/150"})`,
                     }}
                   ></div>
-
-                  {/* Playlist Content */}
                   <div className="relative z-10 flex flex-col items-center">
-                    {/* Playlist Image */}
                     <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-teal-400 mb-4">
                       <img
-                        src={
-                          playlist.image || "https://via.placeholder.com/150"
-                        }
+                        src={playlist.image || "https://via.placeholder.com/150"}
                         alt={playlist.title}
                         className="w-full h-full object-cover transform transition duration-300 hover:scale-110"
                       />
                     </div>
-
-                    {/* Text Content */}
                     <div className="text-center">
                       <h3 className="text-2xl font-semibold text-white mb-2">
                         {playlist.title}
                       </h3>
                       <p className="text-gray-400 text-sm mb-1">
-                        {playlist.status} •{" "}
-                        {playlist.songs.length} Songs
+                        {playlist.status} • {playlist.songs.length} Songs
                       </p>
                       <a
                         href="#"

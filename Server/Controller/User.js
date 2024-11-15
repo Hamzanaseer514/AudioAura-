@@ -65,8 +65,9 @@ const login = async (req, res) => {
         const data = {
             id: user._id,
             role: user.role,
+            name: user.firstname + ' ' + user.lastname,
         };
-        const token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '1min' });
+        const token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: '24h' });
         return res.status(200).json({ msg: "Login successful", token,role:user.role,name:(user.firstname+' '+user.lastname),success:true });
     } catch (err) {
         return res.status(500).json({ msg: "Server error", error: err.message });

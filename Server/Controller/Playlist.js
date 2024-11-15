@@ -33,7 +33,28 @@ const getUsersPlaylist = async (req, res) => {
   }
 }
 
+const addToPlaylist = async (req, res) => {
+  const { playlistId, songId } = req.body;
+  try {
+    const playlist = await Playlist.findById(playlistId);
+    if (!playlist) {
+      return res.status(404).json({ message: 'Playlist not found', success: false });
+    }
+    playlist.songs.push("671387fb455756f7c50c2540");
+    await playlist.save();
+    return res.json({ playlist, success: true, message: "Song added to playlist successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Failed to add song to playlist', error });
+  }
+};
+
+
+
+
+
 module.exports = {
   createPlaylist,
-  getUsersPlaylist
+  getUsersPlaylist,
+  addToPlaylist
 };
