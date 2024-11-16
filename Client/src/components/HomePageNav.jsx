@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AudioAuraLogo from "../assets/AudioAuraLogo.png"
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,8 +47,15 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
         {/* Logo */}
-        <div className="text-white text-lg font-bold">
-          <h1 className="text-[#00ABE4] text-5xl">AudioAura</h1>
+        <div className="flex items-center space-x-2">
+          <img
+            src={AudioAuraLogo} // Replace with your logo image path
+            alt="Logo"
+            className="w-12 h-12 md:w-16 md:h-16"
+          />
+          <h1 className="text-white text-lg font-bold md:text-3xl">
+            AudioAura
+          </h1>
         </div>
 
         {/* Desktop Menu */}
@@ -132,7 +140,7 @@ const Navbar = () => {
         }`}
       >
         <div className="flex flex-col space-y-4 mb-4 mt-4 text-center">
-        <Link
+          <Link
             to="/"
             className={`hover:text-gray-400 transition ${
               isScrolled ? "text-white" : "text-gray-300"

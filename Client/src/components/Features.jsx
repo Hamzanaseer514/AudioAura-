@@ -1,9 +1,28 @@
-import React from "react";
+import React,{useEffect,useState} from "react";
 import HomePageNav from "./HomePageNav";
 import 'animate.css';
 import { FaHeadphonesAlt, FaMusic, FaUsers } from "react-icons/fa"; 
+import { useNavigate } from "react-router-dom";
 
 const Features = () => {
+
+  const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleGetStarted = () => {
+    if (isLoggedIn) {
+      navigate("/spotify");
+    } else {
+      navigate("/login");
+    }
+  };
   return (
     <div className="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen">
       {/* Navbar */}
@@ -18,7 +37,7 @@ const Features = () => {
       Experience the ultimate musical journey with AudioAura, where every track connects to your soul.
       Let's take your emotions on a magical ride.
     </p>
-    <button className="bg-[#00ABE4] text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transform transition duration-300 hover:bg-[#009fc3]">
+    <button onClick={handleGetStarted} className="bg-[#00ABE4] text-white px-6 py-3 rounded-full shadow-lg hover:scale-105 transform transition duration-300 hover:bg-[#009fc3]">
       Get Started
     </button>
   </div>
