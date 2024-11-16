@@ -51,7 +51,15 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex space-x-6 items-center">
+        <div className="hidden text-xl font-bold md:flex space-x-10 items-center">
+          <Link
+            to="/"
+            className={`hover:text-gray-400 transition ${
+              isScrolled ? "text-white" : "text-gray-300"
+            }`}
+          >
+            Home
+          </Link>
           <Link
             to="/features"
             className={`hover:text-gray-400 transition ${
@@ -61,14 +69,6 @@ const Navbar = () => {
             Features
           </Link>
           <Link
-            to="/contact"
-            className={`hover:text-gray-400 transition ${
-              isScrolled ? "text-white" : "text-gray-300"
-            }`}
-          >
-            Contact
-          </Link>
-          <Link
             to="/about"
             className={`hover:text-gray-400 transition ${
               isScrolled ? "text-white" : "text-gray-300"
@@ -76,6 +76,15 @@ const Navbar = () => {
           >
             About
           </Link>
+          <Link
+            to="/contact"
+            className={`hover:text-gray-400 transition ${
+              isScrolled ? "text-white" : "text-gray-300"
+            }`}
+          >
+            Contact
+          </Link>
+          
           {!isLoggedIn ? (
             <Link to="/login">
               <button className="bg-[#00ABE4] text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-[#00abe4d2] transition duration-300">
