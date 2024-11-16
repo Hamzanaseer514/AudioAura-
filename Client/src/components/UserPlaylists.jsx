@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "./sidebar";
 import Player from "./Player";
 import Navbar from "./Navbar";
@@ -12,7 +12,7 @@ const PlaylistPage = () => {
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [error, setError] = useState(null);
 
-  const {setPlaylistCount} = useContext(SongContext)
+  const { setPlaylistCount } = useContext(SongContext);
 
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -25,7 +25,7 @@ const PlaylistPage = () => {
         const data = await response.json();
         if (data.success) {
           setPlaylists(data.playlists);
-          setPlaylistCount(data.playlists.length)
+          setPlaylistCount(data.playlists.length);
         } else {
           setError("Failed to fetch playlists");
         }
@@ -41,16 +41,13 @@ const PlaylistPage = () => {
 
   const fetchSongsByIds = async (songIds) => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/user/getSongsByIds",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ songIds }),
-        }
-      );
+      const response = await fetch("http://localhost:3000/user/getSongsByIds", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ songIds }),
+      });
       const data = await response.json();
       if (data.success) {
         setSongs(data.songs);
@@ -76,19 +73,19 @@ const PlaylistPage = () => {
 
           {loading ? (
             <div class=" flex space-x-12 p-12 justify-center items-center">
-            <div class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+              <div class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
                 <div class="animate-pulse flex space-x-4">
-                    <div class="rounded-full bg-blue-400 h-12 w-12"></div>
-                    <div class="flex-1 space-y-4 py-1">
-                        <div class="h-4 bg-blue-400 rounded w-3/4"></div>
-                        <div class="space-y-2">
-                            <div class="h-4 bg-blue-400 rounded"></div>
-                            <div class="h-4 bg-blue-400 rounded w-5/6"></div>
-                        </div>
+                  <div class="rounded-full bg-blue-400 h-12 w-12"></div>
+                  <div class="flex-1 space-y-4 py-1">
+                    <div class="h-4 bg-blue-400 rounded w-3/4"></div>
+                    <div class="space-y-2">
+                      <div class="h-4 bg-blue-400 rounded"></div>
+                      <div class="h-4 bg-blue-400 rounded w-5/6"></div>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
           ) : error ? (
             <div className="text-white text-center py-10">{error}</div>
           ) : selectedPlaylist ? (

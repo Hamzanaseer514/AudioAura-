@@ -131,7 +131,7 @@ const Navbar = () => {
           isOpen ? "max-h-screen" : "max-h-0 overflow-hidden"
         }`}
       >
-        <div className="flex flex-col space-y-4 mt-4 text-center">
+        <div className="flex flex-col space-y-4 mb-4 mt-4 text-center">
         <Link
             to="/"
             className={`hover:text-gray-400 transition ${

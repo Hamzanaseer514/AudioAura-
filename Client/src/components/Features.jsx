@@ -1,14 +1,13 @@
 import React from "react";
 import HomePageNav from "./HomePageNav";
 import 'animate.css';
-import { FaHeadphonesAlt, FaMusic, FaUsers } from "react-icons/fa"; // Importing icons
+import { FaHeadphonesAlt, FaMusic, FaUsers } from "react-icons/fa"; 
 
 const Features = () => {
   return (
     <div className="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen">
       {/* Navbar */}
       <HomePageNav />
-
       {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-between py-12 md:py-20 mt-12 md:mt-22 px-6 md:px-8">
   <div className="w-full md:w-1/2 space-y-6 animate__animated animate__fadeIn animate__delay-0.5s">
