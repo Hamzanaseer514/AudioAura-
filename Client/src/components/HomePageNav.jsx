@@ -34,6 +34,9 @@ const Navbar = () => {
           <a href="#contact" className="text-white hover:text-gray-300">
             Contact
           </a>
+          <Link to="/about" className="text-white hover:text-gray-300">
+            About
+          </Link>
           {!isLoggedIn ? (
             <Link to="/login">
               <button className="bg-[#00ABE4] text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-[#00abe4d2] transition duration-300">

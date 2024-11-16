@@ -34,8 +34,8 @@ const Hero = () => {
           fadeIn ? "opacity-100" : "opacity-0"
         }`}
       >
-        <h1 className="text-5xl md:text-6xl font-bold mb-6 animate-fadeUp">
-          Music for Everyone
+        <h1 className="text-4xl md:text-5xl font-bold mb-6 animate-fadeUp">
+        Where Music Meets Magic
         </h1>
         <p className="text-lg md:text-2xl mb-6 animate-fadeUp delay-1s">
           Millions of songs. No credit card needed.
@@ -45,7 +45,7 @@ const Hero = () => {
             onClick={handleGetStarted}
             className="bg-[#00ABE4] text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-[#00ABE4] transition duration-300"
           >
-            Get Spotify Free
+            Get AudioAura Free
           </button>
         </div>
       </div>
@@ -98,3 +98,7 @@ const Hero = () => {
 };
 
 export default Hero;
+
+
+
+

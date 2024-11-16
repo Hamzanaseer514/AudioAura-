@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import { useParams, useLocation } from "react-router-dom";
 import { PlayerContext } from "../context/Playercontext";
 import AlbumsContext from "../context/AlbumsContext";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaEllipsisV } from "react-icons/fa";
 
 const DisplayAlbum = () => {
   const { id } = useParams();
@@ -17,7 +17,8 @@ const DisplayAlbum = () => {
   const [songs, setSongs] = useState([]);
   const [loadingSongs, setLoadingSongs] = useState(true);
   const [likedSongs, setLikedSongs] = useState(new Set());
-  
+  const [showMenu, setShowMenu] = useState(null); // To handle menu visibility for each song
+
   // Fetch the user's favorites when they log in
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -27,14 +28,15 @@ const DisplayAlbum = () => {
         if (decodedToken && decodedToken.id) {
           try {
             const response = await fetch(
-              `http://localhost:3000/user/favorites`,{
+              `http://localhost:3000/user/favorites`,
+              {
                 headers: {
                   token: localStorage.getItem("token"),
-                }
+                },
               }
             );
             const data = await response.json();
-            console.log("data",data);
+            console.log("data", data);
             if (data.success) {
               // Populate the likedSongs state with the favorite song IDs
               setLikedSongs(new Set(data.favoriteSongIds));
@@ -56,7 +58,7 @@ const DisplayAlbum = () => {
       const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
       const jsonPayload = decodeURIComponent(
         atob(base64)
-          .split("")
+          .split(" ")
           .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
           .join("")
       );
@@ -106,6 +108,7 @@ const DisplayAlbum = () => {
     }
   };
 
+  // Fetch songs for the album
   useEffect(() => {
     const fetchSongs = async () => {
       try {
@@ -129,6 +132,11 @@ const DisplayAlbum = () => {
     }
   }, [albumData, isAlbum, albumId]);
 
+  const handleMenuToggle = (songId, e) => {
+    e.stopPropagation(); // Prevent event from bubbling up and closing the menu immediately
+    setShowMenu((prev) => (prev === songId ? null : songId)); // Toggle menu visibility
+  };
+
   return (
     <div
       ref={displayRef}
@@ -151,7 +159,7 @@ const DisplayAlbum = () => {
                 <img
                   className="inline-block w-5"
                   src={"/path/to/spotify_logo.png"}
-                  alt=""
+                  alt="Spotify"
                 />
                 <b className="mr-1 ml-1">Spotify</b> • {songs.length} songs
               </p>
@@ -171,7 +179,7 @@ const DisplayAlbum = () => {
             <div
               onClick={() => PlayWithId(song.id)}
               key={index}
-              className="grid grid-cols-4 sm:grid-cols-5 gap-2 p-2 items-center text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer"
+              className="relative group grid grid-cols-4 sm:grid-cols-5 gap-2 p-2 items-center text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer"
             >
               <p className="text-white">
                 <b className="mr-4 text-[#a7a7a7]">
@@ -183,18 +191,51 @@ const DisplayAlbum = () => {
                 </b>
                 {song.name}
               </p>
+
               <p className="text-[15px]">{song.singer}</p>
-              <p className="text-[15px] hidden sm:block">5 days ago</p>
+
+              <p className="text-[15px] hidden sm:block">7 days ago</p>
+
               <p className="text-[15px] text-center">{song.duration}</p>
+
               <p
                 onClick={(e) => {
                   e.stopPropagation();
                   handleLikeClick(song._id);
                 }}
-                className={`cursor-pointer w-8 ${likedSongs.has(song._id) ? "bg-[#00ABE4] text-white" : "bg-transparent text-[#a7a7a7]"} p-2 rounded-full transition-all duration-300`}
+                className={`cursor-pointer w-8 ${
+                  likedSongs.has(song._id)
+                    ? "bg-[#00ABE4] text-white"
+                    : "bg-transparent text-[#a7a7a7]"
+                } p-2 rounded-full transition-all duration-300`}
               >
                 <FaRegHeart />
               </p>
+
+              <div className="absolute hidden group-hover:block top-1/2 right-2 transform -translate-y-1/2 w-4">
+                <FaEllipsisV
+                  onClick={(e) => handleMenuToggle(song._id, e)} // Pass the event here
+                  className="text-[#a7a7a7] cursor-pointer"
+                />
+                {showMenu === song._id && (
+                  <div className="absolute right-0 mt-2 w-40 bg-[#1a1a1a] rounded-lg shadow-lg">
+                    <ul>
+                      <li
+                        className="text-white p-2 hover:bg-[#333333] cursor-pointer"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Add to Playlist
+                      </li>
+                      <li
+                        className="text-white p-2 hover:bg-[#333333] cursor-pointer"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Create Playlist
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </>
