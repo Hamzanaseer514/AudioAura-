@@ -132,6 +132,14 @@ const Navbar = () => {
         }`}
       >
         <div className="flex flex-col space-y-4 mt-4 text-center">
+        <Link
+            to="/"
+            className={`hover:text-gray-400 transition ${
+              isScrolled ? "text-white" : "text-gray-300"
+            }`}
+          >
+            Home
+          </Link>
           <Link
             to="/features"
             className={`hover:text-gray-400 transition ${

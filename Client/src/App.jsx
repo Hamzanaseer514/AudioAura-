@@ -38,7 +38,7 @@ const App = () => {
         <SongContext.Provider value={{Song,setSong,FavouriteCount,setFavouriteCount,PlaylistCount,setPlaylistCount}}>
         <div className="h-screen">
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Features />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/user-profile" element={<UserProfile />} />
