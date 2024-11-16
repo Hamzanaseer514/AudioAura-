@@ -15,7 +15,7 @@ const DisplayHome = () => {
     <>
       <Navbar />
       <div className="mb-4">
-        <h1 className="my-5 font-bold text-2xl">Featured Charts</h1>
+        <h1 className="my-5 font-bold text-2xl http://localhost:3000/albumimages/image_1729333298901.jpgmd:text-4xl">Featured Charts</h1>
         <div className="flex overflow-auto">
           {loading ? (
             <p>Loading albums...</p>

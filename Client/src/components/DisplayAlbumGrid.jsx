@@ -4,6 +4,7 @@ import { useParams, useLocation } from "react-router-dom";
 import { PlayerContext } from "../context/Playercontext";
 import AlbumsContext from "../context/AlbumsContext";
 import { FaRegHeart, FaEllipsisV } from "react-icons/fa";
+import AudioAuraLogo from "../assets/AudioAuraLogo.png"
 
 const DisplayAlbum = () => {
   const { id } = useParams();
@@ -157,11 +158,11 @@ const DisplayAlbum = () => {
               <h4>{albumData.description}</h4>
               <p className="mt-1">
                 <img
-                  className="inline-block w-5"
-                  src={"/path/to/spotify_logo.png"}
+                  className="inline-block w-20"
+                  src={AudioAuraLogo}
                   alt="Spotify"
                 />
-                <b className="mr-1 ml-1">Spotify</b> • {songs.length} songs
+                <b className="mr-1 ml-1">Audio Aura</b> • {songs.length} songs
               </p>
             </div>
           </div>
@@ -184,7 +185,8 @@ const DisplayAlbum = () => {
               <p className="text-white">
                 <b className="mr-4 text-[#a7a7a7]">
                   <img
-                    src={song.image}
+                    src="http://localhost:3000/albumimages/image_1729333298901.jpg"
+                    // src={song.image}
                     alt={song.name}
                     className="inline-block w-10 h-10 mr-2 rounded"
                   />

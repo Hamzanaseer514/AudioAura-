@@ -110,7 +110,7 @@ const PlaylistPage = () => {
                   className="w-36 h-36 mr-6 rounded-lg object-cover border-4 border-teal-400"
                 />
                 <div>
-                  <h2 className="text-6xl font-bold text-white">
+                  <h2 className="text-7xl font-bold text-white">
                     {selectedPlaylist.name}
                   </h2>
                   <p className="text-gray-400 text-xl mt-2">
@@ -137,7 +137,7 @@ const PlaylistPage = () => {
                       <td className="py-4">{index + 1}</td>
                       <td className="py-4 flex items-center">
                         <img
-                          src={song.image || "https://via.placeholder.com/50"}
+                          src="http://localhost:3000/albumimages/image_1729333298901.jpg"
                           alt={song.name}
                           className="w-10 h-10 mr-4 rounded-lg"
                         />
