@@ -5,36 +5,75 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // State for loading
+  const [isScrolled, setIsScrolled] = useState(false); // State for scroll effect
   const navigate = useNavigate();
 
+  // Handle login state
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
 
+  // Scroll effect to change navbar background
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const handleLogout = () => {
     setIsLoading(true); // Set loading to true
     setTimeout(() => {
-      localStorage.removeItem("token"); 
+      localStorage.removeItem("token");
       setIsLoggedIn(false);
-      navigate("/"); // Redirect after 5 seconds
+      navigate("/"); // Redirect after 3 seconds
     }, 3000); // Simulate a 3-second wait
   };
 
   return (
-    <nav className="bg-gray-800 p-4">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+    <nav
+      className={`fixed top-0 left-0 w-full z-50 backdrop-blur-lg transition-all duration-300 ${
+        isScrolled ? "bg-gray-800/70 shadow-lg" : "bg-gray-800"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
+        {/* Logo */}
         <div className="text-white text-lg font-bold">
           <h1 className="text-[#00ABE4] text-5xl">AudioAura</h1>
         </div>
+
+        {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6 items-center">
-          <Link to="/spotify" className="text-white hover:text-gray-300">
+          <Link
+            to="/features"
+            className={`hover:text-gray-400 transition ${
+              isScrolled ? "text-white" : "text-gray-300"
+            }`}
+          >
             Features
           </Link>
-          <a href="#contact" className="text-white hover:text-gray-300">
+          <Link
+            to="/contact"
+            className={`hover:text-gray-400 transition ${
+              isScrolled ? "text-white" : "text-gray-300"
+            }`}
+          >
             Contact
-          </a>
-          <Link to="/about" className="text-white hover:text-gray-300">
+          </Link>
+          <Link
+            to="/about"
+            className={`hover:text-gray-400 transition ${
+              isScrolled ? "text-white" : "text-gray-300"
+            }`}
+          >
             About
           </Link>
           {!isLoggedIn ? (
@@ -48,10 +87,12 @@ const Navbar = () => {
               onClick={handleLogout}
               className="bg-[#00ABE4] text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-[#00abe4d2] transition duration-300"
             >
-              {isLoading ? "Logging out..." : "Logout"} {/* Change button text */}
+              {isLoading ? "Logging out..." : "Logout"}
             </button>
           )}
         </div>
+
+        {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -74,18 +115,30 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+
+      {/* Mobile Dropdown */}
       <div
         className={`md:hidden transition-all duration-300 ${
           isOpen ? "max-h-screen" : "max-h-0 overflow-hidden"
         }`}
       >
         <div className="flex flex-col space-y-4 mt-4 text-center">
-          <Link to="/spotify" className="text-white hover:text-gray-300">
+          <Link
+            to="/features"
+            className={`hover:text-gray-400 transition ${
+              isScrolled ? "text-white" : "text-gray-300"
+            }`}
+          >
             Features
           </Link>
-          <a href="#contact" className="text-white hover:text-gray-300">
+          <Link
+            to="/contact"
+            className={`hover:text-gray-400 transition ${
+              isScrolled ? "text-white" : "text-gray-300"
+            }`}
+          >
             Contact
-          </a>
+          </Link>
           {!isLoggedIn ? (
             <Link to="/login">
               <button className="bg-[#00ABE4] text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-[#00abe4d2] transition duration-300">
@@ -95,7 +148,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={handleLogout}
-              className="bg-green-500 text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-green-600 transition duration-300"
+              className="bg-[#00ABE4] text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-[#00abe4d2] transition duration-300"
             >
               {isLoading ? "Logging out..." : "Logout"}
             </button>

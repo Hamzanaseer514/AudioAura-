@@ -22,6 +22,8 @@ import UserPlaylist from "./components/UserPlaylists.jsx";
 import UserFavourite from "./components/UserFavourite.jsx";
 import SongContext from "./context/SongContext.jsx";
 import About from "./components/About.jsx"
+import Contact from './components/Contact.jsx'
+import Features from './components/Features.jsx'
 
 
 const App = () => {
@@ -43,6 +45,8 @@ const App = () => {
             <Route path="/user-playlist" element={<UserPlaylist />} />
             <Route path="/user-favourite" element={<UserFavourite/>} />
             <Route path="/about" element={<About/>}/>
+            <Route path="/contact" element={<Contact/>}/>
+            <Route path="/features" element={<Features/>}/>
             <Route
               path="/spotify"
               element={
