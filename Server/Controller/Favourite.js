@@ -1,10 +1,11 @@
 const Favorite = require("../Model/Favourite");
 const User = require("../Model/User");
 const Song = require("../Model/Song");
+const { trusted } = require("mongoose");
 
 const addToFavorites = async (req, res) => {
   const { userId, songId } = req.body;
-//   console.log(userId, songId);
+  //   console.log(userId, songId);
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -40,12 +41,10 @@ const addToFavorites = async (req, res) => {
       .json({ success: true, message: "Song added to favorites" });
   } catch (error) {
     console.error("Error adding to favorites:", error);
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Something went wrong. Please try again",
-      });
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong. Please try again",
+    });
   }
 };
 
@@ -66,4 +65,27 @@ const getFavourites = async (req, res) => {
   }
 };
 
-module.exports = { addToFavorites, getFavourites };
+const removeFavourite = async (req, res) => {
+  const { songId } = req.params;
+  const userId = req.user.id;
+
+  try {
+    const deletedFavorite = await Favorite.findOneAndDelete({ userId, songId });
+
+    if (!deletedFavorite) {
+      return res
+        .status(404)
+        .json({ message: "Favorite not found for this user and song.",success:false });
+    }
+
+    res
+      .status(200)
+      .json({ message: "Favorite removed successfully.", deletedFavorite,success:true });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Internal server error.", error: error.message,success:trusted });
+  }
+};
+
+module.exports = { addToFavorites, getFavourites, removeFavourite };

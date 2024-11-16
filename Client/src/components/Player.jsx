@@ -8,7 +8,8 @@ import { FaHeart, FaList, FaDownload } from 'react-icons/fa';
 
 
 const Player = () => {
-  const { Song, setSong } = useContext(SongContext);
+
+  const {setSong} = useContext(SongContext)
   const {
     track,
     seekBg,
