@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./sidebar";
 import Navbar from "./Navbar";
 import { FaUser, FaEnvelope, FaLock, FaCalendarAlt } from "react-icons/fa";
+import SongContext from "../context/SongContext";
 
 const ProfilePage = () => {
   const initialUserData = {
@@ -14,6 +15,8 @@ const ProfilePage = () => {
     playlistsCount: 5,
     favoritesCount: 12,
   };
+
+  const {FavouriteCount,PlaylistCount} = useContext(SongContext)
 
   const [userData, setUserData] = useState(initialUserData);
   const [isEditing, setIsEditing] = useState(false);
@@ -184,7 +187,7 @@ const ProfilePage = () => {
                     <span className="text-3xl text-teal-500">📂</span>
                     <div>
                       <h3 className="text-xl font-semibold text-white">Playlists</h3>
-                      <p className="text-sm text-gray-400">{userData.playlistsCount} Playlists</p>
+                      <p className="text-sm text-gray-400">{PlaylistCount} Playlists</p>
                     </div>
                   </div>
                 </div>
@@ -194,7 +197,7 @@ const ProfilePage = () => {
                     <span className="text-3xl text-teal-500">❤️</span>
                     <div>
                       <h3 className="text-xl font-semibold text-white">Favorites</h3>
-                      <p className="text-sm text-gray-400">{userData.favoritesCount} Favorites</p>
+                      <p className="text-sm text-gray-400">{FavouriteCount} Favorites</p>
                     </div>
                   </div>
                 </div>

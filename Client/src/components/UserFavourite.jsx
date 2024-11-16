@@ -1,11 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import Sidebar from "./sidebar";
 import Navbar from "./Navbar";
 import Player from "./Player";
+import { FaTrash, FaPlus, FaMusic } from 'react-icons/fa';
+import SongContext from "../context/SongContext";
 
 const UserFavourite = () => {
   const [LikedSongs, setLikedSongs] = useState([]);
+  const [Songs, setSongs] = useState([]);
+  const [openIndex, setOpenIndex] = useState(null);
 
+  const toggleMenu = (index) => {
+    setOpenIndex(openIndex === index ? null : index); // Toggle the clicked index
+  };
+
+  const {setFavouriteCount} = useContext(SongContext)
+
+  // Fetch favorite song IDs
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -15,9 +26,9 @@ const UserFavourite = () => {
           },
         });
         const data = await response.json();
-        console.log("data", data);
         if (data.success) {
-          setLikedSongs(data.favoriteSongIds || []); // Adjust based on actual API response structure
+          setLikedSongs(data.favoriteSongIds || []);
+          setFavouriteCount(data.favoriteSongIds.length)
         }
       } catch (error) {
         console.error("Error fetching favorites:", error);
@@ -27,31 +38,120 @@ const UserFavourite = () => {
     fetchFavorites();
   }, []);
 
+  // Fetch full song details using liked song IDs
+  useEffect(() => {
+    const fetchSongsByIds = async () => {
+      if (LikedSongs.length > 0) {
+        try {
+          const response = await fetch(
+            "http://localhost:3000/user/getSongsByIds",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ songIds: LikedSongs }),
+            }
+          );
+          const data = await response.json();
+          if (data.success) {
+            setSongs(data.songs);
+          }
+        } catch (error) {
+          console.error("Error fetching songs:", error);
+        }
+      }
+    };
+
+    fetchSongsByIds();
+  }, [LikedSongs]); // Depend on LikedSongs
+
   return (
-    <div className="h-screen bg-gradient-to-b from-[#0a0a0a] to-[#1b1b1b]">
+    <div className="h-screen bg-gradient-to-b from-[#121212] to-[#2C2C2C]">
       <div className="h-[90%] flex flex-col md:flex-row">
         <Sidebar />
         <div className="flex-1 p-8 overflow-y-auto">
           <Navbar />
-          <div className="bg-[#1a1a1a] p-8 rounded-lg shadow-2xl mt-8">
-            <h2 className="text-2xl font-bold mb-6 text-white">Your Favourites</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {LikedSongs.map((favorite, index) => (
+
+          {/* Liked Songs Header */}
+          <div className="flex flex-col md:flex-row items-center mb-10">
+            <div className="mr-8 mt-8 md:mb-0 flex items-center justify-center w-52 h-52 rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl">
+              <span className="text-6xl text-white">❤️</span>
+            </div>
+
+            <div>
+              <h2 className="text-8xl font-extrabold text-white mb-2">
+                Liked Songs
+              </h2>
+              <p className="text-lg text-gray-300">
+                Hamza Naseer • {LikedSongs.length} songs
+              </p>
+            </div>
+          </div>
+
+          {/* Song Cards Section */}
+          <div className="mt-10">
+            <h3 className="text-3xl font-extrabold text-white mb-6">
+              Your Favourites
+            </h3>
+            <div className="space-y-6">
+              {Songs.map((favorite, index) => (
                 <div
                   key={index}
-                  className="bg-[#2c2c2c] p-6 rounded-lg shadow-xl hover:shadow-2xl transform transition duration-300 ease-in-out hover:bg-teal-600 hover:scale-105"
+                  className="flex items-center p-4 bg-[#2C2C2C] rounded-lg shadow-lg transition-transform duration-300 hover:scale-100"
                 >
-                  <div className="relative flex flex-col items-center bg-gradient-to-r from-teal-500 to-teal-600 p-4 rounded-lg">
-                    <div className="w-20 h-20 bg-teal-400 rounded-full flex items-center justify-center text-2xl text-white font-semibold mb-4 shadow-lg">
-                      🎶
-                    </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">{favorite.name}</h3>
-                    <p className="text-sm text-gray-200 mb-4">{favorite.singer}</p>
-                    <button className="px-4 py-2 bg-teal-700 text-white rounded-full text-sm font-semibold transform transition duration-200 hover:bg-teal-800 hover:scale-105">
-                      Play
-                    </button>
-                    <div className="absolute top-0 left-0 w-full h-full bg-teal-700 opacity-0 hover:opacity-40 transition-opacity duration-300 rounded-lg"></div>
+                  <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-lg overflow-hidden mr-4">
+                    <img
+                      src="http://localhost:3000/albumimages/image_1729333298901.jpg"
+                      alt={favorite.name}
+                      className="w-full h-full object-cover"
+                    />
+                    <span className="absolute bottom-2 right-2 px-2 py-1 text-xs font-semibold bg-black bg-opacity-75 text-white rounded-md">
+                      {favorite.duration || "0:00"}
+                    </span>
                   </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-white truncate">
+                      {favorite.name}
+                    </h3>
+                    <p className="text-sm text-gray-400 truncate">
+                      {favorite.singer}
+                    </p>
+                    <div className="flex items-center mt-2">
+                      <button className="text-xs text-gray-400 bg-transparent border border-gray-400 rounded-full px-2 py-1 hover:bg-gray-600 transition-colors">
+                        Comment
+                      </button>
+                    </div>
+                  </div>
+                  <button
+                    className="relative text-gray-400 hover:text-white ml-4"
+                    onClick={() => toggleMenu(index)} // Pass the index to toggle the correct menu
+                  >
+                    <span className="text-2xl">&#x22EE;</span>
+                    {openIndex === index && (
+                      <div className="absolute top-3 right-1 mt-2  bg-gray-800 text-white rounded-lg shadow-lg p-3 w-48 z-10 transform scale-95 transition-all duration-200 ease-in-out hover:scale-100">
+                        <div className="flex flex-col space-y-3">
+                          {/* Delete from Favorites */}
+                          <button className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                            <span className="text-xs">Delete from Fav</span>
+                            <FaTrash className="text-red-500" />
+                          </button>
+
+                          {/* Create Playlist */}
+                          <button className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                            <span className="text-xs">Create Playlist</span>
+                            <FaMusic className="text-green-500" />
+                          </button>
+
+                          {/* Add to Playlist */}
+                          <button className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                            <span className="text-xs">Add to Playlist</span>
+                            <FaPlus className="text-blue-500" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </button>
                 </div>
               ))}
             </div>
