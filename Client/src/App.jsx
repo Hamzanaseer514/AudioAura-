@@ -21,6 +21,8 @@ import UserProfile from "./components/UserProfile.jsx";
 import UserPlaylist from "./components/UserPlaylists.jsx";
 import UserFavourite from "./components/UserFavourite.jsx";
 import SongContext from "./context/SongContext.jsx";
+import About from "./components/About.jsx"
+
 
 const App = () => {
   const [category, setCategory] = useState("all");
@@ -40,6 +42,7 @@ const App = () => {
             <Route path="/user-profile" element={<UserProfile />} />
             <Route path="/user-playlist" element={<UserPlaylist />} />
             <Route path="/user-favourite" element={<UserFavourite/>} />
+            <Route path="/about" element={<About/>}/>
             <Route
               path="/spotify"
               element={

@@ -54,6 +54,7 @@ import download_icon from './download-icon.png'
 import plus_icon_playlist from './plus-icon.png'
 import heart_icon from './heart-icon.png'
 import mute_icon from './mute-icon.png'
+import player_more from './player-more-icon.png'
 
 export const assets = {
     bell_icon,
@@ -92,7 +93,8 @@ export const assets = {
     download_icon,
     plus_icon_playlist,
     heart_icon,
-    mute_icon
+    mute_icon,
+    player_more
 
 }
 

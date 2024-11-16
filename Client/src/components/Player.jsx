@@ -3,6 +3,9 @@ import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/Playercontext";
 import AddToPlaylist from "./AddToPlaylist";
 import SongContext from "../context/SongContext";
+import { FaHeart, FaList, FaDownload } from 'react-icons/fa';
+
+
 
 const Player = () => {
 
@@ -20,36 +23,34 @@ const Player = () => {
     seeksong,
   } = useContext(PlayerContext);
 
-
   const [isHeartToggled, setIsHeartToggled] = useState(false);
   const [floatingHearts, setFloatingHearts] = useState([]);
   const [isAddToPlaylistOpen, setIsAddToPlaylistOpen] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [volume, setVolume] = useState(1); // State for volume control, default at max (1)
-  const [isMuted, setIsMuted] = useState(false); // Mute state
+  const [volume, setVolume] = useState(1);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // State for menu visibility
+
   const audioRef = useRef(null);
 
-  // Handle volume change
   const handleVolumeChange = (e) => {
     const newVolume = e.target.value;
     setVolume(newVolume);
     if (audioRef.current) {
-      audioRef.current.volume = newVolume; // Set volume on audio element
+      audioRef.current.volume = newVolume;
     }
   };
 
-  // Mute/Unmute toggle
   const toggleMute = () => {
     if (isMuted) {
-      setVolume(audioRef.current ? audioRef.current.volume : 1); // Restore previous volume
+      setVolume(audioRef.current ? audioRef.current.volume : 1);
       setIsMuted(false);
     } else {
-      setVolume(0); // Set volume to 0 for mute
+      setVolume(0);
       setIsMuted(true);
     }
   };
 
-  // Fullscreen toggle for the player
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement
@@ -69,20 +70,16 @@ const Player = () => {
   };
 
   const openmodel = () => {
-    setSong(track)
+    setSong(track);
     setIsAddToPlaylistOpen(true);
-    console.log(track)
-    // console.log(Song)
   };
 
-  // Ensuring the volume is applied when the audio element is ready
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
     }
   }, [volume]);
 
-  // Toggle heart functionality for liking songs
   const toggleHeart = () => {
     setIsHeartToggled(!isHeartToggled);
 
@@ -97,8 +94,11 @@ const Player = () => {
       setFloatingHearts([]);
     }, 1000);
   };
-  // const playlists = []; // Define this with your actual playlist data
-  // const song = {}; // Define this with your actual song data
+
+  // Function to toggle menu visibility
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4 relative">
@@ -143,7 +143,38 @@ const Player = () => {
             src={assets.next_icon}
             alt=""
           />
-          <img className="w-4 cursor-pointer" src={assets.loop_icon} alt="" />
+          <div className="hidden md:block">
+            <img className="w-4 cursor-pointer" src={assets.loop_icon} alt="" />
+          </div>
+          <div className="lg:hidden block ">
+            <img
+              className="w-5 cursor-pointer"
+              src={assets.player_more}
+              alt=""
+              onClick={toggleMenu} // Add onClick handler for toggling menu
+            />
+            {isMenuOpen && (
+       <div className="absolute bg-black bg-opacity-80 text-white p-4 rounded-lg right-0 mt-[-180px] mr-[70px] shadow-lg">
+              <p
+                className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
+                onClick={toggleHeart}
+              >
+                <FaHeart className="text-red-500" /> Add to Favourite
+              </p>
+              <p
+                className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
+                onClick={openmodel} // Opens the Add to Playlist modal
+              >
+                <FaList className="text-blue-500" /> Add to Playlist
+              </p>
+              <p className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200">
+                <FaDownload className="text-green-500" /> Download Song
+              </p>
+            </div>
+     
+
+            )}
+          </div>
         </div>
         <div className="flex items-center gap-5">
           <p>
@@ -165,7 +196,7 @@ const Player = () => {
         </div>
       </div>
       <div className="hidden lg:flex items-center gap-2 opacity-75 relative">
-        {/* Tooltip and hover effect for icons */}
+        {/* Rest of the code for controls and icons */}
         <div className="relative group">
           <img
             className="w-5 cursor-pointer"
@@ -177,7 +208,6 @@ const Player = () => {
             Favorite
           </div>
         </div>
-
         {floatingHearts.map((heart) => (
           <img
             key={heart.id}
@@ -191,7 +221,6 @@ const Player = () => {
             alt="floating heart"
           />
         ))}
-        {/* Download icon with hover effect */}
         <div className="relative group">
           <img
             className="w-5 cursor-pointer"
@@ -203,7 +232,6 @@ const Player = () => {
           </div>
         </div>
 
-        {/* Add to playlist icon with hover text */}
         <div className="relative group">
           <img
             onClick={openmodel}
@@ -222,7 +250,6 @@ const Player = () => {
           </div>
         </div>
 
-        {/* Mute/Volume control section with hover text */}
         <div className="relative group">
           <img
             className={`w-4 cursor-pointer ${isMuted ? "w-5" : "w-4"}`}
@@ -240,7 +267,7 @@ const Player = () => {
           min="0"
           max="1"
           step="0.1"
-          value={isMuted ? 0 : volume} // Sync volume with mute state
+          value={isMuted ? 0 : volume}
           onChange={handleVolumeChange}
           className="w-20 bg-slate-50 h-1 rounded"
         />
@@ -248,32 +275,20 @@ const Player = () => {
           <img
             className="w-4 cursor-pointer"
             src={assets.mini_player_icon}
-            alt=""
-          />
-          <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-7 left-0">
-            Mini
-          </div>
-        </div>
-        <div className="relative group">
-          <img
-            className={`w-4 cursor-pointer ${
-              isFullscreen ? "opacity-50" : "opacity-150"
-            }`}
-            src={assets.zoom_icon}
-            alt="zoom icon"
+            alt="minimize player icon"
             onClick={toggleFullscreen}
           />
-          <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-[-25px]">
+          <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-[-35px]">
             {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
           </div>
         </div>
       </div>
 
+      {/* AddToPlaylist Modal */}
       {isAddToPlaylistOpen && (
         <AddToPlaylist
           setIsModalOpen={setIsAddToPlaylistOpen}
-          // Song={track}
-          // playlists={playlists}
+          // You can pass other props like playlists or song if needed here
           // song={{ ...song, track }}
         />
       )}
