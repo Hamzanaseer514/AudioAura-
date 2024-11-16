@@ -6,7 +6,7 @@ import SongContext from "../context/SongContext";
 
 const Player = () => {
 
-  const {Song,setSong} = useContext(SongContext)
+  const {setSong} = useContext(SongContext)
   const {
     track,
     seekBg,

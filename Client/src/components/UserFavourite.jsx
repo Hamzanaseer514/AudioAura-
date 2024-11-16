@@ -1,20 +1,31 @@
-import React, { useEffect, useState,useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Sidebar from "./sidebar";
 import Navbar from "./Navbar";
 import Player from "./Player";
-import { FaTrash, FaPlus, FaMusic } from 'react-icons/fa';
+import { FaTrash, FaPlus, FaMusic } from "react-icons/fa";
 import SongContext from "../context/SongContext";
+import CreatePlaylist from "./CreatePlaylist";
+import AddToPlaylist from "./AddToPlaylist";
 
 const UserFavourite = () => {
   const [LikedSongs, setLikedSongs] = useState([]);
   const [Songs, setSongs] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
+  const [IsCreateModelOpen, setIsCreateModelOpen] = useState(false)
+  const [IsAddToPlaylistModelOpen, setIsAddToPlaylistModelOpen] = useState(false)
 
   const toggleMenu = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Toggle the clicked index
   };
 
-  const {setFavouriteCount} = useContext(SongContext)
+  const handleCreatePlaylistModel = () => {
+    setIsCreateModelOpen(!IsCreateModelOpen)
+  }
+  const handleAddToPlaylistModel = () => {
+    setIsAddToPlaylistModelOpen(!IsAddToPlaylistModelOpen)
+  }
+
+  const { setFavouriteCount } = useContext(SongContext);
 
   // Fetch favorite song IDs
   useEffect(() => {
@@ -28,7 +39,7 @@ const UserFavourite = () => {
         const data = await response.json();
         if (data.success) {
           setLikedSongs(data.favoriteSongIds || []);
-          setFavouriteCount(data.favoriteSongIds.length)
+          setFavouriteCount(data.favoriteSongIds.length);
         }
       } catch (error) {
         console.error("Error fetching favorites:", error);
@@ -65,6 +76,34 @@ const UserFavourite = () => {
 
     fetchSongsByIds();
   }, [LikedSongs]); // Depend on LikedSongs
+
+  const deleteFavorite = async (songId) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/user/favorites/${songId}`,
+        {
+          method: "DELETE",
+          headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      const { message, success } = data;
+
+      if (success) {
+        alert(message);
+        setLikedSongs((prev) => prev.filter((id) => id !== songId));
+        setSongs((prev) => prev.filter((song) => song._id !== songId));
+        setFavouriteCount((prev) => prev - 1);
+      } else {
+        alert(message);
+      }
+    } catch (error) {
+      console.error("Error deleting favorite:", error);
+    }
+  };
 
   return (
     <div className="h-screen bg-gradient-to-b from-[#121212] to-[#2C2C2C]">
@@ -123,41 +162,49 @@ const UserFavourite = () => {
                       </button>
                     </div>
                   </div>
-                  <button
-                    className="relative text-gray-400 hover:text-white ml-4"
-                    onClick={() => toggleMenu(index)} // Pass the index to toggle the correct menu
-                  >
-                    <span className="text-2xl">&#x22EE;</span>
-                    {openIndex === index && (
-                      <div className="absolute top-3 right-1 mt-2  bg-gray-800 text-white rounded-lg shadow-lg p-3 w-48 z-10 transform scale-95 transition-all duration-200 ease-in-out hover:scale-100">
-                        <div className="flex flex-col space-y-3">
-                          {/* Delete from Favorites */}
-                          <button className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
-                            <span className="text-xs">Delete from Fav</span>
-                            <FaTrash className="text-red-500" />
-                          </button>
+                  <div className="relative">
+                    <button
+                      className="relative text-gray-400 hover:text-white ml-4"
+                      onClick={() => toggleMenu(index)} // Pass the index to toggle the correct menu
+                    >
+                      <span className="text-2xl">&#x22EE;</span>
+                      {openIndex === index && (
+                        <div className="absolute top-[-30px] right-3 mt-2  bg-gray-800 text-white rounded-lg shadow-lg p-3 w-48 z-10 transform scale-95 transition-all duration-200 ease-in-out hover:scale-100">
+                          <div className="flex flex-col space-y-3">
+                            {/* Delete from Favorites */}
+                            <button
+                              onClick={() => deleteFavorite(favorite._id)}
+                              className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200"
+                            >
+                              <span className="text-xs">Delete from Fav</span>
+                              <FaTrash className="text-red-500" />
+                            </button>
 
-                          {/* Create Playlist */}
-                          <button className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
-                            <span className="text-xs">Create Playlist</span>
-                            <FaMusic className="text-green-500" />
-                          </button>
+                            {/* Create Playlist */}
+                            <button onClick={handleCreatePlaylistModel} className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                              <span className="text-xs">Create Playlist</span>
+                              <FaMusic className="text-green-500" />
+                            </button>
+                           
 
-                          {/* Add to Playlist */}
-                          <button className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
-                            <span className="text-xs">Add to Playlist</span>
-                            <FaPlus className="text-blue-500" />
-                          </button>
+                            {/* Add to Playlist */}
+                            <button onClick={handleAddToPlaylistModel} className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                              <span className="text-xs">Add to Playlist</span>
+                              <FaPlus className="text-blue-500" />
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </button>
+                      )}
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
+      {IsCreateModelOpen && <CreatePlaylist setIsModalOpen={setIsCreateModelOpen} />}
+      {IsAddToPlaylistModelOpen && <AddToPlaylist setIsModalOpen={setIsAddToPlaylistModelOpen} />}
       <Player />
     </div>
   );
