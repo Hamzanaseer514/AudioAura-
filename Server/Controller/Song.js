@@ -76,7 +76,6 @@ const getallsongs = async (req, res) => {
 
 const getSongsByIds = async (req, res) => {
   const { songIds } = req.body;
-//  console.log("h",songIds)
   if (!songIds || songIds.length === 0) {
     return res.status(400).json({ message: 'No song IDs provided', success: false });
   }
@@ -84,7 +83,6 @@ const getSongsByIds = async (req, res) => {
   try {
     const objectIds = songIds.map((id) => new mongoose.Types.ObjectId(id));
     const songs = await Songs.find({ '_id': { $in: objectIds } });
-    // console.log(songs)
     if (!songs || songs.length === 0) {
       return res.status(404).json({ message: 'No songs found', success: false });
     }
