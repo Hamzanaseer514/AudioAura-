@@ -67,12 +67,12 @@ const Login = () => {
 
           toast.success(msg, {
             style: {
-              background: "#1DB954",
+              background: "#00ABE4",
               color: "#121212",
             },
             iconTheme: {
               primary: "#121212",
-              secondary: "#1DB954",
+              secondary: "#00ABE4",
             },
           });
 
@@ -123,13 +123,13 @@ const Login = () => {
 
       {/* Login form container */}
       <div className="bg-[#181818] shadow-xl rounded-lg p-8 w-full max-w-md">
-        <h2 className="text-4xl font-bold mb-6 text-center">Login to Spotify</h2>
+        <h2 className="text-4xl font-bold mb-6 text-center text-white">Login to AudioAura</h2>
 
         {/* Login form */}
         <form className="space-y-6" onSubmit={handleSubmit}>
           {/* Email input */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium">
+            <label htmlFor="email" className="block text-sm font-medium text-white">
               Email
             </label>
             <input
@@ -138,7 +138,7 @@ const Login = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 bg-[#282828] text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#1DB954]"
+              className="mt-1 w-full px-4 py-2 bg-[#282828] text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#00ABE4]"
               placeholder="Enter your email"
               required
             />
@@ -146,7 +146,7 @@ const Login = () => {
 
           {/* Password input */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium">
+            <label htmlFor="password" className="block text-sm font-medium text-white">
               Password
             </label>
             <input
@@ -155,7 +155,7 @@ const Login = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="mt-1 w-full px-4 py-2 bg-[#282828] text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#1DB954]"
+              className="mt-1 w-full px-4 py-2 bg-[#282828] text-white rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#00ABE4]"
               placeholder="Enter your password"
               required
             />
@@ -164,18 +164,18 @@ const Login = () => {
           {/* Submit button */}
           <button
             type="submit"
-            className="w-full bg-[#1DB954] hover:bg-green-600 text-black font-bold py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-[#1DB954]"
+            className="w-full bg-[#00ABE4] text-black font-bold py-2 px-4 rounded-full hover:bg-[#00ABE4] focus:outline-none focus:ring-2 focus:ring-[#00ABE4]"
           >
             Login
           </button>
         </form>
 
         {/* Signup link */}
-        <p className="text-center mt-6 text-sm">
+        <p className="text-center mt-6 text-sm text-white">
           Don't have an account?{" "}
           <Link
             to="/signup"
-            className="text-[#1DB954] font-semibold hover:underline"
+            className="text-[#00ABE4] font-semibold hover:text-white"
           >
             Sign up
           </Link>
