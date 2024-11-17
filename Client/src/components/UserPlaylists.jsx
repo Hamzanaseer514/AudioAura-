@@ -2,10 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "./sidebar";
 import Player from "./Player";
 import Navbar from "./Navbar";
-import { TiDelete, TiMediaPlay } from "react-icons/ti";
+import { TiDelete } from "react-icons/ti";
 import { MdDeleteSweep } from "react-icons/md";
 
 import SongContext from "../context/SongContext";
+import ShowWhenNoThing from "./ShowWhenNoThing";
 
 const PlaylistPage = () => {
   const [playlists, setPlaylists] = useState([]);
@@ -57,50 +58,56 @@ const PlaylistPage = () => {
 
   const deletePlaylist = async (playlistId) => {
     try {
-      const response = await fetch(`http://localhost:3000/user/playlist/${playlistId}`,{
-        method: "DELETE",
-        headers: { 
-          "token": localStorage.getItem("token")
-         },
-
-      })
+      const response = await fetch(
+        `http://localhost:3000/user/playlist/${playlistId}`,
+        {
+          method: "DELETE",
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
 
       const data = await response.json();
       const { success, message } = data;
-      if(success){
+      if (success) {
         alert(message);
-        const updatedPlaylists = playlists.filter((playlist) => playlist._id !== playlistId);
+        const updatedPlaylists = playlists.filter(
+          (playlist) => playlist._id !== playlistId
+        );
         setPlaylists(updatedPlaylists);
-      }
-      else if(!success){
+      } else if (!success) {
         alert(message);
       }
     } catch (error) {
       throw new Error("Error deleting playlist");
     }
-  }
+  };
 
   const deleteSongFromPlaylist = async (playlistId, songId) => {
     try {
-      console.log(playlistId, songId);
-  
-      const response = await fetch(`http://localhost:3000/user/deleteSong/${playlistId}/${songId}`, {
-        method: "DELETE",
-        headers: {
-          "token": localStorage.getItem("token"),
-        },
-      });
-  
+      const response = await fetch(
+        `http://localhost:3000/user/deleteSong/${playlistId}/${songId}`,
+        {
+          method: "DELETE",
+          headers: {
+            token: localStorage.getItem("token"),
+          },
+        }
+      );
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Something went wrong");
       }
-  
+
       const data = await response.json();
       const { success, message } = data;
-  
+
       if (success) {
         alert(message);
+        const updatedSongs = songs.filter((song) => song._id !== songId);
+        setSongs(updatedSongs);
       } else {
         alert(message);
       }
@@ -109,13 +116,16 @@ const PlaylistPage = () => {
       alert("Error deleting song from playlist");
     }
   };
-  
-  
 
   const handlePlaylistClick = (playlist) => {
+    if (playlist.songs && playlist.songs.length > 0) {
+      const songIds = playlist.songs.map((song) => song._id); // Extract song IDs
+      fetchSongsByIds(songIds); // Pass only IDs to the fetch function
+    } else {
+      setSongs([]); // Clear songs if the playlist has none
+    }
     setGetPlaylistId(playlist._id);
     setSelectedPlaylist(playlist);
-    fetchSongsByIds(playlist.songs);
   };
 
   const handleBackToPlaylists = () => {
@@ -150,6 +160,8 @@ const PlaylistPage = () => {
             </div>
           ) : error ? (
             <div className="text-white text-center py-10">{error}</div>
+          ) : playlists.length === 0 ? (
+            <ShowWhenNoThing title="Playlists" maintitle="Playlist" />
           ) : selectedPlaylist ? (
             <div className="bg-[#1a1a1a] mt-5 rounded-lg p-6 shadow-2xl">
               <button
@@ -171,103 +183,94 @@ const PlaylistPage = () => {
                     {selectedPlaylist.name}
                   </h2>
                   <p className="text-gray-400 text-lg mt-2">
-                    A mix of your favorites. {selectedPlaylist.songs.length}{" "}
-                    songs
+                    {selectedPlaylist.songs?.length || 0}{" "}
+                    {selectedPlaylist.songs?.length === 1 ? "song" : "songs"}
                   </p>
                 </div>
               </div>
-
-              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                {songs.map((song, index) => (
-                  <div
-                    key={index}
-                    className="bg-[#262626] p-4 rounded-lg flex items-center justify-between shadow-md hover:bg-[#333333] transition-all duration-300 group relative"
-                  >
-                    <div className="flex items-center">
-                      <img
-                        src={
-                          "http://localhost:3000/albumimages/image_1729333298901.jpg"
-                        }
-                        alt={song.name}
-                        className="w-12 h-12 rounded-lg mr-4"
-                      />
-                      <div>
-                        <h3 className="text-white text-lg font-semibold">
-                          {song.name}
-                        </h3>
-                        <p className="text-gray-400 text-sm">5 days ago</p>
+              {selectedPlaylist.songs && selectedPlaylist.songs.length > 0 ? (
+                <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                  {selectedPlaylist.songs.map((song) => (
+                    <div
+                      key={song._id}
+                      className="bg-[#262626] p-4 rounded-lg flex items-center justify-between shadow-md hover:bg-[#333333] transition-all duration-300 group relative"
+                    >
+                      <div className="flex items-center">
+                        <img
+                          src={song.image || "https://via.placeholder.com/50"}
+                          alt={song.name}
+                          className="w-12 h-12 rounded-lg mr-4"
+                        />
+                        <div>
+                          <h3 className="text-white text-lg font-semibold">
+                            {song.name}
+                          </h3>
+                          <p className="text-gray-400 text-sm">
+                            Added 5 days ago
+                          </p>
+                        </div>
                       </div>
+                      <button
+                        onClick={() =>
+                          deleteSongFromPlaylist(selectedPlaylist._id, song._id)
+                        }
+                        className="text-red-500 hover:text-red-400"
+                      >
+                        <TiDelete size={24} />
+                      </button>
                     </div>
-
-                    <button onClick={() => {
-                      deleteSongFromPlaylist(selectedPlaylist._id, song._id);
-                    }} className="text-red-500 hover:text-red-400">
-                      <TiDelete size={24} />
-                    </button>
-
-                    {/* Play Button on Hover */}
-                    {/* <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-50 rounded-lg">
-                      <TiMediaPlay
-                        size={48}
-                        className="text-white hover:text-green-400 transition-transform duration-200 transform scale-110"
-                      />
-                    </div> */}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <ShowWhenNoThing title="Songs" maintitle="Playlist" />
+              )}
             </div>
           ) : (
             <div className="grid gap-8 mt-5 md:grid-cols-2 lg:grid-cols-3">
-              {playlists.length > 0 ? (
-                playlists.map((playlist) => (
+              {playlists.map((playlist) => (
+                <div
+                  key={playlist._id}
+                  onClick={() => handlePlaylistClick(playlist)}
+                  className="relative bg-[rgb(31,31,31)] rounded-lg p-6 cursor-pointer hover:bg-[#333333] transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+                >
                   <div
-                    key={playlist._id}
-                    onClick={() => handlePlaylistClick(playlist)}
-                    className="relative bg-[rgb(31,31,31)] rounded-lg p-6 cursor-pointer hover:bg-[#333333] transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg"
-                  >
-                    <div
-                      className="absolute inset-0 bg-cover bg-center rounded-lg opacity-40"
-                      style={{
-                        backgroundImage: `url(${
+                    className="absolute inset-0 bg-cover bg-center rounded-lg opacity-40"
+                    style={{
+                      backgroundImage: `url(${
+                        playlist.image || "https://via.placeholder.com/150"
+                      })`,
+                    }}
+                  ></div>
+                  <div className="relative z-10 flex flex-col items-center">
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-teal-400 mb-4">
+                      <img
+                        src={
                           playlist.image || "https://via.placeholder.com/150"
-                        })`,
-                      }}
-                    ></div>
-                    <div className="relative z-10 flex flex-col items-center">
-                      <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-teal-400 mb-4">
-                        <img
-                          src={
-                            playlist.image || "https://via.placeholder.com/150"
-                          }
-                          alt={playlist.title}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <p className="text-gray-400 text-sm mb-1">
-                        {playlist.songs.length} Songs
-                      </p>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation(); 
-                          deletePlaylist(playlist._id);
-                        }}
-                        className="absolute top-2 right-2 text-red-500 hover:text-red-400"
-                      >
-                        <MdDeleteSweep size={24} />
-                      </button>
+                        }
+                        alt={playlist.title}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
+                    <p className="text-gray-400 text-sm mb-1">
+                      {playlist.songs.length} Songs
+                    </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deletePlaylist(playlist._id);
+                      }}
+                      className="absolute top-2 right-2 text-red-500 hover:text-red-400"
+                    >
+                      <MdDeleteSweep size={24} />
+                    </button>
                   </div>
-                ))
-              ) : (
-                <h1 className="text-white text-center">
-                  No Playlists Available
-                </h1>
-              )}
+                </div>
+              ))}
             </div>
           )}
         </div>
       </div>
-      <Player />
+      <Player songs={songs} />
     </div>
   );
 };
