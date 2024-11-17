@@ -7,8 +7,12 @@ const Premium = () => {
   const handleBack = () => {
     navigate(-1); 
   };
+  const MakePayment = async () => {
+
+  }
 
   return (
+
     <div className="min-h-screen bg-[#1A1A1A] text-white p-8 relative">
       {/* Back Button */}
       <button 
@@ -38,7 +42,7 @@ const Premium = () => {
             <li>✓ No ads</li>
             <li>✓ High-quality audio</li>
           </ul>
-          <button className="bg-[#00ABE4] text-white font-bold py-2 px-4 rounded-lg w-full hover:bg-[#0086b3] transition duration-300 mt-auto shadow-md hover:shadow-lg">
+          <button className="bg-[#00ABE4] text-white font-bold py-2 px-4 rounded-lg w-full hover:bg-[#0086b3] transition duration-300 mt-auto shadow-md hover:shadow-lg" onClick={MakePayment()}>
             Get Premium
           </button>
         </div>
