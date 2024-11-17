@@ -57,6 +57,7 @@ import mute_icon from './mute-icon.png'
 import player_more from './player-more-icon.png'
 import my_pic from './me.jpg'
 import Hamza_pic from './Hamza-pic.png'
+import AudioAura_favIcon from './AudioAura-logo.png'
 
 export const assets = {
     bell_icon,
@@ -98,7 +99,8 @@ export const assets = {
     mute_icon,
     player_more,
     my_pic,
-    Hamza_pic
+    Hamza_pic,
+    AudioAura_favIcon
 
 }
 

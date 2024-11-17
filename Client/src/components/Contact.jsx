@@ -14,7 +14,7 @@ const Contact = () => {
       Get In Touch With Us
     </h2>
     <p className="text-gray-300 text-lg md:text-xl">
-      Have any questions or <span className="text-[#00ABE4]">feedback?</span> We’d love to hear from you!
+      Have any <span className="text-[#00ABE4]">questions</span> or <span className="text-[#00ABE4]">feedback</span>? We’d love to hear from you!
     </p>
   </div>
   

@@ -90,11 +90,11 @@ const About = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="bg-[#262626] p-6 rounded-xl shadow-lg">
             <h4 className="text-xl font-semibold text-[#00ABE4] mb-4">Frontend</h4>
-            <p className="text-gray-300">React, HTML5, CSS3, Tailwind CSS, SASS</p>
+            <p className="text-gray-300">React, HTML5, CSS3, Tailwind CSS</p>
           </div>
           <div className="bg-[#262626] p-6 rounded-xl shadow-lg">
             <h4 className="text-xl font-semibold text-[#00ABE4] mb-4">Backend</h4>
-            <p className="text-gray-300">Node.js, Express, MongoDB, Firebase</p>
+            <p className="text-gray-300">Node.js, Express, MongoDB</p>
           </div>
           <div className="bg-[#262626] p-6 rounded-xl shadow-lg">
             <h4 className="text-xl font-semibold text-[#00ABE4] mb-4">Version Control</h4>

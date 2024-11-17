@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { assets } from "../assets/assets";
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,10 +47,17 @@ const Navbar = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between p-4">
-        {/* Logo */}
-        <div className="text-white text-lg font-bold">
-          <h1 className="text-[#00ABE4] text-5xl">AudioAura</h1>
+        {/* Logo with Text */}
+        <div className="flex items-center space-x-2 md:space-x-3 text-white text-lg font-bold">
+          <img
+            src='./src/assets/AudioAura-white.png' 
+            alt="AudioAura Logo"
+            className="h-[50px] w-[50px] md:h-[65px] md:w-[65px] object-contain rounded-md shadow-lg hover:scale-105 transition-transform duration-300 filter brightness-125 contrast-110 saturate-150"
+          />
+          <h1 className="text-[#00ABE4] text-3xl md:text-5xl">AudioAura</h1>
         </div>
+
+
 
         {/* Desktop Menu */}
         <div className="hidden text-xl font-bold md:flex space-x-10 items-center">
@@ -84,7 +93,7 @@ const Navbar = () => {
           >
             Contact
           </Link>
-          
+
           {!isLoggedIn ? (
             <Link to="/login">
               <button className="bg-[#00ABE4] text-white py-2 px-6 rounded-full font-semibold text-lg hover:bg-[#00abe4d2] transition duration-300">
@@ -132,7 +141,7 @@ const Navbar = () => {
         }`}
       >
         <div className="flex flex-col space-y-4 mt-4 text-center">
-        <Link
+          <Link
             to="/"
             className={`hover:text-gray-400 transition ${
               isScrolled ? "text-white" : "text-gray-300"
