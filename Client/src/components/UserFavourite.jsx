@@ -21,11 +21,13 @@ const UserFavourite = () => {
   const handleCreatePlaylistModel = () => {
     setIsCreateModelOpen(!IsCreateModelOpen)
   }
-  const handleAddToPlaylistModel = () => {
+  const handleAddToPlaylistModel = (favorite) => {
+    console.log(favorite)
     setIsAddToPlaylistModelOpen(!IsAddToPlaylistModelOpen)
+    setSong(favorite)
   }
 
-  const { setFavouriteCount } = useContext(SongContext);
+  const {setSong,Song, setFavouriteCount } = useContext(SongContext);
 
   // Fetch favorite song IDs
   useEffect(() => {
@@ -188,7 +190,7 @@ const UserFavourite = () => {
                            
 
                             {/* Add to Playlist */}
-                            <button onClick={handleAddToPlaylistModel} className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                            <button onClick={() => {handleAddToPlaylistModel(favorite)}} className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
                               <span className="text-xs">Add to Playlist</span>
                               <FaPlus className="text-blue-500" />
                             </button>

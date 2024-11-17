@@ -2,15 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import Sidebar from "./sidebar";
 import Player from "./Player";
 import Navbar from "./Navbar";
-import { TiDelete } from "react-icons/ti";
+import { TiDelete, TiMediaPlay } from "react-icons/ti";
+import { MdDeleteSweep } from "react-icons/md";
+
 import SongContext from "../context/SongContext";
 
 const PlaylistPage = () => {
   const [playlists, setPlaylists] = useState([]);
-  const [Songs, setSongs] = useState([]); // Store song details
+  const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [error, setError] = useState(null);
+  const [GetPlaylistId, setGetPlaylistId] = useState(null);
 
   const { setPlaylistCount } = useContext(SongContext);
 
@@ -18,9 +21,7 @@ const PlaylistPage = () => {
     const fetchPlaylists = async () => {
       try {
         const response = await fetch("http://localhost:3000/user/playlists", {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
+          headers: { token: localStorage.getItem("token") },
         });
         const data = await response.json();
         if (data.success) {
@@ -29,7 +30,7 @@ const PlaylistPage = () => {
         } else {
           setError("Failed to fetch playlists");
         }
-      } catch (error) {
+      } catch (err) {
         setError("Error fetching playlists");
       } finally {
         setLoading(false);
@@ -43,25 +44,83 @@ const PlaylistPage = () => {
     try {
       const response = await fetch("http://localhost:3000/user/getSongsByIds", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ songIds }),
       });
       const data = await response.json();
-      if (data.success) {
-        setSongs(data.songs);
-      } else {
-        setError("Error fetching songs");
-      }
-    } catch (error) {
+      if (data.success) setSongs(data.songs);
+      else setError("Error fetching songs");
+    } catch (err) {
       setError("Error fetching songs");
     }
   };
 
+  const deletePlaylist = async (playlistId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/user/playlist/${playlistId}`,{
+        method: "DELETE",
+        headers: { 
+          "token": localStorage.getItem("token")
+         },
+
+      })
+
+      const data = await response.json();
+      const { success, message } = data;
+      if(success){
+        alert(message);
+        const updatedPlaylists = playlists.filter((playlist) => playlist._id !== playlistId);
+        setPlaylists(updatedPlaylists);
+      }
+      else if(!success){
+        alert(message);
+      }
+    } catch (error) {
+      throw new Error("Error deleting playlist");
+    }
+  }
+
+  const deleteSongFromPlaylist = async (playlistId, songId) => {
+    try {
+      console.log(playlistId, songId);
+  
+      const response = await fetch(`http://localhost:3000/user/deleteSong/${playlistId}/${songId}`, {
+        method: "DELETE",
+        headers: {
+          "token": localStorage.getItem("token"),
+        },
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+  
+      const data = await response.json();
+      const { success, message } = data;
+  
+      if (success) {
+        alert(message);
+      } else {
+        alert(message);
+      }
+    } catch (error) {
+      console.error("Error deleting song from playlist:", error);
+      alert("Error deleting song from playlist");
+    }
+  };
+  
+  
+
   const handlePlaylistClick = (playlist) => {
+    setGetPlaylistId(playlist._id);
     setSelectedPlaylist(playlist);
     fetchSongsByIds(playlist.songs);
+  };
+
+  const handleBackToPlaylists = () => {
+    setSelectedPlaylist(null);
+    setSongs([]); // Clear the songs state when navigating back to playlists
   };
 
   return (
@@ -70,20 +129,23 @@ const PlaylistPage = () => {
         <Sidebar />
         <div className="flex-1 p-8 overflow-y-auto">
           <Navbar />
-
+          <div className="flex flex-col md:flex-row items-center mb-10">
+            <div className="mr-8 mt-8 md:mb-0 flex items-center justify-center w-52 h-52 rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl">
+              <span className="text-6xl font-bold text-white">🎵</span>
+            </div>
+            <div>
+              <h2 className="text-8xl font-extrabold text-white mb-2">
+                Your Collection
+              </h2>
+              <p className="text-lg text-gray-300">
+                Manage and explore your playlists.
+              </p>
+            </div>
+          </div>
           {loading ? (
-            <div class=" flex space-x-12 p-12 justify-center items-center">
-              <div class="border border-blue-300 shadow rounded-md p-4 max-w-sm w-full mx-auto">
-                <div class="animate-pulse flex space-x-4">
-                  <div class="rounded-full bg-blue-400 h-12 w-12"></div>
-                  <div class="flex-1 space-y-4 py-1">
-                    <div class="h-4 bg-blue-400 rounded w-3/4"></div>
-                    <div class="space-y-2">
-                      <div class="h-4 bg-blue-400 rounded"></div>
-                      <div class="h-4 bg-blue-400 rounded w-5/6"></div>
-                    </div>
-                  </div>
-                </div>
+            <div className="flex justify-center items-center py-12">
+              <div className="animate-pulse">
+                <div className="h-12 w-12 bg-blue-400 rounded-full"></div>
               </div>
             </div>
           ) : error ? (
@@ -91,67 +153,68 @@ const PlaylistPage = () => {
           ) : selectedPlaylist ? (
             <div className="bg-[#1a1a1a] mt-5 rounded-lg p-6 shadow-2xl">
               <button
-                onClick={() => setSelectedPlaylist(null)}
+                onClick={handleBackToPlaylists}
                 className="text-teal-400 hover:underline mb-4 text-lg"
               >
                 &larr; Back to Playlists
               </button>
-
-              {/* Playlist Details */}
               <div className="flex items-center mb-8">
                 <img
                   src={
                     selectedPlaylist.image || "https://via.placeholder.com/150"
                   }
-                  alt={selectedPlaylist.title}
+                  alt={selectedPlaylist.name}
                   className="w-36 h-36 mr-6 rounded-lg object-cover border-4 border-teal-400"
                 />
                 <div>
-                  <h2 className="text-7xl font-bold text-white">
+                  <h2 className="text-6xl font-bold text-white">
                     {selectedPlaylist.name}
                   </h2>
-                  <p className="text-gray-400 text-xl mt-2">
-                    A collection of relaxing tunes.{" "}
-                    {selectedPlaylist.songs.length} songs
+                  <p className="text-gray-400 text-lg mt-2">
+                    A mix of your favorites. {selectedPlaylist.songs.length}{" "}
+                    songs
                   </p>
                 </div>
               </div>
 
-              {/* Song List */}
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="text-gray-400 border-b border-gray-700">
-                    <th className="py-3">#</th>
-                    <th className="py-3">Title</th>
-                    {/* <th className="py-3">Singer</th> */}
-                    <th className="py-3">Date Added</th>
-                    <th className="py-3">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Songs.map((song, index) => (
-                    <tr key={index} className="text-white hover:bg-gray-800">
-                      <td className="py-4">{index + 1}</td>
-                      <td className="py-4 flex items-center">
-                        <img
-                          src="http://localhost:3000/albumimages/image_1729333298901.jpg"
-                          alt={song.name}
-                          className="w-10 h-10 mr-4 rounded-lg"
-                        />
-                        {song.name}
-                      </td>
-                      {/* <td className="py-4">{song.name}</td> */}
-                      {/* <td className="py-4">{song.singer}</td> */}
-                      <td className="py-4">5 days ago</td>
-                      <td className="py-4">
-                        <button className="text-[#00ABE4] py font-semibold text-2xl hover:text-[#00abe4d2] transition duration-300">
-                          <TiDelete />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {songs.map((song, index) => (
+                  <div
+                    key={index}
+                    className="bg-[#262626] p-4 rounded-lg flex items-center justify-between shadow-md hover:bg-[#333333] transition-all duration-300 group relative"
+                  >
+                    <div className="flex items-center">
+                      <img
+                        src={
+                          "http://localhost:3000/albumimages/image_1729333298901.jpg"
+                        }
+                        alt={song.name}
+                        className="w-12 h-12 rounded-lg mr-4"
+                      />
+                      <div>
+                        <h3 className="text-white text-lg font-semibold">
+                          {song.name}
+                        </h3>
+                        <p className="text-gray-400 text-sm">5 days ago</p>
+                      </div>
+                    </div>
+
+                    <button onClick={() => {
+                      deleteSongFromPlaylist(selectedPlaylist._id, song._id);
+                    }} className="text-red-500 hover:text-red-400">
+                      <TiDelete size={24} />
+                    </button>
+
+                    {/* Play Button on Hover */}
+                    {/* <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-50 rounded-lg">
+                      <TiMediaPlay
+                        size={48}
+                        className="text-white hover:text-green-400 transition-transform duration-200 transform scale-110"
+                      />
+                    </div> */}
+                  </div>
+                ))}
+              </div>
             </div>
           ) : (
             <div className="grid gap-8 mt-5 md:grid-cols-2 lg:grid-cols-3">
@@ -160,7 +223,7 @@ const PlaylistPage = () => {
                   <div
                     key={playlist._id}
                     onClick={() => handlePlaylistClick(playlist)}
-                    className="relative bg-[#1f1f1f] rounded-lg p-6 cursor-pointer hover:bg-[#333333] transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg"
+                    className="relative bg-[rgb(31,31,31)] rounded-lg p-6 cursor-pointer hover:bg-[#333333] transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg"
                   >
                     <div
                       className="absolute inset-0 bg-cover bg-center rounded-lg opacity-40"
@@ -180,12 +243,18 @@ const PlaylistPage = () => {
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <h3 className="text-2xl font-semibold text-white mb-2">
-                        {playlist.title}
-                      </h3>
                       <p className="text-gray-400 text-sm mb-1">
                         {playlist.songs.length} Songs
                       </p>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation(); 
+                          deletePlaylist(playlist._id);
+                        }}
+                        className="absolute top-2 right-2 text-red-500 hover:text-red-400"
+                      >
+                        <MdDeleteSweep size={24} />
+                      </button>
                     </div>
                   </div>
                 ))
