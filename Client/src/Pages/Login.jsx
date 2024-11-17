@@ -123,7 +123,7 @@ const Login = () => {
 
       {/* Login form container */}
       <div className="bg-[#181818] shadow-xl rounded-lg p-8 w-full max-w-md">
-        <h2 className="text-4xl font-bold mb-6 text-center text-white">Login to AudioAura</h2>
+        <h2 className="text-4xl font-bold mb-6 text-center text-white">Login to Audio<span className="text-[#00ABE4]">Aura</span></h2>
 
         {/* Login form */}
         <form className="space-y-6" onSubmit={handleSubmit}>

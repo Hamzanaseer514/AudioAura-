@@ -41,17 +41,19 @@ const Hero = () => {
           Millions of songs. No credit card needed.
         </p>
         <div className="animate-fadeUp delay-2s">
-          <button
-            onClick={handleGetStarted}
-            className="bg-[#00ABE4] text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-[#00ABE4] transition duration-300"
-          >
-            Get AudioAura Free
-          </button>
+        <button
+  onClick={handleGetStarted}
+  className="bg-[#00ABE4] text-white py-3 px-6 rounded-full font-semibold text-lg hover:bg-[#00ABE4] transition duration-300 
+    sm:py-2 sm:px-4 sm:text-base md:py-3 md:px-6 md:text-lg lg:py-4 lg:px-8 lg:text-xl"
+>
+  Get AudioAura Free
+</button>
+
         </div>
       </div>
       <section className="relative w-full h-screen flex items-center justify-center">
         <div className="absolute -top-10 left-20">
-          <div className="bg-green-500 w-6 h-6 rounded-full animate-bounce"></div>
+          <div className="bg-[#00ABE4] w-6 h-6 rounded-full animate-bounce"></div>
         </div>
         <div className="absolute -bottom-10 right-20">
           <div className="bg-pink-500 w-6 h-6 rounded-full animate-bounce"></div>
@@ -60,7 +62,7 @@ const Hero = () => {
           <div className="bg-blue-500 w-8 h-8 rounded-full animate-bounce"></div>
         </div>
         <div className="absolute -top-10 right-30">
-          <div className="bg-green-500 w-6 h-6 rounded-full animate-bounce"></div>
+          <div className="bg-[#00ABE4] w-6 h-6 rounded-full animate-bounce"></div>
         </div>
         <div className="absolute -top-40 right-60">
           <div className="bg-yellow-400 w-10 h-10 rounded-full animate-pulse"></div>
@@ -78,7 +80,7 @@ const Hero = () => {
           <div className="bg-gradient-to-r from-purple-500 to-blue-500 w-6 h-6 rounded-full animate-ping"></div>
         </div>
         <div className="absolute bottom-40 right-60">
-          <div className="bg-green-500 w-14 h-14 rounded-full animate-pulse"></div>
+          <div className="bg-[#00ABE4] w-14 h-14 rounded-full animate-pulse"></div>
         </div>
         <div className="absolute top-10 right-20">
           <div className="bg-pink-400 w-8 h-8 rounded-full animate-bounce delay-200"></div>

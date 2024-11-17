@@ -14,7 +14,7 @@ const SongItem = ({name,image,desc,id}) => {
     
     {/* Play button inside the image */}
     <div 
-      className='w-[50px] h-[50px] rounded-full cursor-pointer bg-[#3AE176] flex items-center justify-center 
+      className='w-[50px] h-[50px] rounded-full cursor-pointer bg-[#00ABE4] flex items-center justify-center 
       absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300'
     >
       <img className='w-6 cursor-pointer' src={assets.black_play_icon} alt="" />

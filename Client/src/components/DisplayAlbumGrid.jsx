@@ -3,8 +3,9 @@ import Navbar from "./Navbar";
 import { useParams, useLocation } from "react-router-dom";
 import { PlayerContext } from "../context/Playercontext";
 import AlbumsContext from "../context/AlbumsContext";
-import { FaRegHeart, FaEllipsisV } from "react-icons/fa";
-import AudioAuraLogo from "../assets/AudioAuraLogo.png"
+import { FaRegHeart, FaPlus } from "react-icons/fa";
+import AudioAuraLogo from "../assets/AudioAuraLogo.png";
+import AddToPlaylist from "../components/AddToPlaylist"; // Import the AddToPlaylist component
 
 const DisplayAlbum = () => {
   const { id } = useParams();
@@ -18,7 +19,7 @@ const DisplayAlbum = () => {
   const [songs, setSongs] = useState([]);
   const [loadingSongs, setLoadingSongs] = useState(true);
   const [likedSongs, setLikedSongs] = useState(new Set());
-  const [showMenu, setShowMenu] = useState(null); // To handle menu visibility for each song
+  const [isAddToPlaylistOpen, setIsAddToPlaylistOpen] = useState(false); // Modal state
 
   // Fetch the user's favorites when they log in
   useEffect(() => {
@@ -135,7 +136,7 @@ const DisplayAlbum = () => {
 
   const handleMenuToggle = (songId, e) => {
     e.stopPropagation(); // Prevent event from bubbling up and closing the menu immediately
-    setShowMenu((prev) => (prev === songId ? null : songId)); // Toggle menu visibility
+    setIsAddToPlaylistOpen(true); // Open modal
   };
 
   return (
@@ -186,7 +187,6 @@ const DisplayAlbum = () => {
                 <b className="mr-4 text-[#a7a7a7]">
                   <img
                     src="http://localhost:3000/albumimages/image_1729333298901.jpg"
-                    // src={song.image}
                     alt={song.name}
                     className="inline-block w-10 h-10 mr-2 rounded"
                   />
@@ -215,32 +215,22 @@ const DisplayAlbum = () => {
               </p>
 
               <div className="absolute hidden group-hover:block top-1/2 right-2 transform -translate-y-1/2 w-4">
-                <FaEllipsisV
-                  onClick={(e) => handleMenuToggle(song._id, e)} // Pass the event here
+                <FaPlus
+                  onClick={(e) => handleMenuToggle(song._id, e)}
                   className="text-[#a7a7a7] cursor-pointer"
                 />
-                {showMenu === song._id && (
-                  <div className="absolute right-0 mt-2 w-40 bg-[#1a1a1a] rounded-lg shadow-lg">
-                    <ul>
-                      <li
-                        className="text-white p-2 hover:bg-[#333333] cursor-pointer"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        Add to Playlist
-                      </li>
-                      <li
-                        className="text-white p-2 hover:bg-[#333333] cursor-pointer"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        Create Playlist
-                      </li>
-                    </ul>
-                  </div>
-                )}
               </div>
             </div>
           ))}
         </>
+      )}
+
+      {/* AddToPlaylist Modal */}
+      {isAddToPlaylistOpen && (
+        <AddToPlaylist
+          songId={null} // Pass songId or other relevant data if needed
+          onClose={() => setIsAddToPlaylistOpen(false)} // Close the modal
+        />
       )}
     </div>
   );
