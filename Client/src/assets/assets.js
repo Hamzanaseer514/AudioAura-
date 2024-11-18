@@ -42,7 +42,7 @@ import song1 from  './song1.mp3'
 import song2 from  './song2.mp3'
 import song3 from  './song3.mp3'
 import black_play_icon from './black_play_icon.png'
-import favorite_icon from './favorite_icon.png'
+import favorite_icon from './favourite_icon.png'
 import menu_icon from './menu-vertical-icon.png'
 import dashboard_icon from './dashboard-icon.png'
 import albums_icon from './albums-icon.png'
@@ -58,6 +58,7 @@ import player_more from './player-more-icon.png'
 import my_pic from './me.jpg'
 import Hamza_pic from './Hamza-pic.png'
 import AudioAura_favIcon from './AudioAura-logo.png'
+import AudiooAura_White from './AudioAura-white.png'
 
 export const assets = {
     bell_icon,
@@ -100,7 +101,8 @@ export const assets = {
     player_more,
     my_pic,
     Hamza_pic,
-    AudioAura_favIcon
+    AudioAura_favIcon,
+    AudiooAura_White
 
 }
 

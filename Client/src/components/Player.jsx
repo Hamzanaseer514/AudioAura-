@@ -4,6 +4,7 @@ import { PlayerContext } from "../context/Playercontext";
 import AddToPlaylist from "./AddToPlaylist";
 import SongContext from "../context/SongContext";
 import { FaHeart, FaList, FaDownload } from 'react-icons/fa';
+import toast, { Toaster } from "react-hot-toast";
 
 
 
@@ -73,6 +74,19 @@ const Player = () => {
     setSong(track);
     setIsAddToPlaylistOpen(true);
   };
+  const Queue =()=>{
+    console.log("Queue")
+    toast.success('Song Played in Queue', {
+      style: {
+        background: "#00ABE4",
+        color: "#121212",
+      },
+      iconTheme: {
+        primary: "white",
+        secondary: "black",
+      },
+    });
+  }
 
   useEffect(() => {
     if (audioRef.current) {
@@ -102,6 +116,7 @@ const Player = () => {
 
   return (
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4 relative">
+      <Toaster position="top-center" reverseOrder={false} />
       <div className="hidden lg:flex items-center gap-4">
         <img className="w-12" src={track.image} alt="" />
         <div>
@@ -226,6 +241,7 @@ const Player = () => {
             className="w-5 cursor-pointer"
             src={assets.download_icon}
             alt="download icon"
+           
           />
           <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-0">
             Download
@@ -243,7 +259,7 @@ const Player = () => {
             Playlist
           </div>
         </div>
-        <div className=" relative group">
+        <div className=" relative group" onClick={Queue}>
           <img className="w-4 cursor-pointer" src={assets.queue_icon} alt="" />
           <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-7 left-0">
             Queue

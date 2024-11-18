@@ -194,7 +194,7 @@ const Navbar = () => {
             }}
             className={`text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out ${
               category === "all"
-                ? "bg-green-500 text-black"
+                ? "bg-[#00ABE4] text-black"
                 : "bg-black hover:bg-white hover:text-black"
             }`}
           >
@@ -207,7 +207,7 @@ const Navbar = () => {
             }}
             className={`text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out ${
               category === "music"
-                ? "bg-green-500 text-black"
+                ? "bg-[#00ABE4] text-black"
                 : "bg-black hover:bg-white hover:text-black"
             }`}
           >
@@ -220,7 +220,7 @@ const Navbar = () => {
             }}
             className={`text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out ${
               category === "podcast"
-                ? "bg-green-500 text-black"
+                ? "bg-[#00ABE4] text-black"
                 : "bg-black hover:bg-white hover:text-black"
             }`}
           >
