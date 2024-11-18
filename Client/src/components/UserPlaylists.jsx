@@ -49,7 +49,10 @@ const PlaylistPage = () => {
         body: JSON.stringify({ songIds }),
       });
       const data = await response.json();
-      if (data.success) setSongs(data.songs);
+      if (data.success){
+        setSongs(data.songs);
+        console.log('songs',data.songs);
+      }
       else setError("Error fetching songs");
     } catch (err) {
       setError("Error fetching songs");
@@ -95,19 +98,38 @@ const PlaylistPage = () => {
           },
         }
       );
-
+  
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Something went wrong");
       }
-
+  
       const data = await response.json();
       const { success, message } = data;
-
+  
       if (success) {
         alert(message);
+  
+        // Refresh songs and playlist
         const updatedSongs = songs.filter((song) => song._id !== songId);
         setSongs(updatedSongs);
+  
+        // Fetch updated playlist from backend
+        const refreshedPlaylistsResponse = await fetch(
+          `http://localhost:3000/user/playlists`,
+          {
+            headers: { token: localStorage.getItem("token") },
+          }
+        );
+        const refreshedData = await refreshedPlaylistsResponse.json();
+  
+        if (refreshedData.success) {
+          setPlaylists(refreshedData.playlists);
+          const updatedPlaylist = refreshedData.playlists.find(
+            (pl) => pl._id === playlistId
+          );
+          setSelectedPlaylist(updatedPlaylist || null);
+        }
       } else {
         alert(message);
       }
@@ -116,17 +138,29 @@ const PlaylistPage = () => {
       alert("Error deleting song from playlist");
     }
   };
+  
 
   const handlePlaylistClick = (playlist) => {
-    if (playlist.songs && playlist.songs.length > 0) {
-      const songIds = playlist.songs.map((song) => song._id); // Extract song IDs
-      fetchSongsByIds(songIds); // Pass only IDs to the fetch function
+    console.log(playlist);
+    const songIds = playlist.songs.map((song) => song._id || song); 
+    if (songIds.length > 0) {
+      fetchSongsByIds(songIds); 
     } else {
-      setSongs([]); // Clear songs if the playlist has none
+      setSongs([]); 
     }
-    setGetPlaylistId(playlist._id);
-    setSelectedPlaylist(playlist);
+    setSelectedPlaylist(playlist); // State set kar diya
+    setGetPlaylistId(playlist._id); // State set kar diya
   };
+  
+  // Track `selectedPlaylist` or `GetPlaylistId` for confirmation
+  useEffect(() => {
+    console.log("Selected Playlist Updated:", selectedPlaylist);
+    console.log("Playlist ID Updated:", GetPlaylistId);
+  }, [selectedPlaylist, GetPlaylistId]);
+  
+
+  
+  
 
   const handleBackToPlaylists = () => {
     setSelectedPlaylist(null);
@@ -190,11 +224,12 @@ const PlaylistPage = () => {
               </div>
               {selectedPlaylist.songs && selectedPlaylist.songs.length > 0 ? (
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                  {selectedPlaylist.songs.map((song) => (
+                  {songs.map((song) => (
                     <div
                       key={song._id}
                       className="bg-[#262626] p-4 rounded-lg flex items-center justify-between shadow-md hover:bg-[#333333] transition-all duration-300 group relative"
                     >
+                      
                       <div className="flex items-center">
                         <img
                           src={song.image || "https://via.placeholder.com/50"}
