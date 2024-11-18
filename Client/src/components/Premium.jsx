@@ -7,8 +7,8 @@ const Premium = () => {
   const handleBack = () => {
     navigate(-1); 
   };
-  const MakePayment = async () => {
-
+  const MakePayment =  () => {
+    console.log("Payment")
   }
 
   return (
