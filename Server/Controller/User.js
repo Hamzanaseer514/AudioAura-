@@ -13,6 +13,7 @@ const register = async (req, res) => {
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
     role: Joi.string().required(),
+
   });
 
   const { error } = schema.validate(body);
@@ -72,10 +73,15 @@ const login = async (req, res) => {
       });
     }
 
+    if(user.status === "0"){
+      return res.status(400).json({msg:'You donot have access to this page. Please contact to admin for access', success:false})
+    }
+
     const data = {
       id: user._id,
       role: user.role,
       name: user.firstname + " " + user.lastname,
+      status: user.status,
     };
     const token = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: "24h" });
     return res.status(200).json({
@@ -203,6 +209,27 @@ const updateUser = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error",success:false });
   }
 }
+const updateUserStatus = async (req, res) => {
+  const { id, status } = req.body;
+  console.log(req.body);
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found", success: false });
+    }
+
+    return res.status(200).json({ user, message: "User updated successfully", success: true });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error", success: false });
+  }
+};
+
 
 module.exports = {
   register,
@@ -213,4 +240,5 @@ module.exports = {
   deleteUser,
   getUserWithId,
   updateUser,
+  updateUserStatus
 };

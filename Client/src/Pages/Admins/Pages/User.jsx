@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar"; 
+import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 import { toast, Toaster } from "react-hot-toast";
 
@@ -62,6 +62,36 @@ const User = () => {
     }
   };
 
+  const updateUser = async (status, id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/updateUserStatus`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status, id }),
+      });
+  
+      const data = await response.json();
+      if (data.success) {
+        toast.success(data.message);
+  
+        // Update the local users state with the updated status
+        setUsers((prevUsers) =>
+          prevUsers.map((user) =>
+            user._id === id ? { ...user, status } : user
+          )
+        );
+      } else {
+        toast.error(data.message || "Failed to update user status");
+      }
+    } catch (error) {
+      console.error("Error updating user status:", error);
+      toast.error("An error occurred while updating the user status.");
+    }
+  };
+  
+
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
@@ -73,7 +103,9 @@ const User = () => {
           className="lg:block hidden"
         />
         <div className="flex-1 lg:ml-60 mt-14 p-6">
-          <h1 className="text-3xl font-bold text-center mb-10 text-gray-800">User Management</h1>
+          <h1 className="text-3xl font-bold text-center mb-10 text-gray-800">
+            User Management
+          </h1>
           <div className="mb-8 flex justify-center">
             <input
               type="text"
@@ -113,14 +145,23 @@ const User = () => {
                         <td className="p-4">{user.firstname || "N/A"}</td>
                         <td className="p-4">{user.lastname || "N/A"}</td>
                         <td className="p-4">{user.email || "N/A"}</td>
-                        <td className="p-4">{user.premium ? "Yes" : "No"}</td>
+                        <td className="p-4">{user.premium}</td>
                         <td className="p-4">
-                          <button
-                            onClick={() => deleteuser(user._id)}
-                            className="bg-red-500 text-white px-3 py-1 rounded-full shadow hover:bg-red-600 transition duration-200 ease-in-out"
+                          <select
+                            className="block font-bold w-full px-4 py-2 text-sm text-gray-700 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 hover:shadow-lg transition-all duration-200"
+                            value={user.status} // Dynamically set the current value
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === "1") {
+                                updateUser("1", user._id); // Activate user
+                              } else if (value === "0") {
+                                updateUser("0", user._id); // Deactivate user
+                              }
+                            }}
                           >
-                            Delete
-                          </button>
+                            <option value="1">Activated</option>
+                            <option value="0">Deactivated</option>
+                          </select>
                         </td>
                       </tr>
                     ))

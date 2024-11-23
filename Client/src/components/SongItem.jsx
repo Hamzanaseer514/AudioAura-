@@ -2,15 +2,15 @@ import React, { useContext } from 'react'
 import { PlayerContext } from '../context/Playercontext'
 import {assets} from '../assets/assets'
 
-const SongItem = ({name,image,desc,id}) => {
+const SongItem = ({name,image,description,id}) => {
   const {PlayWithId} = useContext(PlayerContext)
   return (
 <div 
   onClick={() => PlayWithId(id)} 
-  className='min-w-[180px] p-2 px-3 rounded cursor-pointer hover:bg-[#ffffff26] group'
+  className=' min-w-[180px]  p-2 px-3 rounded cursor-pointer hover:bg-[#ffffff26] group'
 >
-  <div className='relative'>
-    <img className='rounded' src={image} alt="" />
+  <div className='relative '>
+    <img className='w-64 rounded' src={image} alt="" />
     
     {/* Play button inside the image */}
     <div 
@@ -22,7 +22,7 @@ const SongItem = ({name,image,desc,id}) => {
   </div>
 
   <p className='font-bold mt-2 mb-1'>{name}</p>
-  <p className='text-slate-200 text-sm'>{desc}</p>
+  <p className='text-slate-200 text-sm'>{description}</p>
 </div>
 
 

@@ -3,14 +3,11 @@ import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/Playercontext";
 import AddToPlaylist from "./AddToPlaylist";
 import SongContext from "../context/SongContext";
-import { FaHeart, FaList, FaDownload } from 'react-icons/fa';
+import { FaHeart, FaList, FaDownload } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 
-
-
 const Player = () => {
-
-  const {setSong} = useContext(SongContext)
+  const { setSong } = useContext(SongContext);
   const {
     track,
     seekBg,
@@ -31,6 +28,7 @@ const Player = () => {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for menu visibility
+  const [likedSongs, setLikedSongs] = useState(new Set());
 
   const audioRef = useRef(null);
 
@@ -74,9 +72,9 @@ const Player = () => {
     setSong(track);
     setIsAddToPlaylistOpen(true);
   };
-  const Queue =()=>{
-    console.log("Queue")
-    toast.success('Song Played in Queue', {
+  const Queue = () => {
+    console.log("Queue");
+    toast.success("Song Played in Queue", {
       style: {
         background: "#00ABE4",
         color: "#121212",
@@ -86,7 +84,7 @@ const Player = () => {
         secondary: "black",
       },
     });
-  }
+  };
 
   useEffect(() => {
     if (audioRef.current) {
@@ -114,6 +112,65 @@ const Player = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // function to parse token
+  const parseJwt = (token) => {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+          .join("")
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error("Invalid token", error);
+      return null;
+    }
+  };
+
+  const handleLikeClick = async (songId) => {
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    if (!decodedToken || !decodedToken.id) {
+      console.log("User not logged in");
+      return;
+    }
+
+    const userId = decodedToken.id;
+    console.log("User ID:", userId);
+    console.log("Song ID:", songId);
+
+    try {
+      const response = await fetch("http://localhost:3000/user/addfavourite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          userId,
+          songId,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        setLikedSongs((prevLikedSongs) => {
+          const updatedLikedSongs = new Set(prevLikedSongs);
+          updatedLikedSongs.add(songId); // Add song to liked songs
+          return updatedLikedSongs;
+        });
+        console.log("Song added to favorites");
+      } else {
+        console.log(data.message); // Handle error message
+      }
+    } catch (error) {
+      console.error("Error adding to favorites:", error);
+    }
+  };
+
   return (
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4 relative">
       <Toaster position="top-center" reverseOrder={false} />
@@ -121,7 +178,7 @@ const Player = () => {
         <img className="w-12" src={track.image} alt="" />
         <div>
           <p>{track.name}</p>
-          <p>{track.desc.slice(0, 12)}</p>
+          {/* <p>{track.desc.slice(0, 12)}</p> */}
         </div>
       </div>
       <div className="flex flex-col items-center gap-1 m-auto">
@@ -169,25 +226,23 @@ const Player = () => {
               onClick={toggleMenu} // Add onClick handler for toggling menu
             />
             {isMenuOpen && (
-       <div className="absolute bg-black bg-opacity-80 text-white p-4 rounded-lg right-0 mt-[-180px] mr-[70px] shadow-lg">
-              <p
-                className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
-                onClick={toggleHeart}
-              >
-                <FaHeart className="text-red-500" /> Add to Favourite
-              </p>
-              <p
-                className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
-                onClick={openmodel} // Opens the Add to Playlist modal
-              >
-                <FaList className="text-blue-500" /> Add to Playlist
-              </p>
-              <p className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200">
-                <FaDownload className="text-green-500" /> Download Song
-              </p>
-            </div>
-     
-
+              <div className="absolute bg-black bg-opacity-80 text-white p-4 rounded-lg right-0 mt-[-180px] mr-[70px] shadow-lg">
+                <p
+                  className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
+                  onClick={() => {toggleHeart(); handleLikeClick(track._id);}} // Toggles heart icon and adds song to liked songs
+                >
+                  <FaHeart className="text-red-500" /> Add to Favourite
+                </p>
+                <p
+                  className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
+                  onClick={openmodel} // Opens the Add to Playlist modal
+                >
+                  <FaList className="text-blue-500" /> Add to Playlist
+                </p>
+                <p className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200">
+                  <FaDownload className="text-green-500" /> Download Song
+                </p>
+              </div>
             )}
           </div>
         </div>
@@ -225,6 +280,7 @@ const Player = () => {
         </div>
         {floatingHearts.map((heart) => (
           <img
+            onClick={() => handleLikeClick(track.id)}
             key={heart.id}
             className="absolute w-5 floating-heart"
             style={{
@@ -241,7 +297,6 @@ const Player = () => {
             className="w-5 cursor-pointer"
             src={assets.download_icon}
             alt="download icon"
-           
           />
           <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-0">
             Download

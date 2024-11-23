@@ -1,6 +1,6 @@
 import { createContext, useRef, useState,useEffect,useContext } from "react";
 import AlbumsContext from "./AlbumsContext";
-import { songsData } from "../assets/assets";
+// import { songsData } from "../assets/assets";
 
 
 
@@ -16,8 +16,12 @@ const PlayerContextProvider = (props) =>{
   const seekBg   = useRef();
   const seekBar = useRef();
 //  console.log(songsData[4])
-  const [track, settrack] = useState(songsData[2])
+console.log("songs",songs[1])
+  const [track, settrack] = useState(songs);
+  
+  console.log("track",track)
   const [playStatus, setplayStatus] = useState(false)
+
   const [time, settime] = useState({
     currentTime:{
         seconds:"00",
@@ -38,27 +42,39 @@ const PlayerContextProvider = (props) =>{
         setplayStatus(false)
   }
   const PlayWithId = async (id) =>{
-    await settrack(songsData[id])
+    
+    console.log("id",id)
+    console.log("songs",songs)
+    console.log("songs",songs[id-1])
+    await settrack(songs[id-1])
     await audioRef.current.play()
     setplayStatus(true)
   }
-  const previous = async()=>{
-    if(track.id>0){
-        await settrack(songsData[track.id-1])
-        await audioRef.current.play()
-        setplayStatus(true)
+  const previous = () => {
+    if (track.id > 1) {
+      const prevTrack = songs[track.id - 2];
+      settrack(prevTrack);
+      audioRef.current.play();
+      setplayStatus(true);
     }
-  }
-  const next = async()=>{
-    if(track.id<songsData.length-1){
-        await settrack(songsData[track.id+1])
-        await audioRef.current.play()
-        setplayStatus(true)
+  };
+  
+  const next = () => {
+    if (track.id < songs.length - 1) {
+      const nextTrack = songs[track.id];
+      settrack(nextTrack);
+      audioRef.current.play();
+      setplayStatus(true);
     }
-  }
-  const seeksong = async(e)=>{
-      audioRef.current.currentTime = (e.nativeEvent.offsetX/seekBg.current.offsetWidth)*audioRef.current.duration
-  }
+  };
+  
+  const seeksong = (e) => {
+    if (audioRef.current && seekBg.current) {
+      const seekPosition = (e.nativeEvent.offsetX / seekBg.current.offsetWidth) * audioRef.current.duration;
+      audioRef.current.currentTime = seekPosition;
+    }
+  };
+  
 
   useEffect(() => {
     setTimeout(()=>{

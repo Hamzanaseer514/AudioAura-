@@ -6,6 +6,7 @@ import { PlayerContext } from "../../context/Playercontext";
 
 const MainPage = () => {
   const { audioRef, track } = useContext(PlayerContext);
+  console.log("track", track.file);
   return (
     <div className="h-screen bg-black">
       <div className="h-[90%] flex">

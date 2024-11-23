@@ -7,13 +7,13 @@ const AddSong = () => {
   const [image, setImage] = useState(null);
   const [audio, setAudio] = useState(null);
   const [songData, setSongData] = useState({
-    name: '',
-    singer: '',
-    duration: '',
-    albumId: '',
-    image: '',
-    file: '',
-    description: '', // Added description field
+    name: "",
+    singer: "",
+    duration: "",
+    albumId: "",
+    image: "",
+    file: "",
+    description: "", // Added description field
   });
   const [albums, setAlbums] = useState([]);
   const [activeOption, setActiveOption] = useState("songs"); // State for active sidebar option
@@ -21,7 +21,7 @@ const AddSong = () => {
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
-        const response = await fetch('http://localhost:3000/admin/getalbums');
+        const response = await fetch("http://localhost:3000/admin/getalbums");
         const data = await response.json();
         if (data.success) {
           setAlbums(data.albums); // Assuming the response contains albums array
@@ -50,10 +50,10 @@ const AddSong = () => {
 
     // Upload image
     let imageFormData = new FormData();
-    imageFormData.append('image', image);
+    imageFormData.append("image", image);
 
     try {
-      const imageResponse = await fetch('http://localhost:3000/uploadalbum', {
+      const imageResponse = await fetch("http://localhost:3000/uploadalbum", {
         method: "POST",
         body: imageFormData,
       });
@@ -63,9 +63,9 @@ const AddSong = () => {
 
       // Upload audio
       let audioFormData = new FormData();
-      audioFormData.append('file', audio);
+      audioFormData.append("file", audio);
 
-      const audioResponse = await fetch('http://localhost:3000/uploadaudio', {
+      const audioResponse = await fetch("http://localhost:3000/uploadaudio", {
         method: "POST",
         body: audioFormData,
       });
@@ -74,13 +74,15 @@ const AddSong = () => {
       songData.file = audioData.file_url; // Set the audio file URL
 
       // Submit song data
-      const response = await fetch('http://localhost:3000/admin/addsong', {
+      const response = await fetch("http://localhost:3000/admin/addsong", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(songData),
       });
+
+      console.log(response);
 
       const data = await response.json();
       const { success, message } = data;
@@ -109,12 +111,19 @@ const AddSong = () => {
         />
         <main className="flex-1 lg:ml-60 mt-14 p-6 min-h-screen flex items-center justify-center">
           <div className="p-8 bg-white rounded-xl shadow-lg w-full max-w-2xl lg:max-w-none">
-            <h2 className="text-3xl sm:text-2xl md:text-2xl font-bold text-center mb-8 text-gray-800">Add New Song</h2>
+            <h2 className="text-3xl sm:text-2xl md:text-2xl font-bold text-center mb-8 text-gray-800">
+              Add New Song
+            </h2>
 
             <form onSubmit={addSongHandler} className="space-y-6">
               {/* Song Name */}
               <div>
-                <label htmlFor="name" className="block text-sm font-semibold text-gray-700">Song Name</label>
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Song Name
+                </label>
                 <input
                   value={songData.name}
                   onChange={changeHandler}
@@ -128,7 +137,12 @@ const AddSong = () => {
 
               {/* Singer */}
               <div>
-                <label htmlFor="singer" className="block text-sm font-semibold text-gray-700">Singer</label>
+                <label
+                  htmlFor="singer"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Singer
+                </label>
                 <input
                   value={songData.singer}
                   onChange={changeHandler}
@@ -142,7 +156,12 @@ const AddSong = () => {
 
               {/* Duration */}
               <div>
-                <label htmlFor="duration" className="block text-sm font-semibold text-gray-700">Duration</label>
+                <label
+                  htmlFor="duration"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Duration
+                </label>
                 <input
                   value={songData.duration}
                   onChange={changeHandler}
@@ -157,7 +176,12 @@ const AddSong = () => {
 
               {/* Description */}
               <div>
-                <label htmlFor="description" className="block text-sm font-semibold text-gray-700">Description</label>
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Description
+                </label>
                 <textarea
                   value={songData.description}
                   onChange={changeHandler}
@@ -171,7 +195,12 @@ const AddSong = () => {
 
               {/* Album Selection */}
               <div>
-                <label htmlFor="albumId" className="block text-sm font-semibold text-gray-700">Album</label>
+                <label
+                  htmlFor="albumId"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Album
+                </label>
                 <select
                   value={songData.albumId}
                   onChange={changeHandler}
@@ -182,7 +211,7 @@ const AddSong = () => {
                 >
                   <option value="">Select an album</option>
                   {albums.map((album) => (
-                    <option key={album.id} value={album.id}>
+                    <option key={album._id} value={album._id}>
                       {album.name}
                     </option>
                   ))}
@@ -191,7 +220,12 @@ const AddSong = () => {
 
               {/* Image Upload */}
               <div>
-                <label htmlFor="image" className="block text-sm font-semibold text-gray-700">Song Image</label>
+                <label
+                  htmlFor="image"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Song Image
+                </label>
                 <div className="mt-3 flex items-center">
                   <img
                     className="w-20 h-20 object-cover rounded-lg mr-4"
@@ -213,7 +247,12 @@ const AddSong = () => {
 
               {/* Audio Upload */}
               <div>
-                <label htmlFor="file" className="block text-sm font-semibold text-gray-700">Song File</label>
+                <label
+                  htmlFor="file"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Song File
+                </label>
                 <div className="mt-3 flex items-center">
                   <input
                     onChange={audioHandler}

@@ -6,16 +6,20 @@ import SongItem from "./SongItem";
 import CategoryContext from "../context/CategoryContext";
 import AlbumsContext from "../context/AlbumsContext";
 import { songsData } from "../assets/assets";
+import CircularHighlights from "./Highlights";
 
 const DisplayHome = () => {
   const { category } = useContext(CategoryContext);
-  const { albums, loading } = useContext(AlbumsContext);
+  const { albums, loading,songs } = useContext(AlbumsContext);
+  console.log(songs)
 
   return (
     <>
       <Navbar />
       <div className="mb-4">
-        <h1 className="my-5 font-bold text-2xl http://localhost:3000/albumimages/image_1729333298901.jpgmd:text-4xl">Featured Charts</h1>
+        <h1 className="my-5 font-bold text-2xl  md:text-4xl">
+          Featured Charts
+        </h1>
         <div className="flex overflow-auto">
           {loading ? (
             <p>Loading albums...</p>
@@ -35,16 +39,19 @@ const DisplayHome = () => {
       <div className="mb-4">
         <h1 className="my-5 font-bold text-2xl">Today's biggest hit</h1>
         <div className="flex overflow-auto">
-          {songsData.map((item, index) => (
+          {songs.map((item, index) => (
             <SongItem
               key={index}
               name={item.name}
-              desc={item.desc}
+              description={item.description}
               id={item.id}
               image={item.image}
             />
           ))}
         </div>
+      </div>
+      <div className="mb-4">
+        <CircularHighlights />
       </div>
     </>
   );
