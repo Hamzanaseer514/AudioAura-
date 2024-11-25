@@ -6,6 +6,7 @@ export const AlbumsProvider = ({ children }) => {
   const [albums, setAlbums] = useState([]);
   const [songs, setSongs] = useState([]); // State for songs
   const [loading, setLoading] = useState(true);
+  const [SongLoading, setSongLoading] = useState(true);
   
   useEffect(() => {
     const fetchAlbums = async () => {
@@ -35,9 +36,11 @@ export const AlbumsProvider = ({ children }) => {
 
     const fetchData = async () => {
       setLoading(true); // Start loading
+      setSongLoading(true);
       await fetchAlbums();
       await fetchSongs();
       setLoading(false); // End loading
+      setSongLoading(false);
     };
 
     fetchData();
@@ -49,7 +52,7 @@ export const AlbumsProvider = ({ children }) => {
   }, [songs]);
 
   return (
-    <AlbumsContext.Provider value={{ albums, songs, loading }}>
+    <AlbumsContext.Provider value={{ albums, songs, loading, SongLoading }}>
       {children}
     </AlbumsContext.Provider>
   );

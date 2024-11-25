@@ -119,7 +119,7 @@ const UserFavourite = () => {
 
           {/* Liked Songs Header */}
           <div className="flex flex-col md:flex-row items-center mb-10">
-            <div className="mr-8 mt-8 md:mb-0 flex items-center justify-center w-52 h-52 rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl">
+            <div className="mr-8 mt-8 md:mb-0 cursor-pointer flex items-center justify-center w-52 h-52 rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl">
               <span className="text-6xl text-white">❤️</span>
             </div>
 
@@ -226,6 +226,7 @@ const UserFavourite = () => {
         <AddToPlaylist setIsModalOpen={setIsAddToPlaylistModelOpen} />
       )}
       <Player />
+      {/* <Player  LikedSongs = {LikedSongs} setLikedSongs={setLikedSongs} setFavouriteCount={setFavouriteCount}/> */}
       <audio ref={audioRef} src={track.file} preload="auto"></audio>
     </div>
   );

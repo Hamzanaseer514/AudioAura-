@@ -44,11 +44,7 @@ const MusicalHighlights = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      {/* Section Title */}
-      <h1 className="text-center text-4xl font-extrabold text-[#ff4141] mb-10">
-        Musical Highlights
-      </h1>
+    <div className="max-w-6xl mx-auto px-4 my-3 pb-12">
 
       {/* Scrollable Container for Cards */}
       <div className="flex overflow-x-auto space-x-6 pb-6 scrollbar-thin scrollbar-thumb-[#ff4141]">

@@ -16,7 +16,7 @@ const PlayerContextProvider = (props) =>{
   const seekBg   = useRef();
   const seekBar = useRef();
 //  console.log(songsData[4])
-console.log("songs",songs[1])
+// console.log("songs",songs[1])
   const [track, settrack] = useState(songs);
   
   console.log("track",track)
@@ -44,9 +44,10 @@ console.log("songs",songs[1])
   const PlayWithId = async (id) =>{
     
     console.log("id",id)
-    console.log("songs",songs)
-    console.log("songs",songs[id-1])
+    // console.log("songs",songs)
+    console.log("songs we play ",songs[id-1])
     await settrack(songs[id-1])
+    console.log("track after setting",track)
     await audioRef.current.play()
     setplayStatus(true)
   }
@@ -60,7 +61,7 @@ console.log("songs",songs[1])
   };
   
   const next = () => {
-    if (track.id < songs.length - 1) {
+    if (track.id < songs.length) {
       const nextTrack = songs[track.id];
       settrack(nextTrack);
       audioRef.current.play();

@@ -6,6 +6,7 @@ import AlbumsContext from "../context/AlbumsContext";
 import { FaRegHeart, FaPlus } from "react-icons/fa";
 import { assets } from "../assets/assets";
 import AddToPlaylist from "./AddToPlaylist";
+import AudioAuroLoader from './AudioAuroLoader'
 
 const DisplayAlbum = () => {
   const { id } = useParams();
@@ -139,7 +140,7 @@ const DisplayAlbum = () => {
 
   const handleMenuToggle = (songId, e) => {
     e.stopPropagation(); // Prevent event from bubbling up and closing the menu immediately
-    setIsAddToPlaylistOpen(true); // Open modal
+    setIsAddToPlaylistOpen(true); // Open the modal
   };
 
   return (
@@ -149,7 +150,7 @@ const DisplayAlbum = () => {
     >
       <Navbar />
       {loading || loadingSongs || !albumData ? (
-        <p>Loading album...</p>
+        <AudioAuroLoader/>
       ) : (
         <>
           <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-end">
@@ -166,7 +167,8 @@ const DisplayAlbum = () => {
                   src={assets.AudiooAura_White}
                   alt=""
                 />
-                <b className="mr-1 ml-1 text-[#00ABE4]">AudioAura</b> • {songs.length} songs
+                <b className="mr-1 ml-1 text-[#00ABE4]">AudioAura</b> •{" "}
+                {songs.length} songs
               </p>
             </div>
           </div>
@@ -204,7 +206,11 @@ const DisplayAlbum = () => {
                   e.stopPropagation();
                   handleLikeClick(song._id);
                 }}
-                className={`cursor-pointer w-8 ${likedSongs.has(song._id) ? "bg-[#00ABE4] text-white" : "bg-transparent text-[#a7a7a7]"} p-2 rounded-full transition-all duration-300`}
+                className={`cursor-pointer w-8 ${
+                  likedSongs.has(song._id)
+                    ? "bg-[#00ABE4] text-white"
+                    : "bg-transparent text-[#a7a7a7]"
+                } p-2 rounded-full transition-all duration-300`}
               >
                 <FaRegHeart />
               </p>
@@ -216,7 +222,6 @@ const DisplayAlbum = () => {
               </div>
             </div>
           ))}
-        
         </>
       )}
     </div>

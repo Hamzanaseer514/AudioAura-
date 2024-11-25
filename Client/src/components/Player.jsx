@@ -6,7 +6,7 @@ import SongContext from "../context/SongContext";
 import { FaHeart, FaList, FaDownload } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 
-const Player = () => {
+const Player = (props) => {
   const { setSong } = useContext(SongContext);
   const {
     track,
@@ -131,16 +131,24 @@ const Player = () => {
   };
 
   const handleLikeClick = async (songId) => {
+    console.log("Adding song to favorites", songId);
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
     if (!decodedToken || !decodedToken.id) {
-      console.log("User not logged in");
+      toast.error("User Not Logged In", {
+        style: {
+          background: "#ff3b3b",
+          color: "#ffffff",
+        },
+        iconTheme: {
+          primary: "#ffffff",
+          secondary: "#ff3b3b",
+        },
+      });
       return;
     }
 
     const userId = decodedToken.id;
-    console.log("User ID:", userId);
-    console.log("Song ID:", songId);
 
     try {
       const response = await fetch("http://localhost:3000/user/addfavourite", {
@@ -157,19 +165,124 @@ const Player = () => {
 
       const data = await response.json();
       if (data.success) {
+        toggleHeart();
         setLikedSongs((prevLikedSongs) => {
           const updatedLikedSongs = new Set(prevLikedSongs);
           updatedLikedSongs.add(songId); // Add song to liked songs
           return updatedLikedSongs;
         });
-        console.log("Song added to favorites");
-      } else {
-        console.log(data.message); // Handle error message
+        toast.success(data.message, {
+          style: {
+            background: "#00ABE4",
+            color: "#121212",
+          },
+          iconTheme: {
+            primary: "#121212",
+            secondary: "#00ABE4",
+          },
+        });
+      } else if(!data.success) {
+        toast.error(data.message, {
+          style: {
+            background: "#ff3b3b",
+            color: "#ffffff",
+          },
+          iconTheme: {
+            primary: "#ffffff",
+            secondary: "#ff3b3b",
+          },
+        }); // Handle error message
       }
     } catch (error) {
       console.error("Error adding to favorites:", error);
     }
   };
+
+  const deleteFavorite = async (songId) => {
+    if (!songId) {
+      return alert("Song ID not found");
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:3000/user/favorites/${songId}`,
+        {
+          method: "DELETE",
+          headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      const { message, success } = data;
+
+      if (success) {
+        toast.success(message, {
+          style: {
+            background: "#00ABE4",
+            color: "#121212",
+          },
+          iconTheme: {
+            primary: "#121212",
+            secondary: "#00ABE4",
+          },
+        });
+        toggleHeart();
+        // props.setLikedSongs((prev) => prev.filter((id) => id !== songId));
+        // // setSongs((prev) => prev.filter((song) => song._id !== songId));
+        // props.setFavouriteCount((prev) => prev - 1);
+      } else if (!success) {
+        toast.error(message, {
+          style: {
+            background: "#ff3b3b",
+            color: "#ffffff",
+          },
+          iconTheme: {
+            primary: "#ffffff",
+            secondary: "#ff3b3b",
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting favorite:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decodedToken = parseJwt(token);
+        if (decodedToken && decodedToken.id) {
+          try {
+            const response = await fetch(
+              `http://localhost:3000/user/favorites`,
+              {
+                headers: {
+                  token: localStorage.getItem("token"),
+                },
+              }
+            );
+            const data = await response.json();
+            console.log("data", data);
+            if (data.success) {
+             
+              setLikedSongs(new Set(data.favoriteSongIds));
+            }
+          } catch (error) {
+            console.error("Error fetching user favorites:", error);
+          }
+        }
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+
+  useEffect(() => {
+    setIsHeartToggled(likedSongs.has(track._id));
+  }, [likedSongs, track._id]);
+  
 
   return (
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4 relative">
@@ -178,7 +291,7 @@ const Player = () => {
         <img className="w-12" src={track.image} alt="" />
         <div>
           <p>{track.name}</p>
-          {/* <p>{track.desc.slice(0, 12)}</p> */}
+          <p>{track.description?.slice(0, 12)}</p>
         </div>
       </div>
       <div className="flex flex-col items-center gap-1 m-auto">
@@ -229,7 +342,10 @@ const Player = () => {
               <div className="absolute bg-black bg-opacity-80 text-white p-4 rounded-lg right-0 mt-[-180px] mr-[70px] shadow-lg">
                 <p
                   className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
-                  onClick={() => {toggleHeart(); handleLikeClick(track._id);}} // Toggles heart icon and adds song to liked songs
+                  onClick={() => {
+                    toggleHeart();
+                    handleLikeClick(track._id);
+                  }} // Toggles heart icon and adds song to liked songs
                 >
                   <FaHeart className="text-red-500" /> Add to Favourite
                 </p>
@@ -269,10 +385,16 @@ const Player = () => {
         {/* Rest of the code for controls and icons */}
         <div className="relative group">
           <img
+            onClick={() => {
+              if (isHeartToggled) {
+                deleteFavorite(track._id);
+              } else if (!isHeartToggled) {
+                handleLikeClick(track._id);
+              }
+            }}
             className="w-5 cursor-pointer"
             src={isHeartToggled ? assets.favorite_icon : assets.heart_icon}
             alt="heart icon"
-            onClick={toggleHeart}
           />
           <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-0">
             Favorite
@@ -280,7 +402,6 @@ const Player = () => {
         </div>
         {floatingHearts.map((heart) => (
           <img
-            onClick={() => handleLikeClick(track.id)}
             key={heart.id}
             className="absolute w-5 floating-heart"
             style={{

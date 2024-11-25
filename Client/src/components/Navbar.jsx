@@ -93,7 +93,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <p
             onClick={() => navigate("/spotify/premium")}
-            className="bg-white text-black text-[15px] px-4 py-1 rounded-2xl hidden md:block cursor-pointer"
+            className="bg-[#00ABE4]  text-white text-[15px] px-4 py-1 rounded-2xl hidden md:block cursor-pointer"
           >
             Explore Premium
           </p>
