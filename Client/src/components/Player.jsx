@@ -6,7 +6,7 @@ import SongContext from "../context/SongContext";
 import { FaHeart, FaList, FaDownload } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 
-const Player = (props) => {
+const Player = () => {
   const { setSong } = useContext(SongContext);
   const {
     track,
@@ -181,7 +181,7 @@ const Player = (props) => {
             secondary: "#00ABE4",
           },
         });
-      } else if(!data.success) {
+      } else if (!data.success) {
         toast.error(data.message, {
           style: {
             background: "#ff3b3b",
@@ -266,7 +266,6 @@ const Player = (props) => {
             const data = await response.json();
             console.log("data", data);
             if (data.success) {
-             
               setLikedSongs(new Set(data.favoriteSongIds));
             }
           } catch (error) {
@@ -282,7 +281,22 @@ const Player = (props) => {
   useEffect(() => {
     setIsHeartToggled(likedSongs.has(track._id));
   }, [likedSongs, track._id]);
-  
+
+  const handleDownload = async (songname, songurl) => {
+    try {
+      const response = await fetch(songurl);
+      const data = await response.blob();
+
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = songname; // Set the filename for download
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading song:", error);
+    }
+  };
 
   return (
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4 relative">
@@ -355,7 +369,12 @@ const Player = (props) => {
                 >
                   <FaList className="text-blue-500" /> Add to Playlist
                 </p>
-                <p className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200">
+                <p
+                  onClick={() => {
+                    handleDownload(track.name, track.file);
+                  }}
+                  className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
+                >
                   <FaDownload className="text-green-500" /> Download Song
                 </p>
               </div>
@@ -413,7 +432,12 @@ const Player = (props) => {
             alt="floating heart"
           />
         ))}
-        <div className="relative group">
+        <div
+          onClick={() => {
+            handleDownload(track.name, track.file);
+          }}
+          className="relative group"
+        >
           <img
             className="w-5 cursor-pointer"
             src={assets.download_icon}

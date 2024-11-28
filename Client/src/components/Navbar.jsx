@@ -128,6 +128,11 @@ const Navbar = () => {
                   Favorites
                 </button>
                 </Link>
+                <Link to="/spotify">
+                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
+                  Music
+                </button>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black"
@@ -246,7 +251,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && <CreatePlaylist closeModal={() => setIsModalOpen(false)} />}
+      {isModalOpen && <CreatePlaylist setIsModalOpen = {setIsModalOpen}  />}
     </>
   );
 };

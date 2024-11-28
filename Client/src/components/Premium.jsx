@@ -27,9 +27,8 @@ const Premium = () => {
         <h1 className="text-4xl font-extrabold text-[#00ABE4] mb-4">Explore Premium Plans</h1>
         <p className="text-lg text-gray-400">Upgrade to enjoy more benefits and better sound quality!</p>
       </div>
-
       {/* Card Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 sm:mx-20 lg:mx-40 gap-8">
 
         {/* Premium Card 1 */}
         <div className="bg-[#2C2C2C] border border-[#383838] rounded-lg p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center text-center">
@@ -64,7 +63,7 @@ const Premium = () => {
         </div>
 
         {/* Premium Card 3 */}
-        <div className="bg-[#2C2C2C] border border-[#383838] rounded-lg p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center text-center">
+        {/* <div className="bg-[#2C2C2C] border border-[#383838] rounded-lg p-6 shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center text-center">
           <h2 className="text-2xl font-bold mb-4 text-[#00ABE4]">Family Pack</h2>
           <p className="text-sm text-gray-500 mb-4">Best for families</p>
           <p className="text-4xl font-bold text-[#00ABE4] mb-6">$15.99/month</p>
@@ -77,7 +76,7 @@ const Premium = () => {
           <button className="bg-[#00ABE4] text-white font-bold py-2 px-4 rounded-lg w-full hover:bg-[#0086b3] transition duration-300 mt-auto shadow-md hover:shadow-lg">
             Get Family
           </button>
-        </div>
+        </div> */}
 
       </div>
     </div>
