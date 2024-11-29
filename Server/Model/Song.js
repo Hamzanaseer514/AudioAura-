@@ -16,5 +16,7 @@ const songSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
+songSchema.index({ name: "text", singer: "text" });
+
 const Song = mongoose.model("Song", songSchema);
 module.exports = Song;

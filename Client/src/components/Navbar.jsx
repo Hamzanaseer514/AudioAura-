@@ -144,7 +144,7 @@ const Navbar = () => {
             </div>
           )}
           {/* Hamburger Icon */}
-          <div className="md:hidden cursor-pointer" onClick={toggleMenu}>
+          <div className="lg:hidden cursor-pointer" onClick={toggleMenu}>
             <img src={assets.humberger_icon} alt="menu" className="w-8 h-8" />
           </div>
         </div>

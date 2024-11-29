@@ -5,6 +5,7 @@ const AlbumRouter = require("./Routes/Album")
 const playlistRouter = require("./Routes/Playlist")
 const FavouriteRouter = require("./Routes/Favourite")
 const paymentRoutes = require('./Routes/paymentRoutes')
+const Song = require("./Model/Song")
 const path =  require("path")
 const multer = require("multer")
 const cors = require("cors")
@@ -66,11 +67,17 @@ app.post("/uploadaudio", uploadAudio.single('file'), (req, res) => {
 });
 
 
-connectToDb().then(() => {
-    console.log("Connected to database")
-}).catch(() => {
-    console.log("Database not connected")
-})
+// Connect to the database and sync indexes
+connectToDb().then(async () => {
+    console.log("Connected to database");
+
+    // Sync indexes for the Song model
+    await Song.syncIndexes();
+    console.log("Indexes synced for Song model");
+}).catch((err) => {
+    console.error("Database not connected", err);
+});
+
 app.listen(port,()=>{
     console.log(`Server is running on port ${port}`)
 })

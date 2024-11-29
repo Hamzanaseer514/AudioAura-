@@ -7,7 +7,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 router.post('/create-checkout-session', async (req, res) => {
   const { username, price, interval } = req.body; 
-
+  console.log(username, price, interval);
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],

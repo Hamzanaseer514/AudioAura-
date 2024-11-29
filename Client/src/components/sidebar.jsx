@@ -1,22 +1,65 @@
-import React from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import CreatePlaylist from "./CreatePlaylist";
+import { searchSongs } from "../Utils/api"; // Importing the search function from utils
+import { PlayerContext } from "../context/Playercontext";
 
 const Sidebar = () => {
   const navigate = useNavigate();
-
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showSearchInput, setShowSearchInput] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // For storing the query
+  const [searchResults, setSearchResults] = useState([]); // For storing the search results
+
+  const { PlayWithId } = useContext(PlayerContext);
+
+  const searchInputRef = useRef(null); // Ref to track search input area
 
   const openModal = () => {
-    setIsModalOpen(true); 
+    setIsModalOpen(true);
   };
 
-  const [showSearchInput, setShowSearchInput] = useState(false);
   const handleSearchClick = () => {
-    setShowSearchInput(!showSearchInput);
+    setShowSearchInput(true); // Always show input on clicking Search
   };
+
+  const handleSearchChange = async (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim() !== "") {
+      try {
+        const results = await searchSongs(query); // Fetch results dynamically
+        setSearchResults(results);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+        setSearchResults([]);
+      }
+    } else {
+      setSearchResults([]); // Clear results if query is empty
+    }
+  };
+
+  const handleClickSearchSong = (song) => {
+    PlayWithId(song.id);
+    setShowSearchInput(false);
+  };
+
+  // Close search input when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (searchInputRef.current && !searchInputRef.current.contains(e.target)) {
+        setShowSearchInput(false);
+      }
+    };
+    if (showSearchInput) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, [showSearchInput]);
 
   return (
     <div className="w-[25%] h-full p-2 flex-col gap-2 text-white hidden lg:flex">
@@ -25,22 +68,37 @@ const Sidebar = () => {
           onClick={() => navigate("/")}
           className="flex items-center gap-3 pl-8 cursor-pointer mt-2"
         >
-          <img className="w-6 " src={assets.home_icon} alt="" />
+          <img className="w-6" src={assets.home_icon} alt="" />
           <p className="font-bold">Home</p>
         </div>
-        {/* <div className='flex items-center gap-3 pl-8 cursor-pointer'>
-                <img className='w-6' src={assets.search_icon} alt="" />
-                <p className='font-bold'>Search</p>
-            </div> */}
 
         {showSearchInput ? (
-          <input
-            type="text"
-            placeholder="Search..."
-            className="p-2  bg-gray-800 text-white rounded mt-3 ml-2 mr-2 h-9"
-            autoFocus
-            onBlur={() => setShowSearchInput(false)}
-          />
+          <div className="relative w-full" ref={searchInputRef}>
+            <input
+              type="text"
+              placeholder="Search..."
+              className="p-2 bg-gray-800 text-white rounded mt-3 w-full mr-2 h-9"
+              autoFocus
+              value={searchQuery}
+              onChange={handleSearchChange} // Update results on typing
+            />
+            <div className="absolute bg-gray-900 text-white w-full max-h-48 overflow-auto rounded shadow-lg mt-1 z-10">
+              {searchResults.length > 0 ? (
+                searchResults.map((song) => (
+                  <div
+                    key={song.id}
+                    className="p-2 hover:bg-gray-700 cursor-pointer"
+                    onClick={() => handleClickSearchSong(song)} // Pass song to details
+                  >
+                    <p className="font-bold">{song.name}</p>
+                    <p className="text-sm text-gray-400">{song.singer}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="p-2 text-gray-400">No results found</p>
+              )}
+            </div>
+          </div>
         ) : (
           <div
             className="flex items-center gap-3 pl-8 cursor-pointer"
@@ -51,6 +109,7 @@ const Sidebar = () => {
           </div>
         )}
       </div>
+
       <div className="bg-[#121212] h-[85%] rounded">
         <div className="p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -62,23 +121,27 @@ const Sidebar = () => {
             <img className="w-5" src={assets.plus_icon} alt="" />
           </div>
         </div>
-        <div className="p-4 bg-[#242424] m-2 rounded font-semibold flex flex-col items-start justify-start gap-1 pl-4">
+
+        <div className="p-4 bg-[#242424]  m-2 rounded font-semibold flex flex-col items-start justify-start gap-1 pl-4">
           <h1>Create your first playlist</h1>
-          <p className="font-light ">it's easy we will help you</p>
-         
-          <button className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4 " onClick={openModal}>
+          <p className="font-light  ">It's easy, we will help you</p>
+          <button
+            className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4"
+            onClick={openModal}
+          >
             Create Playlist
           </button>
-         
         </div>
+
         <div className="p-4 bg-[#242424] m-2 rounded font-semibold flex flex-col items-start justify-start gap-1 pl-4 mt-4">
           <h1>Let's find some podcasts to follow</h1>
-          <p className="font-light ">we'll keep you update on new episodes</p>
-          <button className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4 ">
+          <p className="font-light ">We'll keep you updated on new episodes</p>
+          <button className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4">
             Browse Podcasts
           </button>
         </div>
       </div>
+
       {isModalOpen && <CreatePlaylist setIsModalOpen={setIsModalOpen} />}
     </div>
   );

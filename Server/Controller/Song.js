@@ -94,8 +94,26 @@ const getSongsByIds = async (req, res) => {
   }
 };
 
+const SearchSong = async (req,res) => {
+  const { query } = req.query;
+
+  if (!query) {
+    return res.status(400).json({ message: "Search query is required.",success:false });
+  }
+
+  try {
+    const results = await Songs.find({
+      $text: { $search: query },
+    });
+
+    res.json({success:true, results });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error.",success:false });
+  }
+}
 
 
 
 
-module.exports = { addSong,getSongsByAlbumId,getallsongs,getSongsByIds};
+
+module.exports = { addSong,getSongsByAlbumId,getallsongs,getSongsByIds,SearchSong};
