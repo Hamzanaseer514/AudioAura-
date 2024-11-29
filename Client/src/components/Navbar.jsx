@@ -94,7 +94,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           <p
             onClick={() => navigate("/spotify/premium")}
-            className="bg-white text-black text-[15px] px-4 py-1 rounded-2xl hidden md:block cursor-pointer"
+            className="bg-[#00ABE4]  text-white text-[15px] px-4 py-1 rounded-2xl hidden md:block cursor-pointer"
           >
             Explore Premium
           </p>
@@ -127,6 +127,11 @@ const Navbar = () => {
                 <Link to="/user-favourite">
                 <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
                   Favorites
+                </button>
+                </Link>
+                <Link to="/spotify">
+                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
+                  Music
                 </button>
                 </Link>
                 <button
@@ -247,7 +252,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && <CreatePlaylist closeModal={() => setIsModalOpen(false)} />}
+      {isModalOpen && <CreatePlaylist setIsModalOpen = {setIsModalOpen}  />}
     </>
   );
 };

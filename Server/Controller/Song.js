@@ -9,7 +9,8 @@ const Album = require("../Model/Album");
 const addSong = async (req, res) => {
   try {
     const { name, image, file, description, duration, singer, albumId } = req.body;
-    // console.log(file)
+
+    console.log(albumId)
     const existingSong = await Songs.findOne({ name, albumId });
     if (existingSong) {
       return res.status(400).json({success:false, message: "Song already exists in this album" });

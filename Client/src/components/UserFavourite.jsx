@@ -6,28 +6,31 @@ import { FaTrash, FaPlus, FaMusic } from "react-icons/fa";
 import SongContext from "../context/SongContext";
 import CreatePlaylist from "./CreatePlaylist";
 import AddToPlaylist from "./AddToPlaylist";
+import { PlayerContext } from "../context/Playercontext";
 
 const UserFavourite = () => {
   const [LikedSongs, setLikedSongs] = useState([]);
   const [Songs, setSongs] = useState([]);
   const [openIndex, setOpenIndex] = useState(null);
-  const [IsCreateModelOpen, setIsCreateModelOpen] = useState(false)
-  const [IsAddToPlaylistModelOpen, setIsAddToPlaylistModelOpen] = useState(false)
+  const [IsCreateModelOpen, setIsCreateModelOpen] = useState(false);
+  const [IsAddToPlaylistModelOpen, setIsAddToPlaylistModelOpen] =
+    useState(false);
+  const { PlayWithId, audioRef, track } = useContext(PlayerContext);
 
   const toggleMenu = (index) => {
     setOpenIndex(openIndex === index ? null : index); // Toggle the clicked index
   };
 
   const handleCreatePlaylistModel = () => {
-    setIsCreateModelOpen(!IsCreateModelOpen)
-  }
+    setIsCreateModelOpen(!IsCreateModelOpen);
+  };
   const handleAddToPlaylistModel = (favorite) => {
-    console.log(favorite)
-    setIsAddToPlaylistModelOpen(!IsAddToPlaylistModelOpen)
-    setSong(favorite)
-  }
+    console.log(favorite);
+    setIsAddToPlaylistModelOpen(!IsAddToPlaylistModelOpen);
+    setSong(favorite);
+  };
 
-  const {setSong,Song, setFavouriteCount } = useContext(SongContext);
+  const { setSong, Song, setFavouriteCount } = useContext(SongContext);
 
   // Fetch favorite song IDs
   useEffect(() => {
@@ -116,7 +119,7 @@ const UserFavourite = () => {
 
           {/* Liked Songs Header */}
           <div className="flex flex-col md:flex-row items-center mb-10">
-            <div className="mr-8 mt-8 md:mb-0 flex items-center justify-center w-52 h-52 rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl">
+            <div className="mr-8 mt-8 md:mb-0 cursor-pointer flex items-center justify-center w-52 h-52 rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl">
               <span className="text-6xl text-white">❤️</span>
             </div>
 
@@ -139,7 +142,8 @@ const UserFavourite = () => {
               {Songs.map((favorite, index) => (
                 <div
                   key={index}
-                  className="flex items-center p-4 bg-[#2C2C2C] rounded-lg shadow-lg transition-transform duration-300 hover:scale-100"
+                  className="flex cursor-pointer items-center p-4 bg-[#2C2C2C] rounded-lg shadow-lg transition-transform duration-300 hover:scale-100"
+                  onClick={() => openIndex !== index && PlayWithId(favorite.id)} // Only play if submenu is not open
                 >
                   <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-lg overflow-hidden mr-4">
                     <img
@@ -167,11 +171,14 @@ const UserFavourite = () => {
                   <div className="relative">
                     <button
                       className="relative text-gray-400 hover:text-white ml-4"
-                      onClick={() => toggleMenu(index)} // Pass the index to toggle the correct menu
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent PlayWithId from triggering
+                        toggleMenu(index);
+                      }}
                     >
                       <span className="text-2xl">&#x22EE;</span>
                       {openIndex === index && (
-                        <div className="absolute top-[-30px] right-3 mt-2  bg-gray-800 text-white rounded-lg shadow-lg p-3 w-48 z-10 transform scale-95 transition-all duration-200 ease-in-out hover:scale-100">
+                        <div className="absolute top-[-30px] right-3 mt-2 bg-gray-800 text-white rounded-lg shadow-lg p-3 w-48 z-10 transform scale-95 transition-all duration-200 ease-in-out hover:scale-100">
                           <div className="flex flex-col space-y-3">
                             {/* Delete from Favorites */}
                             <button
@@ -183,14 +190,21 @@ const UserFavourite = () => {
                             </button>
 
                             {/* Create Playlist */}
-                            <button onClick={handleCreatePlaylistModel} className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                            <button
+                              onClick={handleCreatePlaylistModel}
+                              className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200"
+                            >
                               <span className="text-xs">Create Playlist</span>
                               <FaMusic className="text-green-500" />
                             </button>
-                           
 
                             {/* Add to Playlist */}
-                            <button onClick={() => {handleAddToPlaylistModel(favorite)}} className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200">
+                            <button
+                              onClick={() => {
+                                handleAddToPlaylistModel(favorite);
+                              }}
+                              className="flex items-center justify-between w-full p-2 rounded-lg hover:bg-gray-700 transition-all duration-200"
+                            >
                               <span className="text-xs">Add to Playlist</span>
                               <FaPlus className="text-blue-500" />
                             </button>
@@ -205,9 +219,15 @@ const UserFavourite = () => {
           </div>
         </div>
       </div>
-      {IsCreateModelOpen && <CreatePlaylist setIsModalOpen={setIsCreateModelOpen} />}
-      {IsAddToPlaylistModelOpen && <AddToPlaylist setIsModalOpen={setIsAddToPlaylistModelOpen} />}
+      {IsCreateModelOpen && (
+        <CreatePlaylist setIsModalOpen={setIsCreateModelOpen} />
+      )}
+      {IsAddToPlaylistModelOpen && (
+        <AddToPlaylist setIsModalOpen={setIsAddToPlaylistModelOpen} />
+      )}
       <Player />
+      {/* <Player  LikedSongs = {LikedSongs} setLikedSongs={setLikedSongs} setFavouriteCount={setFavouriteCount}/> */}
+      <audio ref={audioRef} src={track.file} preload="auto"></audio>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./sidebar";
 import Navbar from "./Navbar";
@@ -6,54 +6,74 @@ import { FaUser, FaEnvelope, FaLock, FaCalendarAlt } from "react-icons/fa";
 import SongContext from "../context/SongContext";
 
 const ProfilePage = () => {
-  const initialUserData = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    password: "",
-    createdAt: "2024-01-01",
-    playlistsCount: 5,
-    favoritesCount: 12,
-  };
+  const { FavouriteCount, PlaylistCount } = useContext(SongContext);
 
-  const {FavouriteCount,PlaylistCount} = useContext(SongContext)
-
-  const [userData, setUserData] = useState(initialUserData);
+  const [userData, setUserData] = useState({});
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    firstName: initialUserData.firstName,
-    lastName: initialUserData.lastName,
-    email: initialUserData.email,
-    password: "",
-  });
+  const [formData, setFormData] = useState({});
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleEditClick = () => {
     setIsEditing(true);
     setFormData({
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      email: userData.email,
-      password: "",
+      firstname: userData.firstname || "", // Ensure correct casing
+      lastname: userData.lastname || "",
+      email: userData.email || "",
+      password:userData.password || "",
     });
   };
-
+  
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  const handleSubmit = (e) => {
+  
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setUserData((prevData) => ({
-      ...prevData,
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-    }));
-    setIsEditing(false);
+    try {
+      const response = await fetch(`http://localhost:3000/updateUser`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "token": localStorage.getItem("token"),
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      const data = await response.json();
+      if (data.success) {
+        alert(data.message);
+        setUserData(formData); 
+        setIsEditing(false);
+      } else {
+        alert(data.message || "Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("An error occurred while updating the profile.");
+    }
   };
+  
+
+  useEffect(() => {
+    const GetUserId = async () => {
+      const response = await fetch(`http://localhost:3000/getuserwithid`, {
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+      });
+      const data = await response.json();
+      const { message, success } = data;
+      if (success) {
+        setUserData(data.user);
+      } else if (!success) {
+        alert(message);
+      }
+    };
+    GetUserId();
+  }, []);
 
   return (
     <div className="h-screen bg-gradient-to-b from-[#0a0a0a] to-[#1b1b1b]">
@@ -68,8 +88,8 @@ const ProfilePage = () => {
               {/* Profile Section */}
               <div className="w-full md:w-1/3 text-center text-white flex flex-col items-center justify-center">
                 <div className="rounded-full w-32 h-32 bg-teal-400 mx-auto mb-6 flex items-center justify-center transform transition duration-500 ease-in-out hover:scale-105">
-                  <span className="text-3xl font-bold text-gray-800">
-                    {userData.firstName[0]}{userData.lastName[0]}
+                  <span className="text-2xl font-bold text-gray-800">
+                    {userData.firstname}
                   </span>
                 </div>
                 <h2 className="text-2xl font-semibold mb-2 text-white transform transition duration-500 ease-in-out hover:text-teal-500">
@@ -77,10 +97,10 @@ const ProfilePage = () => {
                 </h2>
                 <p className="text-sm">{userData.email}</p>
               </div>
-
-              {/* Profile Form Section */}
               <div className="w-full md:w-2/3 space-y-6">
-                <h2 className="text-2xl font-bold mb-6 text-white">Profile Information</h2>
+                <h2 className="text-2xl font-bold mb-6 text-white">
+                  Profile Information
+                </h2>
 
                 {isEditing ? (
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -91,8 +111,8 @@ const ProfilePage = () => {
                       </label>
                       <input
                         type="text"
-                        name="firstName"
-                        value={formData.firstName}
+                        name="firstname"
+                        value={formData.firstname}
                         onChange={handleInputChange}
                         className="w-full p-3 border border-teal-500 rounded-lg focus:ring-2 focus:ring-teal-500 transition-all duration-300"
                         required
@@ -105,8 +125,8 @@ const ProfilePage = () => {
                       </label>
                       <input
                         type="text"
-                        name="lastName"
-                        value={formData.lastName}
+                        name="lastname"
+                        value={formData.lastname}
                         onChange={handleInputChange}
                         className="w-full p-3 border border-teal-500 rounded-lg focus:ring-2 focus:ring-teal-500 transition-all duration-300"
                         required
@@ -127,16 +147,16 @@ const ProfilePage = () => {
                       />
                     </div>
                     <div className="bg-[#2c2c2c] p-5 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105">
-                      <label className=" text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
+                      <label className="text-sm font-semibold text-gray-600 mb-1 flex items-center space-x-2">
                         <FaLock className="text-teal-500" />
                         <span>Password</span>
                       </label>
                       <input
                         type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
-                        className="w-full p-3 border border-teal-500 rounded-lg focus:ring-2 focus:ring-teal-500 transition-all duration-300"
+                        value={formData.password} 
+                        readOnly 
+                        onClick={() => alert("Password cannot be changed.")}
+                        className="w-full p-3 border border-teal-500 rounded-lg focus:ring-2 focus:ring-teal-500 cursor-not-allowed bg-gray-200 text-gray-500"
                       />
                     </div>
                     <button
@@ -151,13 +171,17 @@ const ProfilePage = () => {
                     <div className="bg-[#2c2c2c] p-5 rounded-lg shadow-lg">
                       <div className="flex items-center space-x-2">
                         <FaUser className="text-teal-500" />
-                        <p className="text-lg">First Name: {userData.firstName}</p>
+                        <p className="text-lg">
+                          First Name: {userData.firstname}
+                        </p>
                       </div>
                     </div>
                     <div className="bg-[#2c2c2c] p-5 rounded-lg shadow-lg">
                       <div className="flex items-center space-x-2">
                         <FaUser className="text-teal-500" />
-                        <p className="text-lg">Last Name: {userData.lastName}</p>
+                        <p className="text-lg">
+                          Last Name: {userData.lastname}
+                        </p>
                       </div>
                     </div>
                     <div className="bg-[#2c2c2c] p-5 rounded-lg shadow-lg">
@@ -186,8 +210,12 @@ const ProfilePage = () => {
                   <div className="flex items-center space-x-4">
                     <span className="text-3xl text-teal-500">📂</span>
                     <div>
-                      <h3 className="text-xl font-semibold text-white">Playlists</h3>
-                      <p className="text-sm text-gray-400">{PlaylistCount} Playlists</p>
+                      <h3 className="text-xl font-semibold text-white">
+                        Playlists
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        {PlaylistCount} Playlists
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -196,8 +224,12 @@ const ProfilePage = () => {
                   <div className="flex items-center space-x-4">
                     <span className="text-3xl text-teal-500">❤️</span>
                     <div>
-                      <h3 className="text-xl font-semibold text-white">Favorites</h3>
-                      <p className="text-sm text-gray-400">{FavouriteCount} Favorites</p>
+                      <h3 className="text-xl font-semibold text-white">
+                        Favorites
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        {FavouriteCount} Favorites
+                      </p>
                     </div>
                   </div>
                 </div>

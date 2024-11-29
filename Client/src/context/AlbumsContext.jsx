@@ -6,6 +6,7 @@ export const AlbumsProvider = ({ children }) => {
   const [albums, setAlbums] = useState([]);
   const [songs, setSongs] = useState([]); // State for songs
   const [loading, setLoading] = useState(true);
+  const [SongLoading, setSongLoading] = useState(true);
   
   useEffect(() => {
     const fetchAlbums = async () => {
@@ -25,7 +26,7 @@ export const AlbumsProvider = ({ children }) => {
         const response = await fetch('http://localhost:3000/admin/getallsongs');
         const data = await response.json();
         if (data.success) {
-        //   console.log("Fetched Songs:", data.songs); // Log fetched songs
+          // console.log("Fetched Songs:", data.songs); // Log fetched songs
           setSongs(data.songs); // Set songs state
         }
       } catch (error) {
@@ -35,9 +36,11 @@ export const AlbumsProvider = ({ children }) => {
 
     const fetchData = async () => {
       setLoading(true); // Start loading
+      setSongLoading(true);
       await fetchAlbums();
       await fetchSongs();
       setLoading(false); // End loading
+      setSongLoading(false);
     };
 
     fetchData();
@@ -45,11 +48,11 @@ export const AlbumsProvider = ({ children }) => {
 
   // Log songs whenever they change
   useEffect(() => {
-    // console.log("Updated Songs:", songs);
+   
   }, [songs]);
 
   return (
-    <AlbumsContext.Provider value={{ albums, songs, loading }}>
+    <AlbumsContext.Provider value={{ albums, songs, loading, SongLoading }}>
       {children}
     </AlbumsContext.Provider>
   );

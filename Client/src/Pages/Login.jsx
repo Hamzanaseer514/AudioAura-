@@ -61,7 +61,7 @@ const Login = () => {
 
         if (decodedToken) {
           const { role } = decodedToken;
-
+          
           // Save the token and navigate based on role
           localStorage.setItem("token", token);
 
@@ -163,6 +163,7 @@ const Login = () => {
 
           {/* Submit button */}
           <button
+          id="loginButton"
             type="submit"
             className="w-full bg-[#00ABE4] text-black font-bold py-2 px-4 rounded-full hover:bg-[#00ABE4] focus:outline-none focus:ring-2 focus:ring-[#00ABE4]"
           >

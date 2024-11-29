@@ -25,7 +25,7 @@ const Sidebar = () => {
           onClick={() => navigate("/")}
           className="flex items-center gap-3 pl-8 cursor-pointer mt-2"
         >
-          <img className="w-6" src={assets.home_icon} alt="" />
+          <img className="w-6 " src={assets.home_icon} alt="" />
           <p className="font-bold">Home</p>
         </div>
         {/* <div className='flex items-center gap-3 pl-8 cursor-pointer'>

@@ -3,14 +3,11 @@ import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/Playercontext";
 import AddToPlaylist from "./AddToPlaylist";
 import SongContext from "../context/SongContext";
-import { FaHeart, FaList, FaDownload } from 'react-icons/fa';
+import { FaHeart, FaList, FaDownload } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 
-
-
 const Player = () => {
-
-  const {setSong} = useContext(SongContext)
+  const { setSong } = useContext(SongContext);
   const {
     track,
     seekBg,
@@ -31,6 +28,7 @@ const Player = () => {
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State for menu visibility
+  const [likedSongs, setLikedSongs] = useState(new Set());
 
   const audioRef = useRef(null);
 
@@ -74,9 +72,9 @@ const Player = () => {
     setSong(track);
     setIsAddToPlaylistOpen(true);
   };
-  const Queue =()=>{
-    console.log("Queue")
-    toast.success('Song Played in Queue', {
+  const Queue = () => {
+    console.log("Queue");
+    toast.success("Song Played in Queue", {
       style: {
         background: "#00ABE4",
         color: "#121212",
@@ -86,7 +84,7 @@ const Player = () => {
         secondary: "black",
       },
     });
-  }
+  };
 
   useEffect(() => {
     if (audioRef.current) {
@@ -114,6 +112,192 @@ const Player = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // function to parse token
+  const parseJwt = (token) => {
+    try {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => `%${("00" + c.charCodeAt(0).toString(16)).slice(-2)}`)
+          .join("")
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error("Invalid token", error);
+      return null;
+    }
+  };
+
+  const handleLikeClick = async (songId) => {
+    console.log("Adding song to favorites", songId);
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    if (!decodedToken || !decodedToken.id) {
+      toast.error("User Not Logged In", {
+        style: {
+          background: "#ff3b3b",
+          color: "#ffffff",
+        },
+        iconTheme: {
+          primary: "#ffffff",
+          secondary: "#ff3b3b",
+        },
+      });
+      return;
+    }
+
+    const userId = decodedToken.id;
+
+    try {
+      const response = await fetch("http://localhost:3000/user/addfavourite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          userId,
+          songId,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        toggleHeart();
+        setLikedSongs((prevLikedSongs) => {
+          const updatedLikedSongs = new Set(prevLikedSongs);
+          updatedLikedSongs.add(songId); // Add song to liked songs
+          return updatedLikedSongs;
+        });
+        toast.success(data.message, {
+          style: {
+            background: "#00ABE4",
+            color: "#121212",
+          },
+          iconTheme: {
+            primary: "#121212",
+            secondary: "#00ABE4",
+          },
+        });
+      } else if (!data.success) {
+        toast.error(data.message, {
+          style: {
+            background: "#ff3b3b",
+            color: "#ffffff",
+          },
+          iconTheme: {
+            primary: "#ffffff",
+            secondary: "#ff3b3b",
+          },
+        }); // Handle error message
+      }
+    } catch (error) {
+      console.error("Error adding to favorites:", error);
+    }
+  };
+
+  const deleteFavorite = async (songId) => {
+    if (!songId) {
+      return alert("Song ID not found");
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:3000/user/favorites/${songId}`,
+        {
+          method: "DELETE",
+          headers: {
+            token: localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      const { message, success } = data;
+
+      if (success) {
+        toast.success(message, {
+          style: {
+            background: "#00ABE4",
+            color: "#121212",
+          },
+          iconTheme: {
+            primary: "#121212",
+            secondary: "#00ABE4",
+          },
+        });
+        toggleHeart();
+        // props.setLikedSongs((prev) => prev.filter((id) => id !== songId));
+        // // setSongs((prev) => prev.filter((song) => song._id !== songId));
+        // props.setFavouriteCount((prev) => prev - 1);
+      } else if (!success) {
+        toast.error(message, {
+          style: {
+            background: "#ff3b3b",
+            color: "#ffffff",
+          },
+          iconTheme: {
+            primary: "#ffffff",
+            secondary: "#ff3b3b",
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting favorite:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        const decodedToken = parseJwt(token);
+        if (decodedToken && decodedToken.id) {
+          try {
+            const response = await fetch(
+              `http://localhost:3000/user/favorites`,
+              {
+                headers: {
+                  token: localStorage.getItem("token"),
+                },
+              }
+            );
+            const data = await response.json();
+            console.log("data", data);
+            if (data.success) {
+              setLikedSongs(new Set(data.favoriteSongIds));
+            }
+          } catch (error) {
+            console.error("Error fetching user favorites:", error);
+          }
+        }
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+
+  useEffect(() => {
+    setIsHeartToggled(likedSongs.has(track._id));
+  }, [likedSongs, track._id]);
+
+  const handleDownload = async (songname, songurl) => {
+    try {
+      const response = await fetch(songurl);
+      const data = await response.blob();
+
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = songname; // Set the filename for download
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Error downloading song:", error);
+    }
+  };
+
   return (
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4 relative">
       <Toaster position="top-center" reverseOrder={false} />
@@ -121,7 +305,7 @@ const Player = () => {
         <img className="w-12" src={track.image} alt="" />
         <div>
           <p>{track.name}</p>
-          <p>{track.desc.slice(0, 12)}</p>
+          <p>{track.description?.slice(0, 12)}</p>
         </div>
       </div>
       <div className="flex flex-col items-center gap-1 m-auto">
@@ -169,25 +353,31 @@ const Player = () => {
               onClick={toggleMenu} // Add onClick handler for toggling menu
             />
             {isMenuOpen && (
-       <div className="absolute bg-black bg-opacity-80 text-white p-4 rounded-lg right-0 mt-[-180px] mr-[70px] shadow-lg">
-              <p
-                className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
-                onClick={toggleHeart}
-              >
-                <FaHeart className="text-red-500" /> Add to Favourite
-              </p>
-              <p
-                className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
-                onClick={openmodel} // Opens the Add to Playlist modal
-              >
-                <FaList className="text-blue-500" /> Add to Playlist
-              </p>
-              <p className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200">
-                <FaDownload className="text-green-500" /> Download Song
-              </p>
-            </div>
-     
-
+              <div className="absolute bg-black bg-opacity-80 text-white p-4 rounded-lg right-0 mt-[-180px] mr-[70px] shadow-lg">
+                <p
+                  className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
+                  onClick={() => {
+                    toggleHeart();
+                    handleLikeClick(track._id);
+                  }} // Toggles heart icon and adds song to liked songs
+                >
+                  <FaHeart className="text-red-500" /> Add to Favourite
+                </p>
+                <p
+                  className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
+                  onClick={openmodel} // Opens the Add to Playlist modal
+                >
+                  <FaList className="text-blue-500" /> Add to Playlist
+                </p>
+                <p
+                  onClick={() => {
+                    handleDownload(track.name, track.file);
+                  }}
+                  className="cursor-pointer py-2 px-4 flex items-center gap-2 hover:bg-gray-700 rounded transition-all duration-200"
+                >
+                  <FaDownload className="text-green-500" /> Download Song
+                </p>
+              </div>
             )}
           </div>
         </div>
@@ -214,10 +404,16 @@ const Player = () => {
         {/* Rest of the code for controls and icons */}
         <div className="relative group">
           <img
+            onClick={() => {
+              if (isHeartToggled) {
+                deleteFavorite(track._id);
+              } else if (!isHeartToggled) {
+                handleLikeClick(track._id);
+              }
+            }}
             className="w-5 cursor-pointer"
             src={isHeartToggled ? assets.favorite_icon : assets.heart_icon}
             alt="heart icon"
-            onClick={toggleHeart}
           />
           <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-0">
             Favorite
@@ -236,12 +432,16 @@ const Player = () => {
             alt="floating heart"
           />
         ))}
-        <div className="relative group">
+        <div
+          onClick={() => {
+            handleDownload(track.name, track.file);
+          }}
+          className="relative group"
+        >
           <img
             className="w-5 cursor-pointer"
             src={assets.download_icon}
             alt="download icon"
-           
           />
           <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white text-xs bottom-8 left-0">
             Download
