@@ -4,6 +4,7 @@ const UserRouter = require("./Routes/User")
 const AlbumRouter = require("./Routes/Album")
 const playlistRouter = require("./Routes/Playlist")
 const FavouriteRouter = require("./Routes/Favourite")
+const paymentRoutes = require('./Routes/paymentRoutes')
 const path =  require("path")
 const multer = require("multer")
 const cors = require("cors")
@@ -17,6 +18,9 @@ app.use("/",UserRouter)
 app.use("/admin",AlbumRouter)
 app.use("/user",playlistRouter)
 app.use("/user",FavouriteRouter)
+app.use('/payement', paymentRoutes); 
+
+
 
 
 const storage = multer.diskStorage({
