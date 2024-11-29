@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import CategoryContext from "../context/CategoryContext";
 import CreatePlaylist from "./CreatePlaylist";
 
+
 // Function to decode JWT
 function parseJwt(token) {
   try {
