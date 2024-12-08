@@ -47,7 +47,7 @@ const Navbar = () => {
 
         {/* Centered Heading */}
         <div className="text-white text-lg font-bold lg:text-2xl">
-          Spotify Admin Dashboard
+          AudioAura Admin Dashboard
         </div>
 
         {/* Right Menu Icon */}
