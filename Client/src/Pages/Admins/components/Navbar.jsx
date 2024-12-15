@@ -47,7 +47,7 @@ const Navbar = () => {
 
         {/* Centered Heading */}
         <div className="text-white text-lg font-bold lg:text-2xl">
-          Spotify Admin Dashboard
+          AudioAura Admin Dashboard
         </div>
 
         {/* Right Menu Icon */}
@@ -57,7 +57,7 @@ const Navbar = () => {
           </button>
           {isMenuOpen && (
             <div className="absolute right-0 mt-2 bg-white text-black border border-gray-300 rounded shadow-lg p-4 space-y-2 w-32 transition-opacity duration-300">
-              <Link to="#" className="block text-black hover:bg-gray-200 py-2 px-4 rounded">Profile</Link>
+              {/* <Link to="#" className="block text-black hover:bg-gray-200 py-2 px-4 rounded">Profile</Link> */}
               <button
               id='logoutButton'
                 onClick={logout}
@@ -72,7 +72,7 @@ const Navbar = () => {
 
         {/* Desktop Profile and Logout Links */}
         <div className="lg:flex items-center space-x-6 hidden">
-          <Link to="#profile" className="text-white hover:text-[#abacad] font-bold">Profile</Link>
+          {/* <Link to="#profile" className="text-white hover:text-[#abacad] font-bold">Profile</Link> */}
           <button
           id='logoutButton'
             onClick={logout}
