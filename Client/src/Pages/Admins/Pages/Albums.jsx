@@ -159,6 +159,7 @@ const AddAlbum = () => {
               </div>
               <div className="text-center"> {/* Ensure button is centered */}
                 <button
+                id="addalbum"
                   type="submit"
                   className="w-full sm:w-[50%] py-3 mt-4 bg-gradient-to-r from-[#ff4141] to-[#626262] text-white font-bold rounded-lg shadow-md hover:bg-gradient-to-l focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff4141] mx-auto"
                 >

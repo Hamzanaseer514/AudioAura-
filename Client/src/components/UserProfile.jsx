@@ -4,6 +4,7 @@ import Sidebar from "./sidebar";
 import Navbar from "./Navbar";
 import { FaUser, FaEnvelope, FaLock, FaCalendarAlt } from "react-icons/fa";
 import SongContext from "../context/SongContext";
+import { MdWorkspacePremium } from "react-icons/md";
 
 const ProfilePage = () => {
   const { FavouriteCount, PlaylistCount } = useContext(SongContext);
@@ -20,15 +21,14 @@ const ProfilePage = () => {
       firstname: userData.firstname || "", // Ensure correct casing
       lastname: userData.lastname || "",
       email: userData.email || "",
-      password:userData.password || "",
+      password: userData.password || "",
     });
   };
-  
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -36,15 +36,18 @@ const ProfilePage = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "token": localStorage.getItem("token"),
+          token: localStorage.getItem("token"),
         },
         body: JSON.stringify(formData),
       });
-  
+
       const data = await response.json();
       if (data.success) {
         alert(data.message);
-        setUserData(formData); 
+        setUserData({
+          ...userData,
+          ...formData,
+        });
         setIsEditing(false);
       } else {
         alert(data.message || "Failed to update profile");
@@ -54,7 +57,6 @@ const ProfilePage = () => {
       alert("An error occurred while updating the profile.");
     }
   };
-  
 
   useEffect(() => {
     const GetUserId = async () => {
@@ -84,10 +86,17 @@ const ProfilePage = () => {
 
           {/* Profile container */}
           <div className="bg-[#1a1a1a] p-8 rounded-lg shadow-2xl mt-8">
+            {userData.premium === "monthly" || userData.premium === "yearly" ? (
+              <div className="text-yellow-500 text-4xl">
+                <MdWorkspacePremium />
+              </div>
+            ) : (
+              <p></p>
+            )}
             <div className="flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-8">
               {/* Profile Section */}
               <div className="w-full md:w-1/3 text-center text-white flex flex-col items-center justify-center">
-                <div className="rounded-full w-32 h-32 bg-teal-400 mx-auto mb-6 flex items-center justify-center transform transition duration-500 ease-in-out hover:scale-105">
+                <div className="rounded-full w-32 h-32 bg-teal-400 mx-auto mb-6 flex  items-center justify-center transform transition duration-500 ease-in-out hover:scale-105">
                   <span className="text-2xl font-bold text-gray-800">
                     {userData.firstname}
                   </span>
@@ -153,8 +162,8 @@ const ProfilePage = () => {
                       </label>
                       <input
                         type="password"
-                        value={formData.password} 
-                        readOnly 
+                        value={formData.password}
+                        readOnly
                         onClick={() => alert("Password cannot be changed.")}
                         className="w-full p-3 border border-teal-500 rounded-lg focus:ring-2 focus:ring-teal-500 cursor-not-allowed bg-gray-200 text-gray-500"
                       />

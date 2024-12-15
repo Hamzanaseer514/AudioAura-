@@ -104,6 +104,18 @@ const deleteSongFromSelectedPlaylist = async (req, res) => {
   }
 };
 
+const getAllPlaylist = async (req, res) => {
+  try {
+    const playlists = await Playlist.find({});
+    if (!playlists) {
+      return res.status(404).json({ message: "No playlists found" });
+    }
+    return res.status(200).json(playlists);
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 
 
 
@@ -118,4 +130,5 @@ module.exports = {
   addToPlaylist,
   deletePlaylist,
   deleteSongFromSelectedPlaylist,
+  getAllPlaylist,
 };

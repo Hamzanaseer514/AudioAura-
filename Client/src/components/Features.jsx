@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import HomePageNav from "./HomePageNav";
-// import 'animate.css';
 import { FaHeadphonesAlt, FaMusic, FaUsers } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 

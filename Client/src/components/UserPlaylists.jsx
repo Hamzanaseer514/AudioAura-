@@ -3,8 +3,8 @@ import Sidebar from "./sidebar";
 import Player from "./Player";
 import Navbar from "./Navbar";
 import { TiDelete } from "react-icons/ti";
-import { MdDeleteSweep } from "react-icons/md";
-
+import { RiDeleteBin3Fill } from "react-icons/ri";
+import { PlayerContext } from "../context/Playercontext";
 import SongContext from "../context/SongContext";
 import ShowWhenNoThing from "./ShowWhenNoThing";
 
@@ -15,8 +15,12 @@ const PlaylistPage = () => {
   const [selectedPlaylist, setSelectedPlaylist] = useState(null);
   const [error, setError] = useState(null);
   const [GetPlaylistId, setGetPlaylistId] = useState(null);
+  const [playlistPicture, setPlaylistPicture] = useState(null);
+  const [playlistPicture1, setPlaylistPicture1] = useState(null);
 
   const { setPlaylistCount } = useContext(SongContext);
+  const {PlayWithId,audioRef,track} = useContext(PlayerContext);
+
 
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -28,6 +32,7 @@ const PlaylistPage = () => {
         if (data.success) {
           setPlaylists(data.playlists);
           setPlaylistCount(data.playlists.length);
+          
         } else {
           setError("Failed to fetch playlists");
         }
@@ -51,6 +56,8 @@ const PlaylistPage = () => {
       const data = await response.json();
       if (data.success){
         setSongs(data.songs);
+        setPlaylistPicture(data.songs[0].image);
+        setPlaylistPicture1(data.songs[1].image);
         console.log('songs',data.songs);
       }
       else setError("Error fetching songs");
@@ -207,7 +214,7 @@ const PlaylistPage = () => {
               <div className="flex items-center mb-8">
                 <img
                   src={
-                    selectedPlaylist.image || "https://via.placeholder.com/150"
+                    playlistPicture || 'https://media.gq.com/photos/5ae3925b3fb87856d8a5cdf6/16:9/w_2560%2Cc_limit/Road-Trip-Playlist-GQ-April-2018-042718-3x2.png'
                   }
                   alt={selectedPlaylist.name}
                   className="w-36 h-36 mr-6 rounded-lg object-cover border-4 border-teal-400"
@@ -223,13 +230,12 @@ const PlaylistPage = () => {
                 </div>
               </div>
               {selectedPlaylist.songs && selectedPlaylist.songs.length > 0 ? (
-                <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                <div  className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                   {songs.map((song) => (
                     <div
-                      key={song._id}
-                      className="bg-[#262626] p-4 rounded-lg flex items-center justify-between shadow-md hover:bg-[#333333] transition-all duration-300 group relative"
-                    >
-                      
+                    onClick={() => PlayWithId(song.id)}
+                      className="bg-[#262626] p-4 rounded-lg cursor-pointer flex items-center justify-between shadow-md hover:bg-[#333333] transition-all duration-300 group relative"
+                    >  
                       <div className="flex items-center">
                         <img
                           src={song.image || "https://via.placeholder.com/50"}
@@ -241,7 +247,7 @@ const PlaylistPage = () => {
                             {song.name}
                           </h3>
                           <p className="text-gray-400 text-sm">
-                            Added 5 days ago
+                            2 min ago
                           </p>
                         </div>
                       </div>
@@ -272,7 +278,7 @@ const PlaylistPage = () => {
                     className="absolute inset-0 bg-cover bg-center rounded-lg opacity-40"
                     style={{
                       backgroundImage: `url(${
-                        playlist.image || "https://via.placeholder.com/150"
+                          playlistPicture || 'https://media.gq.com/photos/5ae3925b3fb87856d8a5cdf6/16:9/w_2560%2Cc_limit/Road-Trip-Playlist-GQ-April-2018-042718-3x2.png'
                       })`,
                     }}
                   ></div>
@@ -280,7 +286,7 @@ const PlaylistPage = () => {
                     <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-teal-400 mb-4">
                       <img
                         src={
-                          playlist.image || "https://via.placeholder.com/150"
+                         playlistPicture1 || 'https://images.ctfassets.net/mrsnpomeucef/3flwsEi4H05T90gyKDVrVn/817cb2fb12e91cbcd607a142539fe3ff/How_to_clear_Spotify_queue.png?w=2880&h=1440'
                         }
                         alt={playlist.title}
                         className="w-full h-full object-cover"
@@ -296,7 +302,7 @@ const PlaylistPage = () => {
                       }}
                       className="absolute top-2 right-2 text-red-500 hover:text-red-400"
                     >
-                      <MdDeleteSweep size={24} />
+                      <RiDeleteBin3Fill size={24} />
                     </button>
                   </div>
                 </div>
@@ -305,7 +311,8 @@ const PlaylistPage = () => {
           )}
         </div>
       </div>
-      <Player songs={songs} />
+      <Player />
+      <audio ref={audioRef} src={track.file} preload="auto"></audio>
     </div>
   );
 };

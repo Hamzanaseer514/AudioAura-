@@ -7,6 +7,7 @@ import SongContext from "../context/SongContext";
 import CreatePlaylist from "./CreatePlaylist";
 import AddToPlaylist from "./AddToPlaylist";
 import { PlayerContext } from "../context/Playercontext";
+import ProtectedPremium from "./ProtectedPremium";
 
 const UserFavourite = () => {
   const [LikedSongs, setLikedSongs] = useState([]);
@@ -220,7 +221,9 @@ const UserFavourite = () => {
         </div>
       </div>
       {IsCreateModelOpen && (
-        <CreatePlaylist setIsModalOpen={setIsCreateModelOpen} />
+         <ProtectedPremium>
+         <CreatePlaylist setIsCreateModelOpen={setIsCreateModelOpen} />
+       </ProtectedPremium>
       )}
       {IsAddToPlaylistModelOpen && (
         <AddToPlaylist setIsModalOpen={setIsAddToPlaylistModelOpen} />

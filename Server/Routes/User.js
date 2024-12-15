@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.post("/register",register )
 router.post("/login", login)
-router.post("/purchasepremium",purchasePremium)
+router.post("/purchasepremium",authMiddleware,purchasePremium)
 router.get("/searchuser",searchUser)
 router.get("/getalluser",getAllUsers)
 router.delete("/deleteuser",deleteUser)

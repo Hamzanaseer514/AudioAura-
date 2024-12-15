@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import CategoryContext from "../context/CategoryContext";
 import CreatePlaylist from "./CreatePlaylist";
-
-
+import ProtectedPremium from "./ProtectedPremium";
 // Function to decode JWT
 function parseJwt(token) {
   try {
@@ -125,14 +124,14 @@ const Navbar = () => {
                   </button>
                 </Link>
                 <Link to="/user-favourite">
-                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
-                  Favorites
-                </button>
+                  <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
+                    Favorites
+                  </button>
                 </Link>
                 <Link to="/spotify">
-                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
-                  Music
-                </button>
+                  <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-black">
+                    Music
+                  </button>
                 </Link>
                 <button
                   onClick={handleLogout}
@@ -252,7 +251,11 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {isModalOpen && <CreatePlaylist setIsModalOpen = {setIsModalOpen}  />}
+      {isModalOpen && (
+        <ProtectedPremium>
+          <CreatePlaylist setIsModalOpen={setIsModalOpen} />
+        </ProtectedPremium>
+      )}
     </>
   );
 };

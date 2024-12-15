@@ -97,7 +97,9 @@ const login = async (req, res) => {
 };
 
 const purchasePremium = async (req, res) => {
-  const { userId, subscriptionType } = req.body;
+  const { subscriptionType } = req.body;
+  const userId = req.user.id;
+  console.log(subscriptionType, userId);
   if (!["monthly", "yearly"].includes(subscriptionType)) {
     return res
       .status(400)
@@ -107,6 +109,10 @@ const purchasePremium = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ msg: "User not found", success: false });
+    }
+
+    if(user.premium === "monthly" || user.premium === "yearly"){
+      return res.status(400).json({msg:"You already have a premium subscription", success:false})
     }
 
     user.premium = subscriptionType;

@@ -24,6 +24,7 @@ import SongContext from "./context/SongContext.jsx";
 import About from "./components/About.jsx"
 import Contact from './components/Contact.jsx'
 import Features from './components/Features.jsx'
+import ProtectedPremium from "./components/ProtectedPremium.jsx";
 
 
 const App = () => {
@@ -55,6 +56,14 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            {/* <Route
+              path="/playlists"
+              element={
+                <ProtectedPremium>
+                  <Playlist />
+                </ProtectedPremium>
+              }
+            /> */}
             <Route path="/spotify/premium" element={<Premium />} />
             <Route path="/spotify/album/:id" element={<ShowAlbum />} />
             <Route

@@ -52,13 +52,14 @@ const Navbar = () => {
 
         {/* Right Menu Icon */}
         <div className="lg:hidden relative">
-          <button onClick={toggleMenu} className="text-white focus:outline-none">
+          <button id='menubutton' onClick={toggleMenu} className="text-white focus:outline-none">
             <img className="w-6" src={assets.menu_icon} alt="Menu" />
           </button>
           {isMenuOpen && (
             <div className="absolute right-0 mt-2 bg-white text-black border border-gray-300 rounded shadow-lg p-4 space-y-2 w-32 transition-opacity duration-300">
               <Link to="#" className="block text-black hover:bg-gray-200 py-2 px-4 rounded">Profile</Link>
               <button
+              id='logoutButton'
                 onClick={logout}
                 className="block text-black hover:bg-gray-200 py-2 px-4 rounded"
                 disabled={loading} // Disable button during loading
@@ -73,6 +74,7 @@ const Navbar = () => {
         <div className="lg:flex items-center space-x-6 hidden">
           <Link to="#profile" className="text-white hover:text-[#abacad] font-bold">Profile</Link>
           <button
+          id='logoutButton'
             onClick={logout}
             className="text-white hover:text-[#abacad] font-bold"
             disabled={loading} // Disable button during loading
@@ -136,14 +138,14 @@ const Navbar = () => {
             Playlists
           </Link>
           <Link
-            to="/tracks"
+            to="/songs"
             className={`flex items-center py-2 px-6 rounded hover:bg-gray-600 transition-all w-full ${
-              activeOption === 'tracks' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
+              activeOption === 'songs' ? 'bg-gray-500 border-l-4 border-green-500' : 'bg-[#505b77]'
             }`}
-            onClick={() => handleOptionClick('tracks')}
+            onClick={() => handleOptionClick('songs')}
           >
             <img src={assets.music_icon} alt="icon" className="w-5 h-5 mr-3" />
-            Tracks
+            Songs
           </Link>
         </div>
       </div>
