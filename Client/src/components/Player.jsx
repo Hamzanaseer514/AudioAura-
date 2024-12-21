@@ -73,8 +73,31 @@ const Player = () => {
     setIsAddToPlaylistOpen(true);
   };
   const Queue = () => {
-    console.log("Queue");
     toast.success("Song Played in Queue", {
+      style: {
+        background: "#00ABE4",
+        color: "#121212",
+      },
+      iconTheme: {
+        primary: "white",
+        secondary: "black",
+      },
+    });
+  };
+  const Shuffle = () => {
+    toast.success("Song Shuffled", {
+      style: {
+        background: "#00ABE4",
+        color: "#121212",
+      },
+      iconTheme: {
+        primary: "white",
+        secondary: "black",
+      },
+    });
+  };
+  const loop = () => {
+    toast.success("Song Played in Loop", {
       style: {
         background: "#00ABE4",
         color: "#121212",
@@ -311,6 +334,7 @@ const Player = () => {
       <div className="flex flex-col items-center gap-1 m-auto">
         <div className="flex gap-4">
           <img
+            onClick={Shuffle} 
             className="w-4 cursor-pointer"
             src={assets.shuffle_icon}
             alt=""
@@ -343,7 +367,7 @@ const Player = () => {
             alt=""
           />
           <div className="hidden md:block">
-            <img className="w-4 cursor-pointer" src={assets.loop_icon} alt="" />
+            <img className="w-4 cursor-pointer" src={assets.loop_icon} alt="" onClick={loop} />
           </div>
           <div className="lg:hidden block ">
             <img

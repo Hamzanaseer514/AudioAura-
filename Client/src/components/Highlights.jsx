@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import feel from '../assets/feel.mp4'
+import logo from '../assets/AudioAura-logo.png'
 
 const highlightsData = [
   {
@@ -6,28 +8,28 @@ const highlightsData = [
     title: "Feel the Beat",
     image: "https://kpopping.com/documents/4c/0/Highlight-Switch-On-Concept-Photos-documents-3(1).jpeg?v=456a5",
     description: "Discover electrifying beats.",
-    video: "https://www.w3schools.com/html/mov_bbb.mp4",
+    video: feel,
   },
   {
     id: 2,
     title: "Mood Boosters",
     image: "/src/assets/Mood.jpg",
     description: "Playlists to uplift your mood.",
-    video: "https://www.w3schools.com/html/movie.mp4",
+    video: feel,
   },
   {
     id: 3,
     title: "Acoustic Vibes",
     image: "/src/assets/Bass.jpg",
     description: "Soothing acoustic melodies.",
-    video: "https://www.w3schools.com/html/mov_bbb.mp4",
+    video: feel,
   },
   {
     id: 4,
     title: "Top Charts",
     image: "/src/assets/Top.jpg",
     description: "Stay updated with trending tracks.",
-    video: "https://www.w3schools.com/html/movie.mp4",
+    video: feel,
   },
   
 ];
@@ -84,26 +86,53 @@ const MusicalHighlights = () => {
 
       {/* Modal for Selected Highlight */}
       {selectedHighlight && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-70 backdrop-blur-sm flex items-center justify-center">
-    <div className="relative bg-gradient-to-br from-[#1e2a47] via-[#3a4a75] to-[#1e2a47] rounded-xl p-8 shadow-xl max-w-3xl w-full">
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-90 backdrop-blur-lg flex items-center justify-center">
+  <div className="relative bg-gradient-to-br from-[#141e30] via-[#1f3c50] to-[#141e30] rounded-2xl p-8 shadow-2xl max-w-3xl w-full transition-transform duration-300 hover:scale-105">
+    {/* Logo */}
+    <div className="absolute top-4 left-4 flex items-center">
+      <img
+        src={logo}
+        alt="Logo"
+        className="h-12 w-12 rounded-full border-2 border-[#00ABE4] shadow-md"
+      />
+      <h1 className="ml-3 text-xl font-semibold text-white">
+        Audio<span className="text-[#00ABE4]">Aura</span> 
+      </h1>
+    </div>
+    {/* Title */}
+    <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#00ABE4] to-[#00CFFD] text-center mb-8">
+      {selectedHighlight.title}
+    </h2>
+    {/* Video Section */}
+    <div className="relative mb-6">
+      <div className="relative rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <video
+          src={selectedHighlight.video}
+          controls
+          autoPlay
+          className="w-full h-72 rounded-xl border-none"
+        />
+        <div className="absolute inset-0 rounded-xl border-[3px] bg-gradient-to-tr from-[#00ABE4] to-[#00CFFD] opacity-50"></div>
+      </div>
+    </div>
+    {/* Description */}
+    <p className="text-lg text-gray-300 text-center leading-relaxed mb-8 px-6">
+      {selectedHighlight.description}
+    </p>
+    {/* Close Button (Bottom) */}
+    <div className="flex justify-center">
       <button
         onClick={closeModal}
-        className="absolute top-4 right-4 text-3xl font-bold text-white hover:text-gray-300"
+        className="py-2 px-8 rounded-full bg-[#00ABE4] text-white font-semibold shadow-md hover:bg-[#00CFFD] hover:shadow-lg transition-all duration-200"
       >
-        ✖
+        Close
       </button>
-      <h2 className="text-3xl font-extrabold text-white mb-6">
-        {selectedHighlight.title}
-      </h2>
-      <video
-        src={selectedHighlight.video}
-        controls
-        autoPlay
-        className="w-full h-64 rounded-lg mb-4 shadow-lg"
-      />
-      <p className="text-lg text-gray-300">{selectedHighlight.description}</p>
     </div>
   </div>
+</div>
+
+
+
 )}
 
     </div>

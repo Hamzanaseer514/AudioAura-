@@ -59,6 +59,7 @@ import my_pic from './me.jpg'
 import Hamza_pic from './Hamza-pic.png'
 import AudioAura_favIcon from './AudioAura-logo.png'
 import AudiooAura_White from './AudioAura-white.png'
+// import FeelTheBeat from './Feel the beats.mp4'
 
 export const assets = {
     bell_icon,
@@ -102,7 +103,8 @@ export const assets = {
     my_pic,
     Hamza_pic,
     AudioAura_favIcon,
-    AudiooAura_White
+    AudiooAura_White,
+    // FeelTheBeat,
 
 }
 
