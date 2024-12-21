@@ -1,6 +1,6 @@
 # AudioAura 🎶
 
-![AudioAura Logo](https://i.imgur.com/xUXM7Pz.png)
+![AudioAura Logo](https://i.imgur.com/xUXM7Pz.png | width=200)
 
 **AudioAura** is a sleek and modern audio streaming website designed for music lovers. With a smooth user interface and seamless audio playback, it allows users to explore music, create playlists, save favorites, and enjoy their favorite tracks all in one place. 🎧
 
@@ -24,3 +24,5 @@
 
 - **MERN Stack** (MongoDB, Express.js, React, Node.js)
 - **Tailwind CSS** for responsive and modern UI styling
+
+### Made with ❤️ by AudioAura Developer 
