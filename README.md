@@ -1,6 +1,8 @@
 # AudioAura 🎶
 
-<img src="https://i.imgur.com/xUXM7Pz.png" width="150" />
+<p align="center">
+  <img src="https://i.imgur.com/xUXM7Pz.png" width="200" />
+</p>
 
 **AudioAura** is a sleek and modern audio streaming website designed for music lovers. With a smooth user interface and seamless audio playback, it allows users to explore music, create playlists, save favorites, and enjoy their favorite tracks all in one place. 🎧
 
