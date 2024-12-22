@@ -37,7 +37,7 @@ const UserFavourite = () => {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/user/favorites`, {
+        const response = await fetch(`https://audioaura-4sap.onrender.com/user/favorites`, {
           headers: {
             token: localStorage.getItem("token"),
           },
@@ -61,7 +61,7 @@ const UserFavourite = () => {
       if (LikedSongs.length > 0) {
         try {
           const response = await fetch(
-            "http://localhost:3000/user/getSongsByIds",
+            "https://audioaura-4sap.onrender.com/user/getSongsByIds",
             {
               method: "POST",
               headers: {
@@ -86,7 +86,7 @@ const UserFavourite = () => {
   const deleteFavorite = async (songId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/favorites/${songId}`,
+        `https://audioaura-4sap.onrender.com/user/favorites/${songId}`,
         {
           method: "DELETE",
           headers: {
