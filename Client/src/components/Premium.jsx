@@ -24,7 +24,7 @@ const Premium = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/payement/create-checkout-session",
+        "https://audioaura-4sap.onrender.com/create-checkout-session",
         {
           method: "POST",
           headers: {
@@ -60,7 +60,7 @@ const Premium = () => {
 
   const updatePremiumPrice = async (subscription) => {
     try {
-      const response = await fetch("http://localhost:3000/purchasepremium", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/purchasepremium", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
