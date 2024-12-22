@@ -25,7 +25,7 @@ const PlaylistPage = () => {
   useEffect(() => {
     const fetchPlaylists = async () => {
       try {
-        const response = await fetch("http://localhost:3000/user/playlists", {
+        const response = await fetch("https://audioaura-4sap.onrender.com/user/playlists", {
           headers: { token: localStorage.getItem("token") },
         });
         const data = await response.json();
@@ -48,7 +48,7 @@ const PlaylistPage = () => {
 
   const fetchSongsByIds = async (songIds) => {
     try {
-      const response = await fetch("http://localhost:3000/user/getSongsByIds", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/user/getSongsByIds", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ songIds }),
@@ -69,7 +69,7 @@ const PlaylistPage = () => {
   const deletePlaylist = async (playlistId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/playlist/${playlistId}`,
+        `https://audioaura-4sap.onrender.com/user/playlist/${playlistId}`,
         {
           method: "DELETE",
           headers: {
@@ -97,7 +97,7 @@ const PlaylistPage = () => {
   const deleteSongFromPlaylist = async (playlistId, songId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/user/deleteSong/${playlistId}/${songId}`,
+        `https://audioaura-4sap.onrender.com/user/deleteSong/${playlistId}/${songId}`,
         {
           method: "DELETE",
           headers: {
@@ -123,7 +123,7 @@ const PlaylistPage = () => {
   
         // Fetch updated playlist from backend
         const refreshedPlaylistsResponse = await fetch(
-          `http://localhost:3000/user/playlists`,
+          `https://audioaura-4sap.onrender.com/user/playlists`,
           {
             headers: { token: localStorage.getItem("token") },
           }
