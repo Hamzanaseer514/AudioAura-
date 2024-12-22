@@ -11,7 +11,7 @@ export const AlbumsProvider = ({ children }) => {
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
-        const response = await fetch('http://localhost:3000/admin/getalbums');
+        const response = await fetch('https://audioaura-4sap.onrender.com/admin/getalbums');
         const data = await response.json();
         if (data.success) {
           setAlbums(data.albums); // Assuming the API returns albums in this format
@@ -23,7 +23,7 @@ export const AlbumsProvider = ({ children }) => {
 
     const fetchSongs = async () => {
       try {
-        const response = await fetch('http://localhost:3000/admin/getallsongs');
+        const response = await fetch('https://audioaura-4sap.onrender.com/admin/getallsongs');
         const data = await response.json();
         if (data.success) {
           // console.log("Fetched Songs:", data.songs); // Log fetched songs
