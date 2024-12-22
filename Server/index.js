@@ -5,6 +5,7 @@ const AlbumRouter = require("./Routes/Album")
 const playlistRouter = require("./Routes/Playlist")
 const FavouriteRouter = require("./Routes/Favourite")
 const paymentRoutes = require('./Routes/paymentRoutes')
+const Count = require("./Routes/count")
 const Song = require("./Model/Song")
 const path =  require("path")
 const multer = require("multer")
@@ -20,6 +21,7 @@ app.use("/admin",AlbumRouter)
 app.use("/user",playlistRouter)
 app.use("/user",FavouriteRouter)
 app.use('/payement', paymentRoutes); 
+app.use('/', Count); 
 
 
 
@@ -38,7 +40,7 @@ app.post("/uploadalbum", upload.single('image'), (req, res) => {
     }
     res.json({
         success: true,
-        image_url: `https://audioaura-4sap.onrender.com/albumimages/${req.file.filename}`
+        image_url: `http://localhost:${port}/albumimages/${req.file.filename}`
     });
 });
 
@@ -62,7 +64,7 @@ app.post("/uploadaudio", uploadAudio.single('file'), (req, res) => {
     }
     res.json({
         success: true,
-        file_url: `https://audioaura-4sap.onrender.com/audiofiles/${req.file.filename}`
+        file_url: `http://localhost:${port}/audiofiles/${req.file.filename}`
     });
 });
 
