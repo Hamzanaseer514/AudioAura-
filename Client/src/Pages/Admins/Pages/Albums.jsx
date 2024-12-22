@@ -36,7 +36,7 @@ const AddAlbum = () => {
     formData.append("image", image);
 
     try {
-      const response = await fetch("http://localhost:3000/uploadalbum", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/uploadalbum", {
         method: "POST",
         body: formData,
       });
@@ -49,7 +49,7 @@ const AddAlbum = () => {
       const data = await response.json();
       if (data.success) {
         albumData.image = data.image_url;
-        const response2 = await fetch("http://localhost:3000/admin/addalbum", {
+        const response2 = await fetch("https://audioaura-4sap.onrender.com/admin/addalbum", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
