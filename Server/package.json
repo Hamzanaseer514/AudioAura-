@@ -12,5 +12,5 @@
     "strip": "^3.0.0",
     "stripe": "^17.4.0"
   },
-  "start": "nodemon index.js"
+  "start": "node index.js"
 }
