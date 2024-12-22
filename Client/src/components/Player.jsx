@@ -174,7 +174,7 @@ const Player = () => {
     const userId = decodedToken.id;
 
     try {
-      const response = await fetch("http://localhost:3000/user/addfavourite", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/user/addfavourite", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -227,7 +227,7 @@ const Player = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:3000/user/favorites/${songId}`,
+        `https://audioaura-4sap.onrender.com/user/favorites/${songId}`,
         {
           method: "DELETE",
           headers: {
@@ -279,7 +279,7 @@ const Player = () => {
         if (decodedToken && decodedToken.id) {
           try {
             const response = await fetch(
-              `http://localhost:3000/user/favorites`,
+              `https://audioaura-4sap.onrender.com/user/favorites`,
               {
                 headers: {
                   token: localStorage.getItem("token"),
