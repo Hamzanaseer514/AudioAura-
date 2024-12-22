@@ -34,8 +34,8 @@ const About = () => {
           </p>
         </div>
 
-        {/* Developer 2 */}
-        {/* <div className="flex flex-col items-center text-center bg-[#262626] p-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
+         Developer 2 
+       <div className="flex flex-col items-center text-center bg-[#262626] p-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
           <img
             src={assets.Hamza_pic} 
             alt="Developer 2"
@@ -45,7 +45,7 @@ const About = () => {
           <p className="text-gray-300 mt-2">
             Ameer Hamza is a talented developer specializing in backend services and API integrations. He ensures that the server-side of applications is robust and secure, providing a seamless user experience.
           </p>
-        </div> */}
+        </div>
       </section>
 
       {/* Full About Description */}
