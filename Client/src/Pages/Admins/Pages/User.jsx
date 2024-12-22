@@ -15,7 +15,7 @@ const User = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://localhost:3000/getalluser");
+      const response = await fetch("https://audioaura-4sap.onrender.com/getalluser");
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -42,7 +42,7 @@ const User = () => {
 
   const deleteuser = async (id) => {
     try {
-      const response = await fetch("http://localhost:3000/deleteuser", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/deleteuser", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +64,7 @@ const User = () => {
 
   const updateUser = async (status, id) => {
     try {
-      const response = await fetch(`http://localhost:3000/updateUserStatus`, {
+      const response = await fetch(`https://audioaura-4sap.onrender.com/updateUserStatus`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
