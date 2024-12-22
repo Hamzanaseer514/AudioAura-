@@ -9,7 +9,7 @@ const ProtectedPremium = ({ children }) => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/getuserwithid", {
+        const response = await fetch("https://audioaura-4sap.onrender.com/getuserwithid", {
           headers: {
             "Content-Type": "application/json",
             token: token,
