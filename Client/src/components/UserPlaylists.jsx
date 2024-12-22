@@ -180,19 +180,23 @@ const PlaylistPage = () => {
         <Sidebar />
         <div className="flex-1 p-8 overflow-y-auto">
           <Navbar />
-          <div className="flex flex-col md:flex-row items-center mb-10">
-            <div className="mr-8 mt-8 md:mb-0 flex items-center justify-center w-52 h-52 rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl">
-              <span className="text-6xl font-bold text-white">🎵</span>
-            </div>
-            <div>
-              <h2 className="text-8xl font-extrabold text-white mb-2">
-                Your Collection
-              </h2>
-              <p className="text-lg text-gray-300">
-                Manage and explore your playlists.
-              </p>
-            </div>
+          <div className="flex flex-col md:flex-row items-center md:items-start mb-10 px-4 mt-10">
+          {/* Icon Container */}
+          <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-52 md:h-52 flex items-center justify-center rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl mb-6 md:mb-0 md:mr-8">
+            <span className="text-5xl sm:text-6xl font-bold text-white">🎵</span>
           </div>
+
+  {/* Text Content */}
+  <div className="text-center md:text-left">
+    <h2 className="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white mb-3">
+      Your Collection
+    </h2>
+    <p className="text-base sm:text-lg md:text-xl text-gray-300">
+      Manage and explore your playlists.
+    </p>
+  </div>
+          </div>
+
           {loading ? (
             <div className="flex justify-center items-center py-12">
               <div className="animate-pulse">

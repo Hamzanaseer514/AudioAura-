@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import CreatePlaylist from "./CreatePlaylist";
 import { searchSongs } from "../Utils/api"; // Importing the search function from utils
 import { PlayerContext } from "../context/Playercontext";
 import ProtectedPremium from "./ProtectedPremium";
-
+import { Link } from "react-router-dom";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +20,7 @@ const Sidebar = () => {
   const openModal = () => {
     setIsModalOpen(true);
   };
+
 
   const handleSearchClick = () => {
     setShowSearchInput(true); // Always show input on clicking Search
@@ -137,11 +138,13 @@ const Sidebar = () => {
           </button>
         </div>
         <div className="p-4 bg-[#242424] m-2 rounded font-semibold flex flex-col items-start justify-start gap-1 pl-4 mt-4">
-          <h1>Let's find some podcasts to follow</h1>
-          <p className="font-light ">We'll keep you updated on new episodes</p>
-          <button className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4">
-            Browse Podcasts
+          <h1>Find your favorites</h1>
+          <p className="font-light ">Discover your favorites, all in one place</p>
+          <Link to="/user-favourite">
+          <button className="px-4 py-1.5 bg-white text-[15px] text-black rounded-full mt-4 " >
+            Your Favotites
           </button>
+          </Link>
         </div>
       </div>
       {/* {isModalOpen && <CreatePlaylist setIsModalOpen={setIsModalOpen} />} */}

@@ -72,6 +72,9 @@ const Navbar = () => {
     }, 1000);
   };
 
+  const handlenavoption =()=>{
+    navigate('/spotify')
+  }
   return (
     <>
       {/* Top Navbar */}
@@ -196,6 +199,7 @@ const Navbar = () => {
             onClick={() => {
               setCategory("all");
               toggleMenu();
+              handlenavoption();
             }}
             className={`text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out ${
               category === "all"
@@ -209,6 +213,7 @@ const Navbar = () => {
             onClick={() => {
               setCategory("music");
               toggleMenu();
+              handlenavoption();
             }}
             className={`text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out ${
               category === "music"
@@ -218,7 +223,7 @@ const Navbar = () => {
           >
             Music
           </div>
-          <div
+          {/* <div
             onClick={() => {
               setCategory("podcast");
               toggleMenu();
@@ -230,7 +235,7 @@ const Navbar = () => {
             }`}
           >
             Podcasts
-          </div>
+          </div> */}
         </div>
 
         {/* Separator Line */}
@@ -245,10 +250,11 @@ const Navbar = () => {
           >
             Create Playlist
           </div>
-
+          <Link to="/user-favourite">
           <div className="text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out hover:bg-white hover:text-black">
-            Browse Podcasts
+            Your Favorites
           </div>
+          </Link>
         </div>
       </div>
       {isModalOpen && (

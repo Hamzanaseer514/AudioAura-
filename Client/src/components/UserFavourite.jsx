@@ -112,27 +112,30 @@ const UserFavourite = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-b from-[#121212] to-[#2C2C2C]">
-      <div className="h-[90%] flex flex-col md:flex-row">
-        <Sidebar />
-        <div className="flex-1 p-8 overflow-y-auto">
-          <Navbar />
+        <div className="h-screen bg-gradient-to-b from-[#121212] to-[#2C2C2C]">
+          <div className="h-[90%] flex flex-col md:flex-row">
+            <Sidebar />
+            <div className="flex-1 p-8 overflow-y-auto">
+              <Navbar />
 
-          {/* Liked Songs Header */}
-          <div className="flex flex-col md:flex-row items-center mb-10">
-            <div className="mr-8 mt-8 md:mb-0 cursor-pointer flex items-center justify-center w-52 h-52 rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl">
-              <span className="text-6xl text-white">❤️</span>
-            </div>
+              {/* Liked Songs Header */}
+              <div className="flex flex-col md:flex-row items-center md:items-start mb-10 px-4 mt-10">
+      {/* Heart Icon Container */}
+      <div className="w-40 h-40 sm:w-48 sm:h-48 md:w-52 md:h-52 flex items-center justify-center rounded-md bg-gradient-to-br from-purple-700 to-pink-500 shadow-2xl mb-6 md:mb-0 md:mr-8">
+        <span className="text-5xl sm:text-6xl text-white">❤️</span>
+      </div>
 
-            <div>
-              <h2 className="text-8xl font-extrabold text-white mb-2">
-                Liked Songs
-              </h2>
-              <p className="text-lg text-gray-300">
-                Hamza Naseer • {LikedSongs.length} songs
-              </p>
-            </div>
-          </div>
+      {/* Text Content */}
+      <div className="text-center md:text-left">
+        <h2 className="text-4xl sm:text-6xl md:text-7xl font-semibold text-white mb-3">
+          Liked Songs
+        </h2>
+        <p className="text-base sm:text-lg md:text-xl text-gray-300">
+          Enjoy Your Favorites • {(LikedSongs.length)-1} songs
+        </p>
+      </div>
+    </div>
+
 
           {/* Song Cards Section */}
           <div className="mt-10">
@@ -148,7 +151,7 @@ const UserFavourite = () => {
                 >
                   <div className="relative w-24 h-24 sm:w-32 sm:h-32 rounded-lg overflow-hidden mr-4">
                     <img
-                      src="http://localhost:3000/albumimages/image_1729333298901.jpg"
+                      src={favorite.image}
                       alt={favorite.name}
                       className="w-full h-full object-cover"
                     />

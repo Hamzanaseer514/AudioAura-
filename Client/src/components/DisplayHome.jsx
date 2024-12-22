@@ -114,7 +114,7 @@ const DisplayHome = () => {
       ))}
     </div>
   </div>
-</div>
+      </div>
 
 
     </>
