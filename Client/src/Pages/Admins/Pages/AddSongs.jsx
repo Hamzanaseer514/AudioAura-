@@ -53,7 +53,7 @@ const AddSong = () => {
     imageFormData.append("image", image);
 
     try {
-      const imageResponse = await fetch("http://localhost:3000/uploadalbum", {
+      const imageResponse = await fetch("https://audioaura-4sap.onrender.com/uploadalbum", {
         method: "POST",
         body: imageFormData,
       });
