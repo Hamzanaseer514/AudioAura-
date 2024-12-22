@@ -13,7 +13,7 @@ const Playlist = () => {
   useEffect(() => {
     const fetchPlaylists = async () => {
       try {
-        const response = await fetch("http://localhost:3000/user/getAllPlaylist");
+        const response = await fetch("https://audioaura-4sap.onrender.com/user/getAllPlaylist");
         const data = await response.json();
         setPlaylists(data);
       } catch (error) {
