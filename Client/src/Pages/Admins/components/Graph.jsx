@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
+import { Bar, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,6 +8,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  ArcElement, // Import ArcElement for Doughnut chart
 } from 'chart.js';
 
 // Register Chart.js components
@@ -15,27 +16,27 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
+  ArcElement, // Register ArcElement for Doughnut chart
   Title,
   Tooltip,
   Legend
 );
 
-const Graph = () => {
+const Graph = ({ albumCount, userCount, songCount, playlistCount }) => {
   // Example data for total albums, users, playlists, and songs in the system
   const systemData = [
-    { name: "Albums", amount: 30 },
-    { name: "Users", amount: 120 },
-    { name: "Songs", amount: 450 },
-    { name: "Playlists", amount: 15 },
+    { name: "Albums", amount: albumCount },
+    { name: "Users", amount: userCount },
+    { name: "Songs", amount: songCount },
+    { name: "Playlists", amount: playlistCount },
   ];
 
-  // Example data for user activity
-  const userActivityData = [
-    { name: "User 1", playlistsAdded: 5, songsListened: 20 },
-    { name: "User 2", playlistsAdded: 3, songsListened: 25 },
-    { name: "User 3", playlistsAdded: 2, songsListened: 15 },
-    { name: "User 4", playlistsAdded: 4, songsListened: 30 },
-  ];
+  // Aggregate user activity data
+  const totalPlaylistsAdded = 5 + 3 + 2 + 4; // Sum of playlists added by all users
+  const totalSongsListened = 20 + 25 + 15 + 30; // Sum of songs listened by all users
+
+  // Calculate the average number of songs per playlist
+  const averageSongsPerPlaylist = songCount / playlistCount;
 
   // Chart data for system items
   const systemChartData = {
@@ -65,28 +66,31 @@ const Graph = () => {
     },
   };
 
-  // Chart data for user activity
+  // Doughnut chart data for user activity
   const userActivityChartData = {
-    labels: userActivityData.map(item => item.name),
+    labels: ['Playlists Added', 'Songs Listened', 'Avg Songs per Playlist'], // Added average songs label
     datasets: [
       {
-        label: 'Playlists Added',
-        data: userActivityData.map(item => item.playlistsAdded),
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-      },
-      {
-        label: 'Songs Listened',
-        data: userActivityData.map(item => item.songsListened),
-        backgroundColor: 'rgba(255, 159, 64, 0.2)',
-        borderColor: 'rgba(255, 159, 64, 1)',
+        label: 'User Activity',
+        data: [totalPlaylistsAdded, totalSongsListened, averageSongsPerPlaylist], // Added the average
+        backgroundColor: [
+          'rgba(75, 192, 192, 0.5)',   // Light greenish-blue for Playlists Added
+          'rgba(255, 159, 64, 0.5)',    // Light orange for Songs Listened
+          'rgba(153, 102, 255, 0.5)',   // Light purple for Avg Songs per Playlist
+          'rgba(255, 99, 132, 0.5)',    // Light pink for extra data (if needed)
+        ],
+        borderColor: [
+          'rgba(75, 192, 192, 1)',     // Darker greenish-blue for Playlists Added
+          'rgba(255, 159, 64, 1)',      // Darker orange for Songs Listened
+          'rgba(153, 102, 255, 1)',     // Darker purple for Avg Songs per Playlist
+          'rgba(255, 99, 132, 1)',      // Darker pink for extra data (if needed)
+        ],
         borderWidth: 1,
       },
     ],
   };
 
-  // Options for user activity chart
+  // Options for user activity doughnut chart
   const userActivityOptions = {
     responsive: true,
     plugins: {
@@ -95,7 +99,7 @@ const Graph = () => {
       },
       title: {
         display: true,
-        text: 'User Activity: Playlists Added vs Songs Listened',
+        text: 'User Activity Distribution: Playlists Added vs Songs Listened vs Avg Songs per Playlist',
       },
     },
   };
@@ -105,8 +109,8 @@ const Graph = () => {
       <div className='flex-1 max-w-[600px] mx-auto p-2'>
         <Bar data={systemChartData} options={systemOptions} />
       </div>
-      <div className='flex-1 max-w-[600px] mx-auto p-2'>
-        <Bar data={userActivityChartData} options={userActivityOptions} />
+      <div className='flex-1 max-w-[350px] mx-auto p-2'>
+        <Doughnut data={userActivityChartData} options={userActivityOptions} />
       </div>
     </div>
   );
