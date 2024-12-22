@@ -50,7 +50,7 @@ const Navbar = () => {
         {/* Logo with Text */}
         <div className="flex items-center space-x-2 md:space-x-3 text-white text-lg font-bold">
           <img
-            src='./src/assets/AudioAura-white.png' 
+            src='https://i.imgur.com/xUXM7Pz.png' 
             alt="AudioAura Logo"
             className="h-[50px] w-[50px] md:h-[65px] md:w-[65px] object-contain rounded-md shadow-lg hover:scale-105 transition-transform duration-300 filter brightness-125 contrast-110 saturate-150"
           />
