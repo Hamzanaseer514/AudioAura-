@@ -1,10 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react"; // Add useRef import
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import CategoryContext from "../context/CategoryContext";
 import CreatePlaylist from "./CreatePlaylist";
 import ProtectedPremium from "./ProtectedPremium";
+import { searchSongs } from "../Utils/api"; // Importing the search function from utils
+import { PlayerContext } from "../context/Playercontext";
+
 // Function to decode JWT
 function parseJwt(token) {
   try {
@@ -26,6 +29,7 @@ function parseJwt(token) {
 const Navbar = () => {
   const { category, setCategory } = useContext(CategoryContext);
   const navigate = useNavigate();
+  const { PlayWithId } = useContext(PlayerContext);
 
   // Decode the token from localStorage
   const token = localStorage.getItem("token");
@@ -47,6 +51,11 @@ const Navbar = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // For storing the query
+  const [searchResults, setSearchResults] = useState([]); // For storing the search results
+
+  // Define the ref for the search input field
+  const searchInputRef = useRef(null);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -72,9 +81,32 @@ const Navbar = () => {
     }, 1000);
   };
 
-  const handlenavoption =()=>{
-    navigate('/spotify')
-  }
+  const handlenavoption = () => {
+    navigate("/spotify");
+  };
+
+  const handleSearchChange = async (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    if (query.trim() !== "") {
+      try {
+        const results = await searchSongs(query); // Fetch results dynamically
+        setSearchResults(results);
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+        setSearchResults([]);
+      }
+    } else {
+      setSearchResults([]); // Clear results if query is empty
+    }
+  };
+
+  const handleClickSearchSong = (song) => {
+    PlayWithId(song.id);
+    setIsSearchOpen(false);
+  };
+
   return (
     <>
       {/* Top Navbar */}
@@ -185,11 +217,33 @@ const Navbar = () => {
           </div>
 
           {isSearchOpen && (
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full mt-4 py-2 px-3 rounded-lg text-black transition duration-300 ease-in-out"
-            />
+            <div className="relative w-full mt-3">
+              <input
+                type="text"
+                placeholder="Search..."
+                className="w-full py-2 px-3 rounded-lg bg-gray-800 text-white transition duration-300 ease-in-out"
+                autoFocus
+                value={searchQuery}
+                onChange={handleSearchChange}
+                ref={searchInputRef} 
+              />
+              <div className="absolute bg-gray-900 text-white w-full max-h-48 overflow-auto rounded shadow-lg mt-1 z-10">
+                {searchResults.length > 0 ? (
+                  searchResults.map((song) => (
+                    <div
+                      key={song.id}
+                      className="p-2 hover:bg-gray-700 cursor-pointer"
+                      onClick={() => handleClickSearchSong(song)}
+                    >
+                      <p className="font-bold">{song.name}</p>
+                      <p className="text-sm text-gray-400">{song.singer}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="p-2 text-gray-400">No results found</p>
+                )}
+              </div>
+            </div>
           )}
         </div>
 
@@ -223,45 +277,24 @@ const Navbar = () => {
           >
             Music
           </div>
-          {/* <div
-            onClick={() => {
-              setCategory("podcast");
-              toggleMenu();
-            }}
-            className={`text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out ${
-              category === "podcast"
-                ? "bg-[#00ABE4] text-black"
-                : "bg-black hover:bg-white hover:text-black"
-            }`}
-          >
-            Podcasts
-          </div> */}
         </div>
 
         {/* Separator Line */}
         <hr className="my-4 border-t-2 border-gray-600" />
 
         {/* Playlist and Podcast Section */}
-        <div className="mt-6">
-          <p className="text-white text-lg font-semibold mb-4">Library</p>
-          <div
+        <div className="flex flex-col items-center mt-3">
+          <button
             onClick={openModal}
-            className="text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out hover:bg-white hover:text-black"
+            className="w-full bg-[#00ABE4] py-2 px-4 rounded-full text-white mb-2"
           >
             Create Playlist
-          </div>
-          <Link to="/user-favourite">
-          <div className="text-white py-2 px-4 mb-2 rounded-full cursor-pointer transition duration-300 ease-in-out hover:bg-white hover:text-black">
-            Your Favorites
-          </div>
-          </Link>
+          </button>
+          <button className="w-full bg-[#00ABE4] py-2 px-4 rounded-full text-white">
+            Podcasts
+          </button>
         </div>
       </div>
-      {isModalOpen && (
-        <ProtectedPremium>
-          <CreatePlaylist setIsModalOpen={setIsModalOpen} />
-        </ProtectedPremium>
-      )}
     </>
   );
 };
