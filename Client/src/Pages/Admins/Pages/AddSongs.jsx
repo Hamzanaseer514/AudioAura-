@@ -21,7 +21,7 @@ const AddSong = () => {
   useEffect(() => {
     const fetchAlbums = async () => {
       try {
-        const response = await fetch("http://localhost:3000/admin/getalbums");
+        const response = await fetch("https://audioaura-4sap.onrender.com/admin/getalbums");
         const data = await response.json();
         if (data.success) {
           setAlbums(data.albums); // Assuming the response contains albums array
@@ -65,7 +65,7 @@ const AddSong = () => {
       let audioFormData = new FormData();
       audioFormData.append("file", audio);
 
-      const audioResponse = await fetch("http://localhost:3000/uploadaudio", {
+      const audioResponse = await fetch("https://audioaura-4sap.onrender.com/uploadaudio", {
         method: "POST",
         body: audioFormData,
       });
@@ -74,7 +74,7 @@ const AddSong = () => {
       songData.file = audioData.file_url; // Set the audio file URL
 
       // Submit song data
-      const response = await fetch("http://localhost:3000/admin/addsong", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/admin/addsong", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
