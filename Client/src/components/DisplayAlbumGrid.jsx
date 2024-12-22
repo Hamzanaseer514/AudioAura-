@@ -35,7 +35,7 @@ const DisplayAlbum = () => {
         if (decodedToken && decodedToken.id) {
           try {
             const response = await fetch(
-              `http://localhost:3000/user/favorites`,
+              `https://audioaura-4sap.onrender.com/user/favorites`,
               {
                 headers: {
                   token: localStorage.getItem("token"),
@@ -87,7 +87,7 @@ const DisplayAlbum = () => {
     const userId = decodedToken.id; // Extract userId from the decoded token
 
     try {
-      const response = await fetch("http://localhost:3000/user/addfavourite", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/user/addfavourite", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +119,7 @@ const DisplayAlbum = () => {
     const fetchSongs = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/admin/album/${albumId}/songs`
+          `https://audioaura-4sap.onrender.com/admin/album/${albumId}/songs`
         );
         const data = await response.json();
         setSongs(data.songs);
