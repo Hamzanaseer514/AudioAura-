@@ -32,7 +32,7 @@ const ProfilePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/updateUser`, {
+      const response = await fetch(`https://audioaura-4sap.onrender.com/updateUser`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -60,7 +60,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const GetUserId = async () => {
-      const response = await fetch(`http://localhost:3000/getuserwithid`, {
+      const response = await fetch(`https://audioaura-4sap.onrender.com/getuserwithid`, {
         headers: {
           "Content-Type": "application/json",
           token: localStorage.getItem("token"),
