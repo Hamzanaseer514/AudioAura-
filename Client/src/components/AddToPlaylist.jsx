@@ -13,7 +13,7 @@ const AddToPlaylist = ({ setIsModalOpen }) => {
   useEffect(() => {
     const fetchPlaylists = async () => {
       try {
-        const response = await fetch("http://localhost:3000/user/playlists", {
+        const response = await fetch("https://audioaura-4sap.onrender.com/user/playlists", {
           headers: {
             token: localStorage.getItem("token"),
             "Content-Type": "application/json",
@@ -42,7 +42,7 @@ const AddToPlaylist = ({ setIsModalOpen }) => {
 
     try {
       // API request to add the song to the selected playlist
-      const response = await fetch("http://localhost:3000/user/addSongToPlaylist", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/user/addSongToPlaylist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
