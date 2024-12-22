@@ -38,7 +38,7 @@ app.post("/uploadalbum", upload.single('image'), (req, res) => {
     }
     res.json({
         success: true,
-        image_url: `http://localhost:${port}/albumimages/${req.file.filename}`
+        image_url: `https://audioaura-4sap.onrender.com/albumimages/${req.file.filename}`
     });
 });
 
@@ -62,7 +62,7 @@ app.post("/uploadaudio", uploadAudio.single('file'), (req, res) => {
     }
     res.json({
         success: true,
-        file_url: `http://localhost:${port}/audiofiles/${req.file.filename}`
+        file_url: `https://audioaura-4sap.onrender.com/audiofiles/${req.file.filename}`
     });
 });
 
