@@ -5,7 +5,7 @@ const AlbumRouter = require("./Routes/Album")
 const playlistRouter = require("./Routes/Playlist")
 const FavouriteRouter = require("./Routes/Favourite")
 const paymentRoutes = require('./Routes/paymentRoutes')
-const Count = require("./Routes/count")
+// const Count = require("./Routes/count")
 const Song = require("./Model/Song")
 const path =  require("path")
 const multer = require("multer")
@@ -21,7 +21,7 @@ app.use("/admin",AlbumRouter)
 app.use("/user",playlistRouter)
 app.use("/user",FavouriteRouter)
 app.use('/payement', paymentRoutes); 
-app.use('/', Count); 
+// app.use('/', Count); 
 
 
 
