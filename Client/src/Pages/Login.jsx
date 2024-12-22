@@ -44,7 +44,7 @@ const Login = () => {
 
     try {
       // Make a POST request to the login API
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
