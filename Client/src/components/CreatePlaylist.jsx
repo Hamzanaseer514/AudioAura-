@@ -16,7 +16,7 @@ const CreatePlaylist = ({ setIsModalOpen }) => {
     e.preventDefault();
     // Send the form data to your backend
     try {
-      const response = await fetch("http://localhost:3000/user/createplaylist", {
+      const response = await fetch("https://audioaura-4sap.onrender.com/user/createplaylist", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
