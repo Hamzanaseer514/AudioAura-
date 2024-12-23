@@ -295,6 +295,11 @@ const Navbar = () => {
           </button>
         </div>
       </div>
+      {isModalOpen && (
+        <ProtectedPremium>
+          <CreatePlaylist setIsModalOpen={setIsModalOpen} />
+        </ProtectedPremium>
+      )}
     </>
   );
 };
